@@ -48,12 +48,11 @@ type: 'custom:bom-radar-card'
 frame_count: 10
 center_lattitude: '-25.567607'
 center_longitude: '152.930597'
-markerIcon: 'true'
 marker_lattitude: '-26.175328'
 marker_longitude: '152.653189'
 show_marker: true
 show_range: true
-zoomLevel: '8'
+zoom_level: '8'
 ```
 
 This will display a radar for the whole of Australia showing the previous 24 hours of radar images with a 100mSec delay between frames.
