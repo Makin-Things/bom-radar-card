@@ -46,11 +46,11 @@ This is the configuration used to generate the radar loop on this page.
 ```yaml
 type: 'custom:bom-radar-card'
 frame_count: 10
-lattitude: '-25.567607'
-longitude: '152.930597'
+center_lattitude: '-25.567607'
+center_longitude: '152.930597'
 markerIcon: 'true'
-markerLattitude: '-26.175328'
-markerLongitude: '152.653189'
+marker_lattitude: '-26.175328'
+marker_longitude: '152.653189'
 show_marker: true
 show_range: true
 zoomLevel: '8'
@@ -62,8 +62,8 @@ This will display a radar for the whole of Australia showing the previous 24 hou
 type: 'custom:bom-radar-card'
 frame_count: 144
 frame_delay: 100
-markerLattitude: '-33.857058'
-markerLongitude: '151.215179'
+marker_lattitude: '-33.857058'
+marker_longitude: '151.215179'
 show_marker: true
 show_range: false
 ```
