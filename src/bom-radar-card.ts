@@ -121,9 +121,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               const maxZoom = 10;
               const minZoom = 4;
               var zoomLevel = (${this._config.zoom_level}) ? ${this._config.zoom_level} : 4;
-              var centerLat = (${this._config.center_lattitude}) ? ${this._config.center_lattitude} : -27.85;
+              var centerLat = (${this._config.center_latitude}) ? ${this._config.center_latitude} : -27.85;
               var centerLon = (${this._config.center_longitude}) ? ${this._config.center_longitude} : 133.75;
-              var markerLat = (${this._config.marker_lattitude}) ? ${this._config.marker_lattitude} : centerLat;
+              var markerLat = (${this._config.marker_latitude}) ? ${this._config.marker_latitude} : centerLat;
               var markerLon = (${this._config.marker_longitude}) ? ${this._config.marker_longitude} : centerLon;
               var timeout = (${this._config.frame_delay}) ? ${this._config.frame_delay} : 500;
               var frameCount = (${this._config.frame_count}) ? ${this._config.frame_count} : 10;

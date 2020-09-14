@@ -23,13 +23,13 @@ The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/
 | Name             | Type    | Requirement  | Description                                   | Default                         |
 | ---------------- | ------- | ------------ | --------------------------------------------- | ------------------------------- |
 | type             | string  | **Required** |                                               | must be `custom:bom-radar-card` |
-| center_lattitude | number  | **Optional** | The initial center lattitude of the map       | `-27.85`                        |
+| center_latitude  | number  | **Optional** | The initial center latitude of the map        | `-27.85`                        |
 | center_longitude | number  | **Optional** | The initial center longitude of the map       | `133.75`                        |
 | zoom_level       | number  | **Optional** | The initial zoom level, can be from 4 to 10   | `4`                             |
 | frame_delay      | number  | **Optional** | The number of milliseconds to show each frame | `500`                           |
 | frame_count      | number  | **Optional** | The number of frames to use in the loop       | `10`                            |
 | show_marker      | boolean | **Optional** | Show the home icon at the marker position     | `false`                         |
-| marker_lattitude | number  | **Optional** | The lattitude for the home icon if enabled    | the same as center_lattitude    |
+| marker_latitude  | number  | **Optional** | The latitude for the home icon if enabled     | the same as center_latitude     |
 | marker_longitude | number  | **Optional** | The longitude for the home icon if enabled    | the same as center_longitude    |
 | show_range       | boolean | **Optional** | Show range rings around marker position       | `false`                         |
 | extra_labels     | boolean | **Optional** | Show more town labels (labels become smaller) | `false`                         |
@@ -46,9 +46,9 @@ This is the configuration used to generate the radar loop on this page.
 ```yaml
 type: 'custom:bom-radar-card'
 frame_count: 10
-center_lattitude: '-25.567607'
+center_latitude: '-25.567607'
 center_longitude: '152.930597'
-marker_lattitude: '-26.175328'
+marker_latitude: '-26.175328'
 marker_longitude: '152.653189'
 show_marker: true
 show_range: true
@@ -61,7 +61,7 @@ This will display a radar for the whole of Australia showing the previous 24 hou
 type: 'custom:bom-radar-card'
 frame_count: 144
 frame_delay: 100
-marker_lattitude: '-33.857058'
+marker_latitude: '-33.857058'
 marker_longitude: '151.215179'
 show_marker: true
 show_range: false

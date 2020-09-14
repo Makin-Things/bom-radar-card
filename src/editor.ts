@@ -57,10 +57,10 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
     return html`
       <div class="values">
         <paper-input
-          label="Map Centre Lattitude (Required)"
-          .value=${config.center_lattitude ? config.center_lattitude : ''}
+          label="Map Centre Latitude (Required)"
+          .value=${config.center_latitude ? config.center_latitude : ''}
           editable
-          .configAttribute=${'center_lattitude'}
+          .configAttribute=${'center_latitude'}
           .configObject=${config}
           @value-changed=${this._valueChanged}
         ></paper-input>
@@ -94,10 +94,10 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
           </paper-listbox></paper-dropdown-menu
         >
         <paper-input
-          label="Marker Lattitude (Optional)"
-          .value=${config.marker_lattitude ? config.marker_lattitude : ''}
+          label="Marker Latitude (Optional)"
+          .value=${config.marker_latitude ? config.marker_latitude : ''}
           editable
-          .configAttribute=${'marker_lattitude'}
+          .configAttribute=${'marker_latitude'}
           .configObject=${config}
           @value-changed=${this._valueChanged}
         ></paper-input>
