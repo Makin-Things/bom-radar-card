@@ -112,8 +112,8 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               </div>
               <div id="attribution" class="text-container" style="height: 18px; float:right;">
                 <span class="Map__Attribution-LjffR DKiFh" id="attribution"
-                  >&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy;
-                  <a href="https://www.arcgis.com/home/item.html?id=30e5fe3149c34df1ba922e6f5bbf808f">ESRI</a></span
+                  >&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy;
+                  <a href="https://carto.com/attribution" target="_blank">CARTO</a></span
                 >
               </div>
             </div>
@@ -128,6 +128,27 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var timeout = (${this._config.frame_delay}) ? ${this._config.frame_delay} : 500;
               var frameCount = (${this._config.frame_count}) ? ${this._config.frame_count} : 10;
               var barSize = 492/frameCount;
+              var labelSize = (${this._config.extra_labels}) ? 128 : 256;
+              var labelZoom = (${this._config.extra_labels}) ? 1 : 0;
+              var map_style = ('${this._config.map_style}') ? '${this._config.map_style}' : 'light';
+              switch (map_style) {
+                case "dark":
+                  var basemap_style = 'dark_nolabels';
+                  var label_style = 'dark_only_labels';
+                  var svg_icon = 'home-circle-light.svg';
+                  break;
+                case "voyager":
+                  var basemap_style = 'rastertiles/voyager_nolabels';
+                  var label_style = 'rastertiles/voyager_only_labels';
+                  var svg_icon = 'home-circle-dark.svg';
+                  break;
+                case "light":
+                default:
+                  var basemap_style = 'light_nolabels';
+                  var label_style = 'light_only_labels';
+                  var svg_icon = 'home-circle-dark.svg';
+              }
+
               var idx = 0;
               var run = true;
               var doRadarUpdate = false;
@@ -212,16 +233,11 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               }).addTo(mymap);
 
               L.tileLayer(
-                'https://tiles.arcgis.com/tiles/eJi5Ccfp64bqr5ym/arcgis/rest/services/proton_basemap_std/MapServer/tile/{z}/{y}/{x}',
+                'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}.png',
                 {
-                  tileSize: 256,
-                  zoomOffset: 0,
-                },
-              ).addTo(mymap);
-
-              L.tileLayer(
-                'https://tiles.arcgis.com/tiles/eJi5Ccfp64bqr5ym/arcgis/rest/services/proton_background_labels_std/MapServer/tile/{z}/{y}/{x}',
-                {
+                  style: basemap_style,
+                  subdomains: 'abcd',
+                  detectRetina: true,
                   tileSize: 256,
                   zoomOffset: 0,
                 },
@@ -232,6 +248,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   'https://api.weather.bom.gov.au/v1/rainradar/tiles/{time}/{z}/{x}/{y}.png',
                   {
                     time: getRadarTime(d.valueOf() + i * 600000),
+                    detectRetina: true,
                     tileSize: 256,
                     zoomOffset: 0,
                     opacity: 0,
@@ -244,10 +261,13 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               d.setTime(d.valueOf() + frameCount * 600000);
 
               townLayer = L.tileLayer(
-                'https://tiles.arcgis.com/tiles/eJi5Ccfp64bqr5ym/arcgis/rest/services/proton_labels_std/MapServer/tile/{z}/{y}/{x}',
+                'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}@2x.png',
                 {
-                  tileSize: 256,
-                  zoomOffset: 0,
+                  style: label_style,
+                  subdomains: 'abcd',
+                  detectRetina: true,
+                  tileSize: labelSize,
+                  zoomOffset: labelZoom,
                 },
               ).addTo(mymap);
               townLayer.setZIndex(2);
@@ -255,7 +275,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               ${
                 this._config.show_marker === true
                   ? "var myIcon = L.icon({ \
-                    iconUrl: '/hacsfiles/bom-radar-card/home-circle.svg', \
+                    iconUrl: '/hacsfiles/bom-radar-card/'+svg_icon, \
                 iconSize: [16, 16], \
               }); \
               L.marker([markerLat, markerLon], { icon: myIcon }).addTo(mymap);"
@@ -416,7 +436,13 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     return html`
       <ha-card class="type-iframe">
         <div id="root">
-          <iframe srcdoc=${doc} scrolling="no" height="526" width="100%" style="border:none; padding:none;"></iframe>
+          <iframe
+            srcdoc=${doc}
+            scrolling="no"
+            height="526"
+            width="100%"
+            style="border:none; padding:none; border-radius: var(--ha-card-border-radius, 4px);"
+          ></iframe>
         </div>
       </ha-card>
     `;
