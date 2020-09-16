@@ -87,7 +87,11 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
             }
             .text-container {
               font: 12px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
-              margin: 0px 10px;
+              margin: 0px 2.5px 0px 10px;
+            }
+            .text-container-small {
+              font: 10px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
+              margin: 0px 10px 0px 2.5px;
             }
             #timestamp {
               margin: 0px 0px;
@@ -97,20 +101,20 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
             }
           </style>
         </head>
-        <body>
+        <body onload="resizeWindow()">
           <span>
-            <div id="color-bar" style="width: 492px; height: 8px;">
-              <img src="/hacsfiles/bom-radar-card/radar-colour-bar.png" width="492" height="8" style="vertical-align: top" />
+            <div id="color-bar" style="height: 8px;">
+              <img id="img-color-bar" src="/hacsfiles/bom-radar-card/radar-colour-bar.png" height="8" style="vertical-align: top" />
             </div>
-            <div id="mapid" style="width: 492px; height: 492px;"></div>
-            <div style="width: 492px; height: 8px; background-color: white;">
+            <div id="mapid" style="height: 492px;"></div>
+            <div id="div-progress-bar" style="height: 8px; background-color: white;">
               <div id="progress-bar" style="height:8px;width:0; background-color: #ccf2ff;"></div>
             </div>
-            <div id="bottom-container" style="width: 492px; height: 18px; background-color: white;">
-              <div id="timestampid" class="text-container" style="width: 200px; height: 18px; float:left;">
+            <div id="bottom-container" style="height: 18px; background-color: white;">
+              <div id="timestampid" class="text-container" style="width: 100px; height: 18px; float:left; position: absolute;">
                 <p id="timestamp"></p>
               </div>
-              <div id="attribution" class="text-container" style="height: 18px; float:right;">
+              <div id="attribution" class="text-container-small" style="height: 18px; float:right;">
                 <span class="Map__Attribution-LjffR DKiFh" id="attribution"
                   >&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy;
                   <a href="https://carto.com/attribution" target="_blank">CARTO</a></span
@@ -127,7 +131,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var markerLon = (${this._config.marker_longitude}) ? ${this._config.marker_longitude} : centerLon;
               var timeout = (${this._config.frame_delay}) ? ${this._config.frame_delay} : 500;
               var frameCount = (${this._config.frame_count}) ? ${this._config.frame_count} : 10;
-              var barSize = 492/frameCount;
+              var barSize = this.frameElement.offsetWidth/frameCount;
               var labelSize = (${this._config.extra_labels}) ? 128 : 256;
               var labelZoom = (${this._config.extra_labels}) ? 1 : 0;
               var map_style = ('${this._config.map_style}') ? '${this._config.map_style}' : 'light';
@@ -285,8 +289,8 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               ${
                 this._config.show_range === true
                   ? 'L.circle([markerLat, markerLon], { radius: 50000, weight: 1, fill: false, opacity: 0.3 }).addTo(mymap); \
-    L.circle([markerLat, markerLon], { radius: 100000, weight: 1, fill: false, opacity: 0.3 }).addTo(mymap); \
-    L.circle([markerLat, markerLon], { radius: 200000, weight: 1, fill: false, opacity: 0.3 }).addTo(mymap);'
+                     L.circle([markerLat, markerLon], { radius: 100000, weight: 1, fill: false, opacity: 0.3 }).addTo(mymap); \
+                     L.circle([markerLat, markerLon], { radius: 200000, weight: 1, fill: false, opacity: 0.3 }).addTo(mymap);'
                   : ''
               }
               setTimeout(function() {
@@ -426,6 +430,15 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   document.getElementById('timestamp').innerHTML = radarTime[idx];
                   radarImage[idx].setOpacity(1);
                 }
+              }
+
+              function resizeWindow() {
+                console.info(this.frameElement.offsetWidth);
+                this.document.getElementById("color-bar").width = this.frameElement.offsetWidth;
+                this.document.getElementById("img-color-bar").width = this.frameElement.offsetWidth;
+                this.document.getElementById("mapid").width = this.frameElement.offsetWidth;
+                this.document.getElementById("div-progress-bar").width = this.frameElement.offsetWidth;
+                this.document.getElementById("bottom-container").width = this.frameElement.offsetWidth;
               }
             </script>
           </span>

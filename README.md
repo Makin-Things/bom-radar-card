@@ -73,6 +73,9 @@ These are some things that are left to do.
 
 - Finish adding the various options to the Lovelace gui editor (I got stuck with how to add toggle buttons for the boolean options)
 - Add more options to disable the controls
+- Add a km scale at the bottom left
+- Allow customisation of ring sizes (possibly add text to show the size)
+- Make it mobile friendly
 
 ## Install
 
