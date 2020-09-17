@@ -32,6 +32,7 @@ The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/
 | marker_latitude  | number  | **Optional** | The latitude for the home icon if enabled     | the same as center_latitude     |
 | marker_longitude | number  | **Optional** | The longitude for the home icon if enabled    | the same as center_longitude    |
 | show_range       | boolean | **Optional** | Show range rings around marker position       | `false`                         |
+| show_scale       | boolean | **Optional** | Show a scale in the bottom left corner        | `false`                         |
 | extra_labels     | boolean | **Optional** | Show more town labels (labels become smaller) | `false`                         |
 | map_style        | string  | **Optional** | Specifies the style for the map               | `'light'`                       |
 

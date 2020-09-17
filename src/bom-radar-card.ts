@@ -156,7 +156,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var idx = 0;
               var run = true;
               var doRadarUpdate = false;
-              var mymap = L.map('mapid', {
+              var radarMap = L.map('mapid', {
                 attributionControl: false,
                 minZoom: minZoom,
                 maxZoom: maxZoom,
@@ -183,7 +183,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 },
 
                 addHooks: function () {
-                  mymap.setView([centerLat, centerLon], zoomLevel);
+                  radarMap.setView([centerLat, centerLon], zoomLevel);
                 }
               });
 
@@ -232,9 +232,25 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               });
 
               new L.Toolbar2.Control({
-                  position: 'bottomright',
-                  actions: [recenterAction, playAction, skipbackAction, skipnextAction]
-              }).addTo(mymap);
+                position: 'bottomright',
+                actions: [recenterAction, playAction, skipbackAction, skipnextAction]
+              }).addTo(radarMap);
+              if (${this._config.show_scale === true}) {
+                L.control.scale({
+                  position: 'bottomleft',
+                  metric: true,
+                  imperial: false,
+                  maxWidth: 100,
+                }).addTo(radarMap);
+
+                if (map_style === "dark") {
+                  var scaleDiv = this.document.getElementsByClassName("leaflet-control-scale-line")[0];
+                  scaleDiv.style.color = "#BBB";
+                  scaleDiv.style.borderColor = "#BBB";
+                  scaleDiv.style.background = "#00000080";
+                  console.info(this.document.getElementsByClassName("leaflet-control-scale-line")[0]);
+                }
+              }
 
               L.tileLayer(
                 'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}.png',
@@ -245,7 +261,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   tileSize: 256,
                   zoomOffset: 0,
                 },
-              ).addTo(mymap);
+              ).addTo(radarMap);
 
               for (i = 0; i < frameCount; i++) {
                 radarImage[i] = L.tileLayer(
@@ -257,7 +273,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                     zoomOffset: 0,
                     opacity: 0,
                   },
-                ).addTo(mymap);
+                ).addTo(radarMap);
                 radarTime[i] = getRadarTimeString(d.valueOf() + i * 600000);
               }
               radarImage[idx].setOpacity(1);
@@ -265,15 +281,15 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               d.setTime(d.valueOf() + frameCount * 600000);
 
               townLayer = L.tileLayer(
-                'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}@2x.png',
+                'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}.png',
                 {
                   style: label_style,
                   subdomains: 'abcd',
-                  detectRetina: true,
+                  detectRetina: false,
                   tileSize: labelSize,
                   zoomOffset: labelZoom,
                 },
-              ).addTo(mymap);
+              ).addTo(radarMap);
               townLayer.setZIndex(2);
 
               ${
@@ -282,15 +298,15 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                     iconUrl: '/hacsfiles/bom-radar-card/'+svg_icon, \
                 iconSize: [16, 16], \
               }); \
-              L.marker([markerLat, markerLon], { icon: myIcon }).addTo(mymap);"
+              L.marker([markerLat, markerLon], { icon: myIcon }).addTo(radarMap);"
                   : ''
               }
 
               ${
                 this._config.show_range === true
-                  ? 'L.circle([markerLat, markerLon], { radius: 50000, weight: 1, fill: false, opacity: 0.3 }).addTo(mymap); \
-                     L.circle([markerLat, markerLon], { radius: 100000, weight: 1, fill: false, opacity: 0.3 }).addTo(mymap); \
-                     L.circle([markerLat, markerLon], { radius: 200000, weight: 1, fill: false, opacity: 0.3 }).addTo(mymap);'
+                  ? 'L.circle([markerLat, markerLon], { radius: 50000, weight: 1, fill: false, opacity: 0.3 }).addTo(radarMap); \
+                     L.circle([markerLat, markerLon], { radius: 100000, weight: 1, fill: false, opacity: 0.3 }).addTo(radarMap); \
+                     L.circle([markerLat, markerLon], { radius: 200000, weight: 1, fill: false, opacity: 0.3 }).addTo(radarMap);'
                   : ''
               }
               setTimeout(function() {
@@ -315,7 +331,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   tileSize: 256,
                   zoomOffset: 0,
                   opacity: 0,
-                }).addTo(mymap);
+                }).addTo(radarMap);
                 newTime = getRadarTimeString(d.valueOf() - 600000);
 
                 radarImage[0].remove();
@@ -433,7 +449,6 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               }
 
               function resizeWindow() {
-                console.info(this.frameElement.offsetWidth);
                 this.document.getElementById("color-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("img-color-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("mapid").width = this.frameElement.offsetWidth;
