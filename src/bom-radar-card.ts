@@ -248,7 +248,6 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   scaleDiv.style.color = "#BBB";
                   scaleDiv.style.borderColor = "#BBB";
                   scaleDiv.style.background = "#00000080";
-                  console.info(this.document.getElementsByClassName("leaflet-control-scale-line")[0]);
                 }
               }
 
