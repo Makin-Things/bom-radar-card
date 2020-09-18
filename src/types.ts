@@ -4,6 +4,7 @@ import { LovelaceCardConfig } from 'custom-card-helpers';
 export interface BomRadarCardConfig extends LovelaceCardConfig {
   type: string;
   name?: string;
+  map_style?: string;
   show_warning?: boolean;
   show_error?: boolean;
   test_gui?: boolean;

@@ -56,29 +56,30 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
 
     return html`
       <div class="values">
-        <paper-input
-          label="Map Centre Latitude (Required)"
-          .value=${config.center_latitude ? config.center_latitude : ''}
-          editable
-          .configAttribute=${'center_latitude'}
-          .configObject=${config}
-          @value-changed=${this._valueChanged}
-        ></paper-input>
-        <paper-input
-          label="Map Centre Longitude (Required)"
-          .value=${config.center_longitude ? config.center_longitude : ''}
-          editable
-          .configAttribute=${'center_longitude'}
-          .configObject=${config}
-          @value-changed=${this._valueChanged}
-        ></paper-input>
         <paper-dropdown-menu
-          label="Zoom Level (Required)"
-          .value=${config.zoom_level ? config.zoom_level : ''}
+          label="Map Style"
+          .value=${config.map_style ? config.map_style : ''}
+          editable
+          .configAttribute=${'map_style'}
+          .configObject=${config}
+          @value-changed=${this._valueChangedString}
+          ><paper-listbox
+            slot="dropdown-content"
+            attr-for-selected="item-name"
+            selected="${config.map_style ? config.map_style : ''}"
+          >
+            <paper-item item-name="Light">Light</paper-item>
+            <paper-item item-name="Voyager">Voyager</paper-item>
+            <paper-item item-name="Dark">Dark</paper-item>
+          </paper-listbox></paper-dropdown-menu
+        >
+        <paper-dropdown-menu
+          label="Zoom Level"
+          .value=${config.zoom_level ? config.zoom_level : null}
           editable
           .configAttribute=${'zoom_level'}
           .configObject=${config}
-          @value-changed=${this._valueChanged}
+          @value-changed=${this._valueChangedNumber}
           ><paper-listbox
             slot="dropdown-content"
             attr-for-selected="item-name"
@@ -94,26 +95,105 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
           </paper-listbox></paper-dropdown-menu
         >
         <paper-input
-          label="Marker Latitude (Optional)"
+          label="Map Centre Latitude"
+          .value=${config.center_latitude ? config.center_latitude : ''}
+          editable
+          .configAttribute=${'center_latitude'}
+          .configObject=${config}
+          @value-changed=${this._valueChangedNumber}
+        ></paper-input>
+        <paper-input
+          label="Map Centre Longitude"
+          .value=${config.center_longitude ? config.center_longitude : ''}
+          editable
+          .configAttribute=${'center_longitude'}
+          .configObject=${config}
+          @value-changed=${this._valueChangedNumber}
+        ></paper-input>
+        <paper-input
+          label="Marker Latitude"
           .value=${config.marker_latitude ? config.marker_latitude : ''}
           editable
           .configAttribute=${'marker_latitude'}
           .configObject=${config}
-          @value-changed=${this._valueChanged}
+          @value-changed=${this._valueChangedNumber}
         ></paper-input>
         <paper-input
-          label="Marker Longitude (Optional)"
+          label="Marker Longitude"
           .value=${config.marker_longitude ? config.marker_longitude : ''}
           editable
           .configAttribute=${'marker_longitude'}
           .configObject=${config}
-          @value-changed=${this._valueChanged}
+          @value-changed=${this._valueChangedNumber}
         ></paper-input>
       </div>
     `;
   }
 
   private _valueChanged(ev): void {
+    if (!this._config || !this.hass) {
+      return;
+    }
+    const target = ev.target;
+    if (this[`_${target.configValue}`] === target.value) {
+      return;
+    }
+    if (target.configValue) {
+      if (target.value === '') {
+        delete this._config[target.configValue];
+      } else {
+        this._config = {
+          ...this._config,
+          [target.configValue]: target.checked !== undefined ? target.checked : target.value,
+        };
+      }
+    }
+    fireEvent(this, 'config-changed', { config: this._config });
+  }
+
+  private _valueChangedBoolean(ev): void {
+    if (!this._config || !this.hass) {
+      return;
+    }
+    const target = ev.target;
+    if (this[`_${target.configAttribute}`] === target.value) {
+      return;
+    }
+    if (target.configAttribute) {
+      if (target.value === '' || target.value === null) {
+        delete this._config[target.configAttribute];
+      } else {
+        this._config = {
+          ...this._config,
+          [target.configAttribute]: target.value === 'true',
+        };
+      }
+    }
+    fireEvent(this, 'config-changed', { config: this._config });
+  }
+
+  private _valueChangedNumber(ev): void {
+    if (!this._config || !this.hass) {
+      return;
+    }
+    const target = ev.target;
+    if (this[`_${target.configAttribute}`] === target.value) {
+      return;
+    }
+    if (target.configAttribute) {
+      if (target.value === '' || target.value === null) {
+        delete this._config[target.configAttribute];
+      } else {
+        this._config = {
+          ...this._config,
+          [target.configAttribute]: Number(target.value),
+        };
+      }
+    }
+    fireEvent(this, 'config-changed', { config: this._config });
+  }
+
+  private _valueChangedString(ev): void {
     if (!this._config || !this.hass) {
       return;
     }
@@ -127,13 +207,12 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
       } else {
         this._config = {
           ...this._config,
-          [target.configAttribute]: target.checked !== undefined ? target.checked : target.value,
+          [target.configAttribute]: target.value,
         };
       }
     }
     fireEvent(this, 'config-changed', { config: this._config });
   }
-
   static get styles(): CSSResult {
     return css`
       .option {

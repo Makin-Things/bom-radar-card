@@ -93,6 +93,12 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               font: 10px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
               margin: 0px 10px 0px 2.5px;
             }
+            .light-links a {
+              color: blue;
+            }
+            .dark-links a {
+              color: skyblue;
+            }
             #timestamp {
               margin: 0px 0px;
             }
@@ -110,7 +116,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
             <div id="div-progress-bar" style="height: 8px; background-color: white;">
               <div id="progress-bar" style="height:8px;width:0; background-color: #ccf2ff;"></div>
             </div>
-            <div id="bottom-container" style="height: 18px; background-color: white;">
+            <div id="bottom-container" class="light-links" style="height: 18px; background-color: white;">
               <div id="timestampid" class="text-container" style="width: 100px; height: 18px; float:left; position: absolute;">
                 <p id="timestamp"></p>
               </div>
@@ -124,17 +130,19 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
             <script>
               const maxZoom = 10;
               const minZoom = 4;
-              var zoomLevel = (${this._config.zoom_level}) ? ${this._config.zoom_level} : 4;
-              var centerLat = (${this._config.center_latitude}) ? ${this._config.center_latitude} : -27.85;
-              var centerLon = (${this._config.center_longitude}) ? ${this._config.center_longitude} : 133.75;
+              var zoomLevel = ${this._config.zoom_level !== undefined ? this._config.zoom_level : 4};
+              var centerLat = ${this._config.center_latitude !== undefined ? this._config.center_latitude : -27.85};
+              var centerLon = ${this._config.center_longitude !== undefined ? this._config.center_longitude : 133.75};
               var markerLat = (${this._config.marker_latitude}) ? ${this._config.marker_latitude} : centerLat;
               var markerLon = (${this._config.marker_longitude}) ? ${this._config.marker_longitude} : centerLon;
-              var timeout = (${this._config.frame_delay}) ? ${this._config.frame_delay} : 500;
-              var frameCount = (${this._config.frame_count}) ? ${this._config.frame_count} : 10;
+              var timeout = ${this._config.frame_delay !== undefined ? this._config.frame_delay : 500};
+              var frameCount = ${this._config.frame_count != undefined ? this._config.frame_count : 10};
               var barSize = this.frameElement.offsetWidth/frameCount;
-              var labelSize = (${this._config.extra_labels}) ? 128 : 256;
-              var labelZoom = (${this._config.extra_labels}) ? 1 : 0;
-              var map_style = ('${this._config.map_style}') ? '${this._config.map_style}' : 'light';
+              var labelSize = ${this._config.extra_labels !== undefined ? 128 : 256};
+              var labelZoom = ${this._config.extra_labels !== undefined ? 1 : 0};
+              var map_style = '${
+                this._config.map_style !== undefined ? this._config.map_style.toLowerCase() : 'light'
+              }';
               switch (map_style) {
                 case "dark":
                   var basemap_style = 'dark_nolabels';
@@ -157,6 +165,17 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var run = true;
               var doRadarUpdate = false;
               var radarMap = L.map('mapid', {
+                zoomControl: ${this._config.show_zoom === true && this._config.static_map !== true ? 'true' : 'false'},
+                ${
+                  this._config.static_map === true
+                    ? 'scrollWheelZoom: false, \
+                doubleClickZoom: false, \
+                boxZoom: false, \
+                dragging: false, \
+                keyboard: false, \
+                touchZoom: false,'
+                    : ''
+                }
                 attributionControl: false,
                 minZoom: minZoom,
                 maxZoom: maxZoom,
@@ -164,6 +183,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   [0, 101.25],
                   [-55.77657, 168.75],
                 ],
+                maxBoundsViscosity: 1.0,
               }).setView([centerLat, centerLon], zoomLevel);
               var radarImage = [];
               var radarTime = [];
@@ -174,74 +194,86 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
               document.getElementById("progress-bar").style.width = barSize+"px";
 
-              var recenterAction = L.Toolbar2.Action.extend({
-                options: {
-                    toolbarIcon: {
-                        html: '<img src="/hacsfiles/bom-radar-card/recenter.png" width="24" height="24">',
-                        tooltip: 'Re-center'
-                    }
-                },
+              var t2actions = [];
 
-                addHooks: function () {
-                  radarMap.setView([centerLat, centerLon], zoomLevel);
-                }
-              });
+              if (${this._config.show_recenter === true && this._config.static_map !== true}) {
+                var recenterAction = L.Toolbar2.Action.extend({
+                  options: {
+                      toolbarIcon: {
+                          html: '<img src="/hacsfiles/bom-radar-card/recenter.png" width="24" height="24">',
+                          tooltip: 'Re-center'
+                      }
+                  },
 
-              var playAction = L.Toolbar2.Action.extend({
-                options: {
-                    toolbarIcon: {
-                        html: '<img id="playButton" src="/hacsfiles/bom-radar-card/pause.png" width="24" height="24">',
-                        tooltip: 'Pause'
-                    }
-                },
-
-                addHooks: function () {
-                  run = !run;
-                  if (run) {
-                    document.getElementById("playButton").src = "/hacsfiles/bom-radar-card/pause.png"
-                  } else {
-                    document.getElementById("playButton").src = "/hacsfiles/bom-radar-card/play.png"
+                  addHooks: function () {
+                    radarMap.setView([centerLat, centerLon], zoomLevel);
                   }
-                }
-              });
+                });
+                t2actions.push(recenterAction);
+              }
 
-              var skipbackAction = L.Toolbar2.Action.extend({
-                options: {
-                    toolbarIcon: {
-                        html: '<img src="/hacsfiles/bom-radar-card/skip-back.png" width="24" height="24">',
-                        tooltip: 'Previous Frame'
+              if (${this._config.show_playback === true}) {
+                var playAction = L.Toolbar2.Action.extend({
+                  options: {
+                      toolbarIcon: {
+                          html: '<img id="playButton" src="/hacsfiles/bom-radar-card/pause.png" width="24" height="24">',
+                          tooltip: 'Pause'
+                      }
+                  },
+
+                  addHooks: function () {
+                    run = !run;
+                    if (run) {
+                      document.getElementById("playButton").src = "/hacsfiles/bom-radar-card/pause.png"
+                    } else {
+                      document.getElementById("playButton").src = "/hacsfiles/bom-radar-card/play.png"
                     }
-                },
+                  }
+                });
+                t2actions.push(playAction);
 
-                addHooks: function () {
-                  skipBack();
-                }
-              });
+                var skipbackAction = L.Toolbar2.Action.extend({
+                  options: {
+                      toolbarIcon: {
+                          html: '<img src="/hacsfiles/bom-radar-card/skip-back.png" width="24" height="24">',
+                          tooltip: 'Previous Frame'
+                      }
+                  },
 
-              var skipnextAction = L.Toolbar2.Action.extend({
-                options: {
-                    toolbarIcon: {
-                        html: '<img src="/hacsfiles/bom-radar-card/skip-next.png" width="24" height="24">',
-                        tooltip: 'Next Frame'
-                    }
-                },
+                  addHooks: function () {
+                    skipBack();
+                  }
+                });
+                t2actions.push(skipbackAction);
 
-                addHooks: function () {
-                  skipNext();
-                }
-              });
+                var skipnextAction = L.Toolbar2.Action.extend({
+                  options: {
+                      toolbarIcon: {
+                          html: '<img src="/hacsfiles/bom-radar-card/skip-next.png" width="24" height="24">',
+                          tooltip: 'Next Frame'
+                      }
+                  },
 
-              new L.Toolbar2.Control({
-                position: 'bottomright',
-                actions: [recenterAction, playAction, skipbackAction, skipnextAction]
-              }).addTo(radarMap);
-              if (${this._config.show_scale === true}) {
-                L.control.scale({
-                  position: 'bottomleft',
-                  metric: true,
-                  imperial: false,
-                  maxWidth: 100,
+                  addHooks: function () {
+                    skipNext();
+                  }
+                });
+                t2actions.push(skipnextAction);
+              }
+
+              if (t2actions.length > 0) {
+                new L.Toolbar2.Control({
+                  position: 'bottomright',
+                  actions: t2actions
                 }).addTo(radarMap);
+                if (${this._config.show_scale === true}) {
+                  L.control.scale({
+                    position: 'bottomleft',
+                    metric: true,
+                    imperial: false,
+                    maxWidth: 100,
+                  }).addTo(radarMap);
+                }
 
                 if (map_style === "dark") {
                   var scaleDiv = this.document.getElementsByClassName("leaflet-control-scale-line")[0];
@@ -249,6 +281,14 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   scaleDiv.style.borderColor = "#BBB";
                   scaleDiv.style.background = "#00000080";
                 }
+              }
+
+              if (map_style === "dark") {
+                this.document.getElementById("div-progress-bar").style.background = "#1C1C1C";
+                this.document.getElementById("progress-bar").style.background = "steelblue";
+                this.document.getElementById("bottom-container").style.background = "#1C1C1C";
+                this.document.getElementById("bottom-container").style.color = "#DDDDDD";
+                this.document.getElementById("bottom-container").className = "dark-links";
               }
 
               L.tileLayer(
