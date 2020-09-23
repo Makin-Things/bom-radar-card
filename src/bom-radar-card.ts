@@ -97,7 +97,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               color: blue;
             }
             .dark-links a {
-              color: skyblue;
+              color: steelblue;
             }
             #timestamp {
               margin: 0px 0px;
@@ -122,8 +122,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               </div>
               <div id="attribution" class="text-container-small" style="height: 18px; float:right;">
                 <span class="Map__Attribution-LjffR DKiFh" id="attribution"
-                  >&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy;
-                  <a href="https://carto.com/attribution" target="_blank">CARTO</a></span
+                  ></span
                 >
               </div>
             </div>
@@ -145,20 +144,37 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               }';
               switch (map_style) {
                 case "dark":
+                  var basemap_url = 'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}.png';
                   var basemap_style = 'dark_nolabels';
+                  var label_url = 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'dark_only_labels';
                   var svg_icon = 'home-circle-light.svg';
+                  var attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a>';
                   break;
                 case "voyager":
+                  var basemap_url = 'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}.png';
                   var basemap_style = 'rastertiles/voyager_nolabels';
+                  var label_url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'rastertiles/voyager_only_labels';
                   var svg_icon = 'home-circle-dark.svg';
+                  var attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a>';
+                  break;
+                case 'satellite':
+                  var basemap_url = 'https://server.arcgisonline.com/ArcGIS/rest/services/{style}/MapServer/tile/{z}/{y}/{x}';
+                  var basemap_style = 'World_Imagery';
+                  var label_url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}.png';
+                  var label_style = 'proton_labels_std';
+                  var svg_icon = 'home-circle-dark.svg';
+                  var attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="http://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" target="_blank">ESRI</a>';
                   break;
                 case "light":
                 default:
+                  var basemap_url = 'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}.png';
                   var basemap_style = 'light_nolabels';
+                  var label_url = 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'light_only_labels';
                   var svg_icon = 'home-circle-dark.svg';
+                  var attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a>';
               }
 
               var idx = 0;
@@ -193,6 +209,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               d.setTime(Math.trunc(d.valueOf() / 600000) * 600000 - frameCount * 600000);
 
               document.getElementById("progress-bar").style.width = barSize+"px";
+              document.getElementById("attribution").innerHTML = attribution;
 
               var t2actions = [];
 
@@ -275,7 +292,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   }).addTo(radarMap);
                 }
 
-                if (map_style === "dark") {
+                if ((map_style === "dark") || (map_style == "satellite")) {
                   var scaleDiv = this.document.getElementsByClassName("leaflet-control-scale-line")[0];
                   scaleDiv.style.color = "#BBB";
                   scaleDiv.style.borderColor = "#BBB";
@@ -283,7 +300,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 }
               }
 
-              if (map_style === "dark") {
+              if ((map_style === "dark") || (map_style == "satellite")) {
                 this.document.getElementById("div-progress-bar").style.background = "#1C1C1C";
                 this.document.getElementById("progress-bar").style.background = "steelblue";
                 this.document.getElementById("bottom-container").style.background = "#1C1C1C";
@@ -292,7 +309,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               }
 
               L.tileLayer(
-                'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}.png',
+                basemap_url,
                 {
                   style: basemap_style,
                   subdomains: 'abcd',
@@ -320,9 +337,8 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               d.setTime(d.valueOf() + frameCount * 600000);
 
               townLayer = L.tileLayer(
-                'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}.png',
+                label_url,
                 {
-                  style: label_style,
                   subdomains: 'abcd',
                   detectRetina: false,
                   tileSize: labelSize,
