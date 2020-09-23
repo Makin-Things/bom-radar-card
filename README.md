@@ -79,7 +79,7 @@ show_range: false
 
 These are some things that are left to do.
 
-- Finish adding the various options to the Lovelace gui editor (I got stuck with how to add toggle buttons for the boolean options)
+- Finish adding the various options to the Lovelace gui editor. This is on hold due to breaking changes in HA 0.115. See https://github.com/home-assistant/frontend/issues/7098 for details.
 - Allow customisation of ring sizes (possibly add text to show the size)
 
 ## Install
