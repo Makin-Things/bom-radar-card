@@ -55,7 +55,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   // #####
 
   getCardSize(): number {
-    return 1;
+    return 10;
   }
 
   protected shouldUpdate(/*changedProps: PropertyValues*/): boolean {
@@ -127,6 +127,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               </div>
             </div>
             <script>
+              const radarLocations = [[-35.661387, 149.512229],[-33.700764, 151.209470],[-29.620633, 152.963328],[-29.496994, 149.850825],[-31.024219, 150.192037],[-32.729802, 152.025422],[-29.038524, 167.941679],[-35.158170, 147.456307],[-34.262389, 150.875099],[-37.855210, 144.755512],[-34.234354, 142.086133],[-37.887532, 147.575475],[-35.990000, 142.010000],[-36.029663, 146.022772],[-19.885737, 148.075693],[-27.717739, 153.240015],[-16.818145, 145.662895],[-23.549558, 148.239166],[-23.855056, 151.262567],[-25.957342, 152.576898],[-23.439783, 144.282270],[-21.117243, 149.217213],[-27.606344, 152.540084],[-16.670000, 139.170000],[-20.711204, 139.555281],[-19.419800, 146.550974],[-26.440193, 147.349130],[-12.666413, 141.924640],[-16.287199, 149.964539],[-34.617016, 138.468782],[-43.112593, 147.805241],[-41.179147, 145.579986],[-23.795064, 133.888935],[-12.455933, 130.926599],[-12.274995, 136.819911],[-14.510918, 132.447010],[-11.648500, 133.379977],[-34.941838, 117.816370],[-17.948234, 122.235334],[-24.887978, 113.669386],[-20.653613, 116.683144],[-31.777795, 117.952768],[-33.830150, 121.891734],[-28.804648, 114.697349],[-25.033225, 128.301756],[-30.784261, 121.454814],[-22.103197, 113.999698],[-33.096956, 119.008796],[-32.391761, 115.866955],[-20.371845, 118.631670],[-30.358887, 116.305769],[-15.451711, 128.120856],[-35.329531, 138.502498],[-32.129823, 133.696361],[-37.747713, 140.774605],[-31.155811, 136.804400],[-18.228916, 127.662836]];
               const maxZoom = 10;
               const minZoom = 4;
               var zoomLevel = ${this._config.zoom_level !== undefined ? this._config.zoom_level : 4};
@@ -350,20 +351,33 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               ${
                 this._config.show_marker === true
                   ? "var myIcon = L.icon({ \
-                    iconUrl: '/hacsfiles/bom-radar-card/'+svg_icon, \
-                iconSize: [16, 16], \
+                     iconUrl: '/hacsfiles/bom-radar-card/'+svg_icon, \
+                     iconSize: [16, 16], \
               }); \
-              L.marker([markerLat, markerLon], { icon: myIcon }).addTo(radarMap);"
+              L.marker([markerLat, markerLon], { icon: myIcon, interactive: false }).addTo(radarMap);"
                   : ''
               }
 
               ${
                 this._config.show_range === true
-                  ? 'L.circle([markerLat, markerLon], { radius: 50000, weight: 1, fill: false, opacity: 0.3 }).addTo(radarMap); \
-                     L.circle([markerLat, markerLon], { radius: 100000, weight: 1, fill: false, opacity: 0.3 }).addTo(radarMap); \
-                     L.circle([markerLat, markerLon], { radius: 200000, weight: 1, fill: false, opacity: 0.3 }).addTo(radarMap);'
+                  ? 'L.circle([markerLat, markerLon], { radius: 50000, weight: 1, fill: false, opacity: 0.3, interactive: false }).addTo(radarMap); \
+                     L.circle([markerLat, markerLon], { radius: 100000, weight: 1, fill: false, opacity: 0.3, interactive: false }).addTo(radarMap); \
+                     L.circle([markerLat, markerLon], { radius: 200000, weight: 1, fill: false, opacity: 0.3, interactive: false }).addTo(radarMap);'
                   : ''
               }
+
+              ${
+                this._config.show_radar_coverage === true
+                  ? "radarMap.createPane('overlayRadar'); \
+                     radarMap.getPane('overlayRadar').style.opacity = 0.1; \
+                     radarMap.getPane('overlayRadar').style.zIndex = 400; \
+                     radarMap.getPane('overlayRadar').style.pointerEvents = 'none'; \
+                     radarLocations.forEach(function (coords) { \
+                       L.circle([coords[0], coords[1]], { radius: 200000, weight: 1, stroke: false, fill: true, fillOpacity: 1, interactive: false, pane: 'overlayRadar' }).addTo(radarMap); \
+              });"
+                  : ''
+              }
+
               setTimeout(function() {
                 nextFrame();
               }, timeout);

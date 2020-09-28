@@ -20,25 +20,26 @@ The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/
 
 ## Options
 
-| Name             | Type    | Requirement  | Description                                            | Default                           |
-| ---------------- | ------- | ------------ | ------------------------------------------------------ | --------------------------------- |
-| type             | string  | **Required** |                                                        | must be `'custom:bom-radar-card'` |
-| center_latitude  | number  | **Optional** | The initial center latitude of the map                 | `-27.85`                          |
-| center_longitude | number  | **Optional** | The initial center longitude of the map                | `133.75`                          |
-| zoom_level       | number  | **Optional** | The initial zoom level, can be from 4 to 10            | `4`                               |
-| frame_delay      | number  | **Optional** | The number of milliseconds to show each frame          | `500`                             |
-| frame_count      | number  | **Optional** | The number of frames to use in the loop                | `10`                              |
-| show_marker      | boolean | **Optional** | Show the home icon at the marker position              | `false`                           |
-| marker_latitude  | number  | **Optional** | The latitude for the home icon if enabled              | the same as center_latitude       |
-| marker_longitude | number  | **Optional** | The longitude for the home icon if enabled             | the same as center_longitude      |
-| show_range       | boolean | **Optional** | Show range rings around marker position                | `false`                           |
-| show_scale       | boolean | **Optional** | Show a scale in the bottom left corner                 | `false`                           |
-| show_zoom        | boolean | **Optional** | Show the zoom controls in the top left corner          | `false`                           |
-| show_recenter    | boolean | **Optional** | Show the re-center control in the bottom right toolbar | `false`                           |
-| show_playback    | boolean | **Optional** | Show the playback controls in the bottom right toolbar | `false`                           |
-| extra_labels     | boolean | **Optional** | Show more town labels (labels become smaller)          | `false`                           |
-| map_style        | string  | **Optional** | Specifies the style for the map                        | `'light'`                         |
-| static_map       | boolean | **Optional** | Set to true to disable all panning and zooming         | `false`                           |
+| Name                | Type    | Requirement  | Description                                            | Default                                      |
+| ------------------- | ------- | ------------ | ------------------------------------------------------ | -------------------------------------------- |
+| type                | string  | **Required** |                                                        | must be `'custom:bom-radar-card'`            |
+| center_latitude     | number  | **Optional** | The initial center latitude of the map                 | `-27.85`                                     |
+| center_longitude    | number  | **Optional** | The initial center longitude of the map                | `133.75`                                     |
+| zoom_level          | number  | **Optional** | The initial zoom level, can be from 4 to 10            | `4`                                          |
+| frame_delay         | number  | **Optional** | The number of milliseconds to show each frame          | `500`                                        |
+| frame_count         | number  | **Optional** | The number of frames to use in the loop                | `10`                                         |
+| show_marker         | boolean | **Optional** | Show the home icon at the marker position              | `false`                                      |
+| marker_latitude     | number  | **Optional** | The latitude for the home icon if enabled              | the same as center_latitude                  |
+| marker_longitude    | number  | **Optional** | The longitude for the home icon if enabled             | the same as center_longitude                 |
+| show_range          | boolean | **Optional** | Show range rings around marker position                | `false`                                      |
+| show_scale          | boolean | **Optional** | Show a scale in the bottom left corner                 | `false`                                      |
+| show_zoom           | boolean | **Optional** | Show the zoom controls in the top left corner          | `false`                                      |
+| show_recenter       | boolean | **Optional** | Show the re-center control in the bottom right toolbar | `false`                                      |
+| show_playback       | boolean | **Optional** | Show the playback controls in the bottom right toolbar | `false`                                      |
+| extra_labels        | boolean | **Optional** | Show more town labels (labels become smaller)          | `false`                                      |
+| map_style           | string  | **Optional** | Specifies the style for the map                        | `'light'` see section below for valid values |
+| static_map          | boolean | **Optional** | Set to true to disable all panning and zooming         | `false`                                      |
+| show_radar_coverage | boolean | **Optional** | Show an overlay of the radar coverage                  | `false`                                      |
 
 ### Map style
 
