@@ -284,14 +284,15 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   position: 'bottomright',
                   actions: t2actions
                 }).addTo(radarMap);
-                if (${this._config.show_scale === true}) {
-                  L.control.scale({
-                    position: 'bottomleft',
-                    metric: true,
-                    imperial: false,
-                    maxWidth: 100,
-                  }).addTo(radarMap);
-                }
+              }
+
+              if (${this._config.show_scale === true}) {
+                L.control.scale({
+                  position: 'bottomleft',
+                  metric: true,
+                  imperial: false,
+                  maxWidth: 100,
+                }).addTo(radarMap);
 
                 if ((map_style === "dark") || (map_style == "satellite")) {
                   var scaleDiv = this.document.getElementsByClassName("leaflet-control-scale-line")[0];
