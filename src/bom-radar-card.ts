@@ -150,6 +150,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   var label_url = 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'dark_only_labels';
                   var svg_icon = 'home-circle-light.svg';
+                  var svg_radar_icon = 'radar-light.svg';
                   var attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a>';
                   break;
                 case "voyager":
@@ -158,6 +159,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   var label_url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'rastertiles/voyager_only_labels';
                   var svg_icon = 'home-circle-dark.svg';
+                  var svg_radar_icon = 'radar-dark.svg';
                   var attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a>';
                   break;
                 case 'satellite':
@@ -166,6 +168,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   var label_url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'proton_labels_std';
                   var svg_icon = 'home-circle-dark.svg';
+                  var svg_radar_icon = 'radar-dark.svg';
                   var attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="http://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" target="_blank">ESRI</a>';
                   break;
                 case "light":
@@ -175,6 +178,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   var label_url = 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'light_only_labels';
                   var svg_icon = 'home-circle-dark.svg';
+                  var svg_radar_icon = 'radar-dark.svg';
                   var attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a>';
               }
 
@@ -352,10 +356,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               ${
                 this._config.show_marker === true
                   ? "var myIcon = L.icon({ \
-                     iconUrl: '/hacsfiles/bom-radar-card/'+svg_icon, \
-                     iconSize: [16, 16], \
-              }); \
-              L.marker([markerLat, markerLon], { icon: myIcon, interactive: false }).addTo(radarMap);"
+                       iconUrl: '/hacsfiles/bom-radar-card/'+svg_icon, \
+                       iconSize: [16, 16], \
+                     }); \
+                     L.marker([markerLat, markerLon], { icon: myIcon, interactive: false }).addTo(radarMap);"
                   : ''
               }
 
@@ -368,14 +372,29 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               }
 
               ${
-                this._config.show_radar_coverage === true
-                  ? "radarMap.createPane('overlayRadar'); \
-                     radarMap.getPane('overlayRadar').style.opacity = 0.1; \
-                     radarMap.getPane('overlayRadar').style.zIndex = 400; \
-                     radarMap.getPane('overlayRadar').style.pointerEvents = 'none'; \
+                this._config.show_radar_location === true
+                  ? "var radarIcon = L.icon({ \
+                       iconUrl: '/hacsfiles/bom-radar-card/'+svg_radar_icon, \
+                       iconSize: [12, 12], \
+                     }); \
+                     radarMap.createPane('overlayRadarLocation'); \
+                     radarMap.getPane('overlayRadarLocation').style.zIndex = 401; \
+                     radarMap.getPane('overlayRadarLocation').style.pointerEvents = 'none'; \
                      radarLocations.forEach(function (coords) { \
-                       L.circle([coords[0], coords[1]], { radius: 200000, weight: 1, stroke: false, fill: true, fillOpacity: 1, interactive: false, pane: 'overlayRadar' }).addTo(radarMap); \
-              });"
+                       L.marker([coords[0], coords[1]], { icon: radarIcon, interactive: false, pane: 'overlayRadarLocation' }).addTo(radarMap); \
+                     });"
+                  : ''
+              }
+
+              ${
+                this._config.show_radar_coverage === true
+                  ? "radarMap.createPane('overlayRadarCoverage'); \
+                     radarMap.getPane('overlayRadarCoverage').style.opacity = 0.1; \
+                     radarMap.getPane('overlayRadarCoverage').style.zIndex = 400; \
+                     radarMap.getPane('overlayRadarCoverage').style.pointerEvents = 'none'; \
+                     radarLocations.forEach(function (coords) { \
+                       L.circle([coords[0], coords[1]], { radius: 200000, weight: 1, stroke: false, fill: true, fillOpacity: 1, interactive: false, pane: 'overlayRadarCoverage' }).addTo(radarMap); \
+                     });"
                   : ''
               }
 
