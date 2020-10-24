@@ -140,11 +140,18 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var barSize = this.frameElement.offsetWidth/frameCount;
               var labelSize = ${this._config.extra_labels !== undefined ? 128 : 256};
               var labelZoom = ${this._config.extra_labels !== undefined ? 1 : 0};
+              var locationRadius = '${
+                this._config.radar_location_radius !== undefined ? this._config.radar_location_radius : 2
+              }';
               var locationLineColour = '${
-                this._config.location_line_colour !== undefined ? this._config.location_line_colour : '#00FF00'
+                this._config.radar_location_line_colour !== undefined
+                  ? this._config.radar_location_line_colour
+                  : '#00FF00'
               }';
               var locationFillColour = '${
-                this._config.location_fill_colour !== undefined ? this._config.location_fill_colour : '#FF0000'
+                this._config.radar_location_fill_colour !== undefined
+                  ? this._config.radar_location_fill_colour
+                  : '#FF0000'
               }';
               var map_style = '${
                 this._config.map_style !== undefined ? this._config.map_style.toLowerCase() : 'light'
@@ -379,7 +386,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                      radarMap.getPane('overlayRadarLocation').style.zIndex = 401; \
                      radarMap.getPane('overlayRadarLocation').style.pointerEvents = 'none'; \
                      radarLocations.forEach(function (coords) { \
-                       L.circleMarker([coords[0], coords[1]], { radius: 2, weight: 1, color: locationLineColour, fillColor: locationFillColour, fillOpacity: 1.0, interactive: false, pane: 'overlayRadarLocation' }).addTo(radarMap); \
+                       L.circleMarker([coords[0], coords[1]], { radius: locationRadius, weight: locationRadius/2, color: locationLineColour, fillColor: locationFillColour, fillOpacity: 1.0, interactive: false, pane: 'overlayRadarLocation' }).addTo(radarMap); \
                      });"
                   : ''
               }
