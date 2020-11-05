@@ -89,7 +89,7 @@ These are some things that are left to do.
 
 ## Install
 
-If you use HACS, the resources will automatically be configured with the needed file.
+If you use HACS, the resources will automatically be configured with the needed file. The repository needs to be added as a custom repository within HACS. Go to HACS-Frontend, click on the three dots at the top right and select Custom Repositories. For the URL enter https://github.com/theOzzieRat/bom-radar-card and for Category choose Lovelace. Click Add. Now the card will show up HACS for installation.
 
 If you don't use HACS, you can download js file from [latest releases](https://github.com/theOzzieRat/bom-radar-card/releases). Drop it then in `www` folder in your `config` directory. Next add the following entry in lovelace configuration:
 

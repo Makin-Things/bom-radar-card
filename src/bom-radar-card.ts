@@ -69,6 +69,8 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       return this.showWarning(localize('common.show_warning'));
     }
 
+    console.log(this.baseURI);
+
     const doc = `
       <!DOCTYPE html>
       <html>
@@ -76,7 +78,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
           <title>BOM Radar Card</title>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <link rel="stylesheet" href="/hacsfiles/bom-radar-card/leaflet.css"/>
+          <link rel="stylesheet" href="/local/community/bom-radar-card/leaflet.css"/>
           <link rel="stylesheet" href="/hacsfiles/bom-radar-card/leaflet.toolbar.min.css"/>
           <script src="/hacsfiles/bom-radar-card/leaflet.js"></script>
           <script src="/hacsfiles/bom-radar-card/leaflet.toolbar.min.js"></script>
