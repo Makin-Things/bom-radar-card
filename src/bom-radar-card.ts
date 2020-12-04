@@ -1,5 +1,5 @@
-import { LitElement, html, customElement, property, CSSResult, TemplateResult, css, PropertyValues } from 'lit-element';
-import { HomeAssistant, hasConfigOrEntityChanged, LovelaceCardEditor, LovelaceCard } from 'custom-card-helpers';
+import { LitElement, html, customElement, property, CSSResult, TemplateResult, css } from 'lit-element';
+import { HomeAssistant, LovelaceCardEditor, LovelaceCard } from 'custom-card-helpers';
 
 import './editor';
 
