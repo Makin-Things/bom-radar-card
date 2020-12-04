@@ -19,8 +19,3 @@ jobs:
           rm -rf /home/runner/work/bom-radar-card/bom-radar-card/node_modules
           npm install
           npm run build
-
-      - name: Zip
-        run: |
-          rm -f /home/runner/work/bom-radar-card/bom-radar-card/dist/bom-radar-card.zip
-          zip /home/runner/work/bom-radar-card/bom-radar-card/dist/bom-radar-card.zip /home/runner/work/bom-radar-card/bom-radar-card/dist/*
