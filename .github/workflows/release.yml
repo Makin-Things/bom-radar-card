@@ -14,8 +14,9 @@ jobs:
       # Build
       - name: Build the file
         run: |
+          rm -rf /home/runner/work/bom-radar-card/bom-radar-card/node_modules
           cd /home/runner/work/bom-radar-card/bom-radar-card
-          npm ci
+          npm install
           npm run build
 
       # Upload build file to the release as an asset.
