@@ -32,11 +32,7 @@ jobs:
 
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /home/runner/work/bom-radar-card/bom-radar-card/dist/bom-radar-card.zip
-          asset_name: bom-radar-card.zip
+          file: /home/runner/work/bom-radar-card/bom-radar-card/dist/*
           tag: ${{ github.ref }}
           overwrite: true
-
-      - name: Cleanup
-        run: |
-          rm -f /home/runner/work/bom-radar-card/bom-radar-card/dist/bom-radar-card.zip
+          file_glob: true
