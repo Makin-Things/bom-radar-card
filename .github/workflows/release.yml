@@ -21,8 +21,9 @@ jobs:
 
       - name: Zip
         run: |
-          rm -f /home/runner/work/bom-radar-card/bom-radar-card/dist/bom-radar-card.zip
-          zip /home/runner/work/bom-radar-card/bom-radar-card/dist/bom-radar-card.zip /home/runner/work/bom-radar-card/bom-radar-card/dist/*
+          cd /home/runner/work/bom-radar-card/bom-radar-card/dist
+          rm -f bom-radar-card.zip
+          zip bom-radar-card.zip *
 
       # Upload build file to the release as an asset.
       - name: Upload zip to release
