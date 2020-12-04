@@ -21,10 +21,10 @@ jobs:
 
       - name: Zip
         run: |
-          cd /home/runner/work/bom-radar-card/bom-radar-card/dist
+          pushd /home/runner/work/bom-radar-card/bom-radar-card/dist
           rm -f bom-radar-card.zip
           zip bom-radar-card.zip *
-          ls
+          popd
 
       # Upload build file to the release as an asset.
       - name: Upload zip to release
@@ -36,3 +36,7 @@ jobs:
           asset_name: bom-radar-card.zip
           tag: ${{ github.ref }}
           overwrite: true
+
+      - name: Cleanup
+        run: |
+          rm -f /home/runner/work/bom-radar-card/bom-radar-card/dist/bom-radar-card.zip
