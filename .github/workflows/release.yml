@@ -15,10 +15,10 @@ jobs:
       - name: Build the file
         run: |
           cd /home/runner/work/bom-radar-card/bom-radar-card
-          npm install
+          npm ci
           npm run build
 
-      # Upload build file to the releas as an asset.
+      # Upload build file to the release as an asset.
       - name: Upload zip to release
         uses: svenstaro/upload-release-action@v1-release
 
