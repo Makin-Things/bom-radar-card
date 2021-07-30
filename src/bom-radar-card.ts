@@ -1,4 +1,4 @@
-import { LitElement, html, customElement, property, CSSResult, TemplateResult, css } from 'lit-element';
+import { LitElement, html, customElement, property, css, CSSResult, TemplateResult } from 'lit-element';
 import { HomeAssistant, LovelaceCardEditor, LovelaceCard } from 'custom-card-helpers';
 
 import './editor';
@@ -69,6 +69,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       return this.showWarning(localize('common.show_warning'));
     }
 
+    console.info('render offsetWidht: ' + this.offsetWidth);
+    console.info('square_map: ' + this._config.square_map);
+
     const doc = `
       <!DOCTYPE html>
       <html>
@@ -107,12 +110,18 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
             }
           </style>
         </head>
-        <body onload="resizeWindow()">
+        <body onresize="resizeWindow()">
           <span>
             <div id="color-bar" style="height: 8px;">
               <img id="img-color-bar" src="/hacsfiles/bom-radar-card/radar-colour-bar.png" height="8" style="vertical-align: top" />
             </div>
-            <div id="mapid" style="height: 492px;"></div>
+            <div id="mapid" style="height: ${
+              this._config.square_map !== undefined
+                ? this._config.square_map
+                  ? this.offsetWidth + 'px'
+                  : '492px'
+                : '492px'
+            };"></div>
             <div id="div-progress-bar" style="height: 8px; background-color: white;">
               <div id="progress-bar" style="height:8px;width:0; background-color: #ccf2ff;"></div>
             </div>
@@ -138,10 +147,12 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 [-35.158170, 147.456307],
                 [-34.262389, 150.875099],
                 [-37.855210, 144.755512],
-                [-34.28, 141.59],
+                [-34.287096, 141.598250],
                 [-37.887532, 147.575475],
                 [-35.990000, 142.010000],
                 [-36.029663, 146.022772],
+                [-33.552222, 145.528610],
+                [-33.552222, 145.528610],
                 [-19.885737, 148.075693],
                 [-27.717739, 153.240015],
                 [-16.818145, 145.662895],
@@ -195,7 +206,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var markerLon = (${this._config.marker_longitude}) ? ${this._config.marker_longitude} : centerLon;
               var timeout = ${this._config.frame_delay !== undefined ? this._config.frame_delay : 500};
               var frameCount = ${this._config.frame_count != undefined ? this._config.frame_count : 10};
-              var barSize = this.frameElement.offsetWidth/frameCount;
+              resizeWindow();
+              if ((this.frameElement.offsetWidth < 400) && (zoomLevel > minZoom)) {
+                zoomLevel--;
+              }
               var labelSize = ${this._config.extra_labels !== undefined ? 128 : 256};
               var labelZoom = ${this._config.extra_labels !== undefined ? 1 : 0};
               var locationRadius = '${
@@ -601,11 +615,16 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               }
 
               function resizeWindow() {
+                console.info("resize: " + this.frameElement.offsetWidth);
                 this.document.getElementById("color-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("img-color-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("mapid").width = this.frameElement.offsetWidth;
+                this.document.getElementById("mapid").height = ${
+                  this._config.square_map !== undefined ? (this._config.square_map ? this.offsetWidth : 492) : 492
+                }
                 this.document.getElementById("div-progress-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("bottom-container").width = this.frameElement.offsetWidth;
+                barSize = this.frameElement.offsetWidth/frameCount;
               }
             </script>
           </span>
@@ -613,20 +632,26 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       </html>
     `;
 
+    console.info('Pre-Width: ' + this.offsetWidth);
+    const padding =
+      this._config.square_map !== undefined
+        ? this._config.square_map
+          ? `${this.offsetWidth + 34}px`
+          : `526px`
+        : `526px`;
+
     return html`
+      <style>
+        ${this.styles}
+      </style>
       <ha-card class="type-iframe">
-        <div id="root">
-          <iframe
-            srcdoc=${doc}
-            scrolling="no"
-            height="526"
-            width="100%"
-            style="border:none; padding:none; border-radius: var(--ha-card-border-radius, 4px);"
-          ></iframe>
+        <div id="root" style="padding-top: ${padding}">
+          <iframe srcdoc=${doc} scrolling="no"></iframe>
         </div>
       </ha-card>
     `;
   }
+  //            style="border:none; padding:none; border-radius: var(--ha-card-border-radius, 4px);"
 
   private showWarning(warning: string): TemplateResult {
     return html`
@@ -657,6 +682,21 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       }
       #color-bar {
         margin: 0px 0px;
+      }
+      ha-card {
+        overflow: hidden;
+      }
+      #root {
+        width: 100%;
+        position: relative;
+      }
+      iframe {
+        position: absolute;
+        border: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
       }
     `;
   }
