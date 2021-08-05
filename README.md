@@ -41,9 +41,10 @@ The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/
 | static_map                 | boolean | **Optional** | Set to true to disable all panning and zooming           | `false`                                      |
 | show_radar_coverage        | boolean | **Optional** | Show an overlay of the radar coverage                    | `false`                                      |
 | show_radar_location        | boolean | **Optional** | Show an cirlce at radar sites                            | `false`                                      |
-| radar_location_radius      | boolean | **Optional** | Set the radius of the location circles                   | 2                                            |
-| radar_location_line_colour | boolean | **Optional** | Set the colour of the outer line of the location circles | `'#00FF00'` green                            |
-| radar_location_fill_colour | boolean | **Optional** | Set the colour of the fill of the location circles       | `'#FF0000'` red                              |
+| radar_location_radius      | number  | **Optional** | Set the radius of the location circles                   | 2                                            |
+| radar_location_line_colour | string  | **Optional** | Set the colour of the outer line of the location circles | `'#00FF00'` green                            |
+| radar_location_fill_colour | string  | **Optional** | Set the colour of the fill of the location circles       | `'#FF0000'` red                              |
+| square_map                 | boolean | **Optional** | Will keep the map square (not in panel mode)             | `false`                                      |
 
 ### Map style
 
@@ -85,7 +86,6 @@ show_range: false
 These are some things that are left to do.
 
 - Finish adding the various options to the Lovelace gui editor. This is on hold due to breaking changes in HA 0.115. See https://github.com/home-assistant/frontend/issues/7098 for details.
-- Allow customisation of ring sizes (possibly add text to show the size)
 
 ## Install
 
