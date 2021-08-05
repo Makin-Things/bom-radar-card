@@ -33,6 +33,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     return {};
   }
 
+  @property({ type: Boolean, reflect: true })
+  public isPanel = false;
+
   // TODO Add any properities that should cause your element to re-render here
   @property() public hass!: HomeAssistant;
   @property() private _config!: BomRadarCardConfig;
@@ -68,9 +71,6 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     if (this._config.show_warning) {
       return this.showWarning(localize('common.show_warning'));
     }
-
-    console.info('render offsetWidht: ' + this.offsetWidth);
-    console.info('square_map: ' + this._config.square_map);
 
     const doc = `
       <!DOCTYPE html>
@@ -116,7 +116,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               <img id="img-color-bar" src="/hacsfiles/bom-radar-card/radar-colour-bar.png" height="8" style="vertical-align: top" />
             </div>
             <div id="mapid" style="height: ${
-              this._config.square_map !== undefined
+              this.isPanel && this.offsetParent
+                ? this.offsetParent.clientHeight - 34 + 'px'
+                : this._config.square_map !== undefined
                 ? this._config.square_map
                   ? this.offsetWidth + 'px'
                   : '492px'
@@ -151,7 +153,6 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 [-37.887532, 147.575475],
                 [-35.990000, 142.010000],
                 [-36.029663, 146.022772],
-                [-33.552222, 145.528610],
                 [-33.552222, 145.528610],
                 [-19.885737, 148.075693],
                 [-27.717739, 153.240015],
@@ -207,9 +208,6 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var timeout = ${this._config.frame_delay !== undefined ? this._config.frame_delay : 500};
               var frameCount = ${this._config.frame_count != undefined ? this._config.frame_count : 10};
               resizeWindow();
-              if ((this.frameElement.offsetWidth < 400) && (zoomLevel > minZoom)) {
-                zoomLevel--;
-              }
               var labelSize = ${this._config.extra_labels !== undefined ? 128 : 256};
               var labelZoom = ${this._config.extra_labels !== undefined ? 1 : 0};
               var locationRadius = '${
@@ -615,12 +613,17 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               }
 
               function resizeWindow() {
-                console.info("resize: " + this.frameElement.offsetWidth);
                 this.document.getElementById("color-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("img-color-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("mapid").width = this.frameElement.offsetWidth;
                 this.document.getElementById("mapid").height = ${
-                  this._config.square_map !== undefined ? (this._config.square_map ? this.offsetWidth : 492) : 492
+                  this.isPanel && this.offsetParent
+                    ? this.offsetParent?.clientHeight - 34
+                    : this._config.square_map !== undefined
+                    ? this._config.square_map
+                      ? this.offsetWidth
+                      : 492
+                    : 492
                 }
                 this.document.getElementById("div-progress-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("bottom-container").width = this.frameElement.offsetWidth;
@@ -632,9 +635,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       </html>
     `;
 
-    console.info('Pre-Width: ' + this.offsetWidth);
     const padding =
-      this._config.square_map !== undefined
+      this.isPanel && this.offsetParent
+        ? this.offsetParent?.clientHeight + 'px'
+        : this._config.square_map !== undefined
         ? this._config.square_map
           ? `${this.offsetWidth + 34}px`
           : `526px`
