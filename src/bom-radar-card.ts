@@ -39,6 +39,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   // TODO Add any properities that should cause your element to re-render here
   @property() public hass!: HomeAssistant;
   @property() private _config!: BomRadarCardConfig;
+  @property() public editMode?: boolean;
 
   public setConfig(config: BomRadarCardConfig): void {
     // TODO Check for required fields and that they are of the proper format
@@ -116,11 +117,13 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               <img id="img-color-bar" src="/local/community/bom-radar-card/radar-colour-bar.png" height="8" style="vertical-align: top" />
             </div>
             <div id="mapid" style="height: ${
-              this.isPanel && this.offsetParent
-                ? this.offsetParent.clientHeight - 34 + 'px'
+              this.isPanel
+                ? this.offsetParent
+                  ? this.offsetParent.clientHeight - 34 - (this.editMode === true ? 59 : 0) + `px`
+                  : `526px`
                 : this._config.square_map !== undefined
                 ? this._config.square_map
-                  ? this.offsetWidth + 'px'
+                  ? this.getBoundingClientRect().width + 'px'
                   : '492px'
                 : '492px'
             };"></div>
@@ -208,8 +211,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var timeout = ${this._config.frame_delay !== undefined ? this._config.frame_delay : 500};
               var frameCount = ${this._config.frame_count != undefined ? this._config.frame_count : 10};
               resizeWindow();
-              var labelSize = ${this._config.extra_labels !== undefined ? 128 : 256};
-              var labelZoom = ${this._config.extra_labels !== undefined ? 1 : 0};
+              var labelSize = ${
+                this._config.extra_labels !== undefined ? (this._config.extra_labels ? 128 : 256) : 256
+              };
+              var labelZoom = ${this._config.extra_labels !== undefined ? (this._config.extra_labels ? 1 : 0) : 0};
               var locationRadius = '${
                 this._config.radar_location_radius !== undefined ? this._config.radar_location_radius : 2
               }';
@@ -617,11 +622,13 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 this.document.getElementById("img-color-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("mapid").width = this.frameElement.offsetWidth;
                 this.document.getElementById("mapid").height = ${
-                  this.isPanel && this.offsetParent
-                    ? this.offsetParent?.clientHeight - 34
+                  this.isPanel
+                    ? this.offsetParent
+                      ? this.offsetParent.clientHeight - 34 - (this.editMode === true ? 59 : 0)
+                      : 492
                     : this._config.square_map !== undefined
                     ? this._config.square_map
-                      ? this.offsetWidth
+                      ? this.getBoundingClientRect().width
                       : 492
                     : 492
                 }
@@ -635,14 +642,15 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       </html>
     `;
 
-    const padding =
-      this.isPanel && this.offsetParent
-        ? this.offsetParent?.clientHeight + 'px'
-        : this._config.square_map !== undefined
-        ? this._config.square_map
-          ? `${this.offsetWidth + 34}px`
-          : `526px`
-        : `526px`;
+    const padding = this.isPanel
+      ? this.offsetParent
+        ? this.offsetParent.clientHeight - (this.editMode === true ? 59 : 0) + `px`
+        : `526px`
+      : this._config.square_map !== undefined
+      ? this._config.square_map
+        ? `${this.getBoundingClientRect().width + 34}px`
+        : `526px`
+      : `526px`;
 
     return html`
       <style>
@@ -655,7 +663,6 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       </ha-card>
     `;
   }
-  //            style="border:none; padding:none; border-radius: var(--ha-card-border-radius, 4px);"
 
   private showWarning(warning: string): TemplateResult {
     return html`
