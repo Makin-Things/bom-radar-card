@@ -411,7 +411,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
               for (i = 0; i < frameCount; i++) {
                 radarImage[i] = L.tileLayer(
-                  'https://api.weather.bom.gov.au/v1/rainradar/tiles/{time}/{z}/{x}/{y}.png',
+                  'https://radar-tiles.service.bom.gov.au/tiles/{time}/{z}/{x}/{y}.png',
                   {
                     time: getRadarTime(d.valueOf() + i * 600000),
                     detectRetina: true,
@@ -494,7 +494,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               }
 
               function updateRadar() {
-                newLayer = L.tileLayer('https://api.weather.bom.gov.au/v1/rainradar/tiles/{time}/{z}/{x}/{y}.png', {
+                newLayer = L.tileLayer('https://radar-tiles.service.bom.gov.au/tiles/{time}/{z}/{x}/{y}.png', {
                   time: getRadarTime(d.valueOf() - 600000),
                   maxZoom: maxZoom,
                   tileSize: 256,
