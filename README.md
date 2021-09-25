@@ -16,7 +16,7 @@ Hey dude! Help me out for a couple of :beers: or a :coffee:!
 
 The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/) now use map tiles to distribute the radar images. This allow for one continous map that can be zoomed and panned seamlessly. This card allows this to be displayed within Home Assistant. The one drawback of the new system is that currently the BOM only publishes new tiles every 10 minutes (compared to 6 minutes with the old radar products) and there is a bigger lag in them being published. This results in the most recent radar image being between 10 to 20 minutes old at any point in time. The upside is that the radar tiles are available for a much longer time frame. This means you can create radar loops of up to at least 24 hours.
 
-![BOM Radar card](https://raw.githubusercontent.com/theOzzieRat/bom-radar-card/master/bom-radar-card.gif)
+![BOM Radar card](https://raw.githubusercontent.com/makin-things/bom-radar-card/master/bom-radar-card.gif)
 
 ## Options
 
@@ -81,17 +81,11 @@ show_marker: true
 show_range: false
 ```
 
-## ToDo
-
-These are some things that are left to do.
-
-- Finish adding the various options to the Lovelace gui editor. This is on hold due to breaking changes in HA 0.115. See https://github.com/home-assistant/frontend/issues/7098 for details.
-
 ## Install
 
-If you use HACS, the resources will automatically be configured with the needed file. The repository needs to be added as a custom repository within HACS. Go to HACS-Frontend, click on the three dots at the top right and select Custom Repositories. For the URL enter https://github.com/theOzzieRat/bom-radar-card and for Category choose Lovelace. Click Add. Now the card will show up HACS for installation.
+If you use HACS, the resources will automatically be configured with the needed file. The repository needs to be added as a custom repository within HACS. Go to HACS-Frontend, click on the three dots at the top right and select Custom Repositories. For the URL enter https://github.com/makin-things/bom-radar-card and for Category choose Lovelace. Click Add. Now the card will show up HACS for installation.
 
-If you don't use HACS (seriously you should as it makes life so much easier), you can download the required files from [latest releases](https://github.com/theOzzieRat/bom-radar-card/releases). Drop all of the files in `www/community/bom-radar-card` folder in your `config` directory. It should look like this:
+If you don't use HACS (seriously you should as it makes life so much easier), you can download the required files from [latest releases](https://github.com/makin-things/bom-radar-card/releases). Drop all of the files in `www/community/bom-radar-card` folder in your `config` directory. It should look like this:
 
 ```
     └── ...
@@ -122,6 +116,6 @@ resources:
     type: module
 ```
 
-[license-shield]: https://img.shields.io/github/license/theOzzieRat/bom-radar-card.svg?style=for-the-badge
-[releases-shield]: https://img.shields.io/github/release/theOzzieRat/bom-radar-card.svg?style=for-the-badge
-[releases]: https://github.com/theOzzieRat/bom-radar-card/releases
+[license-shield]: https://img.shields.io/github/license/makin-things/bom-radar-card.svg?style=for-the-badge
+[releases-shield]: https://img.shields.io/github/release/makin-things/bom-radar-card.svg?style=for-the-badge
+[releases]: https://github.com/makin-things/bom-radar-card/releases

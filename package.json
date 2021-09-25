@@ -11,7 +11,7 @@
     "custom-cards"
   ],
   "module": "bom-radar-card.js",
-  "repository": "git@github.com:theozzierat/bom-radar-card.git",
+  "repository": "git@github.com:makin-things/bom-radar-card.git",
   "author": "Simon Ratcliffe <simon@makin-things.com>",
   "license": "MIT",
   "dependencies": {
