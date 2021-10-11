@@ -1,4 +1,5 @@
-import { LitElement, html, customElement, property, TemplateResult, CSSResult, css } from 'lit-element';
+import { LitElement, html, css, CSSResult, TemplateResult } from 'lit';
+import { property, customElement } from 'lit/decorators.js';
 import { HomeAssistant, fireEvent, LovelaceCardEditor } from 'custom-card-helpers';
 
 import { BomRadarCardConfig } from './types';
