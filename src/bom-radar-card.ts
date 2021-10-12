@@ -16,12 +16,14 @@ console.info(
   'color: white; font-weight: bold; background: dimgray',
 );
 
-/*(window as any).customCards = (window as any).customCards || [];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(window as any).customCards = (window as any).customCards || [];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (window as any).customCards.push({
   type: 'bom-radar-card',
-  name: 'BOM Radar Card',
-  description: 'A card to display a radar from the Autralian BOM',
-});*/
+  name: 'BoM Radar Card',
+  description: 'A rain radar card using the new tiled images from the Australian BoM',
+});
 
 // TODO Name your custom element
 @customElement('bom-radar-card')
@@ -30,7 +32,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     return document.createElement('bom-radar-card-editor') as LovelaceCardEditor;
   }
 
-  public static getStubConfig(): object {
+  public static getStubConfig(): Record<string, unknown> {
     return {};
   }
 

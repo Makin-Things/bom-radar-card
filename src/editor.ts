@@ -29,22 +29,6 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
     return '';
   }
 
-  get _show_warning(): boolean {
-    if (this._config) {
-      return this._config.show_warning || false;
-    }
-
-    return false;
-  }
-
-  get _show_error(): boolean {
-    if (this._config) {
-      return this._config.show_error || false;
-    }
-
-    return false;
-  }
-
   protected render(): TemplateResult | void {
     if (!this.hass) {
       return html``;
