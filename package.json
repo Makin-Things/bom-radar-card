@@ -1,6 +1,6 @@
 {
   "name": "bom-radar-card",
-  "version": "v1.4.3",
+  "version": "v1.4.4",
   "description": "A rain radar card using the new tiled images from the Australian BOM",
   "keywords": [
     "home-assistant",
@@ -31,6 +31,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "check-dependencies": "^1.1.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -44,7 +45,6 @@
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
-    "rollup-plugin-uglify": "^6.0.4",
     "typescript": "^4.4.3"
   },
   "scripts": {
