@@ -119,22 +119,21 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
             <div id="color-bar" style="height: 8px;">
               <img id="img-color-bar" src="/local/community/bom-radar-card/radar-colour-bar.png" height="8" style="vertical-align: top" />
             </div>
-            <div id="mapid" style="height: ${
-              this.isPanel
-                ? this.offsetParent
-                  ? this.offsetParent.clientHeight - 34 - (this.editMode === true ? 59 : 0) + `px`
-                  : `526px`
-                : this._config.square_map !== undefined
-                ? this._config.square_map
-                  ? this.getBoundingClientRect().width + 'px'
-                  : '492px'
-                : '492px'
-            };"></div>
+            <div id="mapid" style="height: ${this.isPanel
+        ? this.offsetParent
+          ? this.offsetParent.clientHeight - 34 - (this.editMode === true ? 59 : 0) + `px`
+          : `526px`
+        : this._config.square_map !== undefined
+          ? this._config.square_map
+            ? this.getBoundingClientRect().width + 'px'
+            : '492px'
+          : '492px'
+      };"></div>
             <div id="div-progress-bar" style="height: 8px; background-color: white;">
               <div id="progress-bar" style="height:8px;width:0; background-color: #ccf2ff;"></div>
             </div>
             <div id="bottom-container" class="light-links" style="height: 18px; background-color: white;">
-              <div id="timestampid" class="text-container" style="width: 100px; height: 18px; float:left; position: absolute;">
+              <div id="timestampid" class="text-container" style="width: 110px; height: 18px; float:left; position: absolute;">
                 <p id="timestamp"></p>
               </div>
               <div id="attribution" class="text-container-small" style="height: 18px; float:right;">
@@ -215,26 +214,21 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var timeout = ${this._config.frame_delay !== undefined ? this._config.frame_delay : 500};
               var frameCount = ${this._config.frame_count != undefined ? this._config.frame_count : 10};
               resizeWindow();
-              var labelSize = ${
-                this._config.extra_labels !== undefined ? (this._config.extra_labels ? 128 : 256) : 256
-              };
+              var labelSize = ${this._config.extra_labels !== undefined ? (this._config.extra_labels ? 128 : 256) : 256
+      };
               var labelZoom = ${this._config.extra_labels !== undefined ? (this._config.extra_labels ? 1 : 0) : 0};
-              var locationRadius = '${
-                this._config.radar_location_radius !== undefined ? this._config.radar_location_radius : 2
-              }';
-              var locationLineColour = '${
-                this._config.radar_location_line_colour !== undefined
-                  ? this._config.radar_location_line_colour
-                  : '#00FF00'
-              }';
-              var locationFillColour = '${
-                this._config.radar_location_fill_colour !== undefined
-                  ? this._config.radar_location_fill_colour
-                  : '#FF0000'
-              }';
-              var map_style = '${
-                this._config.map_style !== undefined ? this._config.map_style.toLowerCase() : 'light'
-              }';
+              var locationRadius = '${this._config.radar_location_radius !== undefined ? this._config.radar_location_radius : 2
+      }';
+              var locationLineColour = '${this._config.radar_location_line_colour !== undefined
+        ? this._config.radar_location_line_colour
+        : '#00FF00'
+      }';
+              var locationFillColour = '${this._config.radar_location_fill_colour !== undefined
+        ? this._config.radar_location_fill_colour
+        : '#FF0000'
+      }';
+              var map_style = '${this._config.map_style !== undefined ? this._config.map_style.toLowerCase() : 'light'
+      }';
               switch (map_style) {
                 case "dark":
                   var basemap_url = 'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}.png';
@@ -275,16 +269,15 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var doRadarUpdate = false;
               var radarMap = L.map('mapid', {
                 zoomControl: ${this._config.show_zoom === true && this._config.static_map !== true ? 'true' : 'false'},
-                ${
-                  this._config.static_map === true
-                    ? 'scrollWheelZoom: false, \
+                ${this._config.static_map === true
+        ? 'scrollWheelZoom: false, \
                 doubleClickZoom: false, \
                 boxZoom: false, \
                 dragging: false, \
                 keyboard: false, \
                 touchZoom: false,'
-                    : ''
-                }
+        : ''
+      }
                 attributionControl: false,
                 minZoom: minZoom,
                 maxZoom: maxZoom,
@@ -441,47 +434,43 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               ).addTo(radarMap);
               townLayer.setZIndex(2);
 
-              ${
-                this._config.show_marker === true
-                  ? "var myIcon = L.icon({ \
+              ${this._config.show_marker === true
+        ? "var myIcon = L.icon({ \
                        iconUrl: '/local/community/bom-radar-card/'+svg_icon, \
                        iconSize: [16, 16], \
                      }); \
                      L.marker([markerLat, markerLon], { icon: myIcon, interactive: false }).addTo(radarMap);"
-                  : ''
-              }
+        : ''
+      }
 
-              ${
-                this._config.show_range === true
-                  ? 'L.circle([markerLat, markerLon], { radius: 50000, weight: 1, fill: false, opacity: 0.3, interactive: false }).addTo(radarMap); \
+              ${this._config.show_range === true
+        ? 'L.circle([markerLat, markerLon], { radius: 50000, weight: 1, fill: false, opacity: 0.3, interactive: false }).addTo(radarMap); \
                      L.circle([markerLat, markerLon], { radius: 100000, weight: 1, fill: false, opacity: 0.3, interactive: false }).addTo(radarMap); \
                      L.circle([markerLat, markerLon], { radius: 200000, weight: 1, fill: false, opacity: 0.3, interactive: false }).addTo(radarMap);'
-                  : ''
-              }
+        : ''
+      }
 
-              ${
-                this._config.show_radar_location === true
-                  ? "radarMap.createPane('overlayRadarLocation'); \
+              ${this._config.show_radar_location === true
+        ? "radarMap.createPane('overlayRadarLocation'); \
                      radarMap.getPane('overlayRadarLocation').style.zIndex = 401; \
                      radarMap.getPane('overlayRadarLocation').style.pointerEvents = 'none'; \
                      radarLocations.forEach(function (coords) { \
                        L.circleMarker([coords[0], coords[1]], { radius: locationRadius, weight: locationRadius/2, color: locationLineColour, fillColor: locationFillColour, fillOpacity: 1.0, interactive: false, pane: 'overlayRadarLocation' }).addTo(radarMap); \
                        L.circleMarker([coords[0], coords[1]], { radius: Math.max(10, locationRadius*1.5), stroke: false, fill: true, fillOpacity: 0.0, interactive: true, pane: 'overlayRadarLocation' }).addTo(radarMap).bindTooltip(coords[2]); \
                       });"
-                  : ''
-              }
+        : ''
+      }
 
-              ${
-                this._config.show_radar_coverage === true
-                  ? "radarMap.createPane('overlayRadarCoverage'); \
+              ${this._config.show_radar_coverage === true
+        ? "radarMap.createPane('overlayRadarCoverage'); \
                      radarMap.getPane('overlayRadarCoverage').style.opacity = 0.1; \
                      radarMap.getPane('overlayRadarCoverage').style.zIndex = 400; \
                      radarMap.getPane('overlayRadarCoverage').style.pointerEvents = 'none'; \
                      radarLocations.forEach(function (coords) { \
                        L.circle([coords[0], coords[1]], { radius: 250000, weight: 1, stroke: false, fill: true, fillOpacity: 1, interactive: false, pane: 'overlayRadarCoverage' }).addTo(radarMap); \
                      });"
-                  : ''
-              }
+        : ''
+      }
 
               setTimeout(function() {
                 nextFrame();
@@ -626,17 +615,16 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 this.document.getElementById("color-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("img-color-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("mapid").width = this.frameElement.offsetWidth;
-                this.document.getElementById("mapid").height = ${
-                  this.isPanel
-                    ? this.offsetParent
-                      ? this.offsetParent.clientHeight - 34 - (this.editMode === true ? 59 : 0)
-                      : 492
-                    : this._config.square_map !== undefined
-                    ? this._config.square_map
-                      ? this.getBoundingClientRect().width
-                      : 492
-                    : 492
-                }
+                this.document.getElementById("mapid").height = ${this.isPanel
+        ? this.offsetParent
+          ? this.offsetParent.clientHeight - 34 - (this.editMode === true ? 59 : 0)
+          : 492
+        : this._config.square_map !== undefined
+          ? this._config.square_map
+            ? this.getBoundingClientRect().width
+            : 492
+          : 492
+      }
                 this.document.getElementById("div-progress-bar").width = this.frameElement.offsetWidth;
                 this.document.getElementById("bottom-container").width = this.frameElement.offsetWidth;
                 barSize = this.frameElement.offsetWidth/frameCount;
@@ -652,10 +640,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         ? this.offsetParent.clientHeight - (this.editMode === true ? 59 : 0) + `px`
         : `526px`
       : this._config.square_map !== undefined
-      ? this._config.square_map
-        ? `${this.getBoundingClientRect().width + 34}px`
-        : `526px`
-      : `526px`;
+        ? this._config.square_map
+          ? `${this.getBoundingClientRect().width + 34}px`
+          : `526px`
+        : `526px`;
 
     return html`
       <style>
