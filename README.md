@@ -1,6 +1,6 @@
 # BOM Radar Card
 
-A rain radar card using the new tiled images from the Australian BOM
+A Home Assistant rain radar card using the new tiled images from the Australian BOM
 
 [![GitHub Release][releases-shield]][releases]
 [![License][license-shield]](LICENSE.md)
