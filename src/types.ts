@@ -11,6 +11,7 @@ export interface BomRadarCardConfig extends LovelaceCardConfig {
   show_recenter: boolean;
   static_map: boolean;
   show_zoom: boolean;
+  square_map: boolean;
   radar_location_fill_colour: undefined;
   radar_location_line_colour: undefined;
   radar_location_radius: undefined;

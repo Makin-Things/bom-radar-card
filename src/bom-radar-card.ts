@@ -1,5 +1,5 @@
 import { LitElement, html, css, CSSResult, TemplateResult } from 'lit';
-import { property, customElement } from 'lit/decorators.js';
+import { property, customElement } from 'lit/decorators';
 import { HomeAssistant, LovelaceCardEditor, LovelaceCard } from 'custom-card-helpers';
 
 import './editor';
@@ -40,9 +40,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   public isPanel = false;
 
   // TODO Add any properities that should cause your element to re-render here
-  @property() public hass!: HomeAssistant;
-  @property() private _config!: BomRadarCardConfig;
-  @property() public editMode?: boolean;
+  @property({ attribute: false }) public hass!: HomeAssistant;
+  @property({ attribute: false }) private _config!: BomRadarCardConfig;
+  @property({ attribute: false }) public editMode?: boolean;
 
   public setConfig(config: BomRadarCardConfig): void {
     // TODO Check for required fields and that they are of the proper format
