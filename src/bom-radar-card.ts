@@ -117,7 +117,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         <body onresize="resizeWindow()">
           <span>
             <div id="color-bar" style="height: 8px;">
-              <img id="img-color-bar" src="/local/community/bom-radar-card/radar-colour-bar.png" height="8" style="vertical-align: top" />
+              <img id="img-color-bar" src="/local/community/bom-radar-card/radar-colour-bar-meteored.png" height="8" style="vertical-align: top" />
             </div>
             <div id="mapid" style="height: ${this.isPanel
         ? this.offsetParent
@@ -276,7 +276,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 dragging: false, \
                 keyboard: false, \
                 touchZoom: false,'
-        : ''
+        : 'wheelPxPerZoomLevel: 120,'
       }
                 attributionControl: false,
                 minZoom: minZoom,
@@ -292,7 +292,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
               var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
               var d = new Date();
-              d.setTime(Math.trunc(d.valueOf() / 600000) * 600000 - frameCount * 600000);
+              d.setTime(Math.trunc((d.valueOf() - 60000) / 300000) * 300000 - (frameCount - 1) * 300000);
 
               document.getElementById("progress-bar").style.width = barSize+"px";
               document.getElementById("attribution").innerHTML = attribution;
@@ -408,20 +408,20 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
               for (i = 0; i < frameCount; i++) {
                 radarImage[i] = L.tileLayer(
-                  'https://radar-tiles.service.bom.gov.au/tiles/{time}/{z}/{x}/{y}.png',
+                  'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/5/1_1.png',
                   {
-                    time: getRadarTime(d.valueOf() + i * 600000),
+                    time: d.valueOf()/1000 + i * 300,
                     detectRetina: true,
                     tileSize: 256,
                     zoomOffset: 0,
                     opacity: 0,
                   },
                 ).addTo(radarMap);
-                radarTime[i] = getRadarTimeString(d.valueOf() + i * 600000);
+                radarTime[i] = getRadarTimeString(d.valueOf() + i * 300000);
               }
               radarImage[idx].setOpacity(1);
               document.getElementById('timestamp').innerHTML = radarTime[idx];
-              d.setTime(d.valueOf() + frameCount * 600000);
+              d.setTime(d.valueOf() + (frameCount - 1) * 300000);
 
               townLayer = L.tileLayer(
                 label_url,
@@ -478,9 +478,11 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               setUpdateTimeout();
 
               function setUpdateTimeout() {
-                d.setTime(d.valueOf() + 600000);
+                console.info('Enter setUpdateTimeout d=', d.valueOf());
+                d.setTime(d.valueOf() + 300000);
                 x = new Date();
-                setTimeout(triggerRadarUpdate, d.valueOf() - x.valueOf());
+                setTimeout(triggerRadarUpdate, d.valueOf() - x.valueOf() + 60000);
+                console.info('Timeout=', d.valueOf() - x.valueOf() + 60000);
               }
 
               function triggerRadarUpdate() {
@@ -488,14 +490,19 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               }
 
               function updateRadar() {
-                newLayer = L.tileLayer('https://radar-tiles.service.bom.gov.au/tiles/{time}/{z}/{x}/{y}.png', {
-                  time: getRadarTime(d.valueOf() - 600000),
+                newLayer = L.tileLayer('https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/5/1_1.png', {
+                  time: d.valueOf()/1000,
                   maxZoom: maxZoom,
                   tileSize: 256,
                   zoomOffset: 0,
                   opacity: 0,
-                }).addTo(radarMap);
-                newTime = getRadarTimeString(d.valueOf() - 600000);
+                });
+                newLayer.on('tileerror', function(error,tile) {
+                  console.info(error);
+                  console.info(tile);
+                });
+                newLayer.addTo(radarMap);
+                newTime = getRadarTimeString(d.valueOf());
 
                 radarImage[0].remove();
                 for (i = 0; i < frameCount - 1; i++) {
