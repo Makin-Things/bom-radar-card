@@ -213,6 +213,36 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var markerLon = (${this._config.marker_longitude}) ? ${this._config.marker_longitude} : centerLon;
               var timeout = ${this._config.frame_delay !== undefined ? this._config.frame_delay : 500};
               var frameCount = ${this._config.frame_count != undefined ? this._config.frame_count : 10};
+              var tileURL = '${this._config.data_source !== undefined ? this._config.data_source : 'BoM'}';
+              switch (tileURL) {
+                case "BoM":
+                  var tileURL = 'https://radar-tiles.service.bom.gov.au/tiles/{time}/{z}/{x}/{y}.png';
+                  break;
+                case "RainViewer-Original":
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/1/1_1.png';
+                  break;
+                case "RainViewer-UniversalBlue":
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/2/1_1.png';
+                  break;
+                case "RainViewer-TITAN":
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/3/1_1.png';
+                  break;
+                case "RainViewer-TWC":
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/4/1_1.png';
+                  break;
+                case "RainViewer-Meteored":
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/5/1_1.png';
+                  break;
+                case "RainViewer-NEXRAD":
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/6/1_1.png';
+                  break;
+                case "RainViewer-Rainbow":
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/7/1_1.png';
+                  break;
+                case "RainViewer-DarkSky":
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/8/1_1.png';
+                  break;
+              }
               resizeWindow();
               var labelSize = ${this._config.extra_labels !== undefined ? (this._config.extra_labels ? 128 : 256) : 256
       };
@@ -408,7 +438,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
               for (i = 0; i < frameCount; i++) {
                 radarImage[i] = L.tileLayer(
-                  'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/5/1_1.png',
+                  tileURL,
                   {
                     time: d.valueOf()/1000 + i * 300,
                     detectRetina: true,
@@ -490,7 +520,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               }
 
               function updateRadar() {
-                newLayer = L.tileLayer('https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/5/1_1.png', {
+                newLayer = L.tileLayer(tileURL, {
                   time: d.valueOf()/1000,
                   maxZoom: maxZoom,
                   tileSize: 256,
