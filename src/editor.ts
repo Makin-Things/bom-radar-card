@@ -8,7 +8,8 @@ import { customElement, property, state } from 'lit/decorators';
 import { formfieldDefinition } from '../elements/formfield';
 import { selectDefinition } from '../elements/select';
 import { switchDefinition } from '../elements/switch';
-import { textfieldDefinition } from '../elements/textfield'
+import { textfieldDefinition } from '../elements/textfield';
+import { sliderDefinition } from '../elements/slider';
 
 @customElement('bom-radar-card-editor')
 export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implements LovelaceCardEditor {
@@ -25,6 +26,7 @@ export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implement
     ...selectDefinition,
     ...switchDefinition,
     ...formfieldDefinition,
+    ...sliderDefinition,
   };
 
   public setConfig(config: BomRadarCardConfig): void {
@@ -145,6 +147,12 @@ export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implement
               .configValue=${'frame_delay'}
               @input=${this._valueChangedNumber}
           ></mwc-textfield>
+          <mwc-textfield
+              label="Restart Delay(ms) (optional)"
+              .value=${config.restart_delay ? config.restart_delay : ''}
+              .configValue=${'restart_delay'}
+              @input=${this._valueChangedNumber}
+          ></mwc-textfield>
         </div>
         <div class="side-by-side">
           <mwc-formfield .label=${"Static Map"}>
@@ -255,6 +263,26 @@ export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implement
               @input=${this._valueChangedString}
           ></mwc-textfield>
         </div>
+        <mwc-formfield alignEnd .label=${"Opacity"} style="width: 100%;">
+          <mwc-slider
+              discrete
+              min="0"
+              max="100"
+              .value=${config.opacity ? config.opacity : 100}
+              .configValue=${'opacity'}
+              @input=${this._valueChangedNumber}
+              style="width: 100%;"
+          ></mwc-slider>
+        </mwc-formfield>
+        <mwc-slider
+            discrete
+            min="0"
+            max="100"
+            .value=${config.opacity ? config.opacity : 100}
+            .configValue=${'opacity'}
+            @input=${this._valueChangedNumber}
+            style="width: 200px;"
+        ></mwc-slider>
       </div>
     `;
   }

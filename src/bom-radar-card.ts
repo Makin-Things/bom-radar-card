@@ -1,5 +1,5 @@
 import { LitElement, html, css, CSSResult, TemplateResult } from 'lit';
-import { property, customElement } from 'lit/decorators';
+import { property, customElement } from 'lit/decorators.js';
 import { HomeAssistant, LovelaceCardEditor, LovelaceCard } from 'custom-card-helpers';
 
 import './editor';
@@ -212,6 +212,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               var markerLat = (${this._config.marker_latitude}) ? ${this._config.marker_latitude} : centerLat;
               var markerLon = (${this._config.marker_longitude}) ? ${this._config.marker_longitude} : centerLon;
               var timeout = ${this._config.frame_delay !== undefined ? this._config.frame_delay : 500};
+              var restartDelay = ${this._config.restart_delay !== undefined ? this._config.restart_delay : 1000};
               var frameCount = ${this._config.frame_count != undefined ? this._config.frame_count : 10};
               var tileURL = '${this._config.data_source !== undefined ? this._config.data_source : 'BoM'}';
               switch (tileURL) {
@@ -222,49 +223,49 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   var frameLag = 600000;
                   break;
                 case "RainViewer-Original":
-                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/1/1_1.png';
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/1/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-original.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
                   break;
                 case "RainViewer-UniversalBlue":
-                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/2/1_1.png';
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/2/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-universalblue.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
                   break;
                 case "RainViewer-TITAN":
-                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/3/1_1.png';
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/3/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-titan.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
                   break;
                 case "RainViewer-TWC":
-                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/4/1_1.png';
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/4/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-twc.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
                   break;
                 case "RainViewer-Meteored":
-                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/5/1_1.png';
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/5/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-meteored.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
                   break;
                 case "RainViewer-NEXRAD":
-                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/6/1_1.png';
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/6/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-nexrad.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
                   break;
                 case "RainViewer-Rainbow":
-                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/7/1_1.png';
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/7/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-rainbow.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
                   break;
                 case "RainViewer-DarkSky":
-                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/8/1_1.png';
+                  var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/8/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-darksky.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
@@ -344,8 +345,8 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 ],
                 maxBoundsViscosity: 1.0,
               }).setView([centerLat, centerLon], zoomLevel);
-              var radarImage = [];
-              var radarTime = [];
+              var radarImage = [frameCount];
+              var radarTime = [frameCount];
               var weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
               var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
               var d = new Date();
@@ -477,11 +478,21 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                     tileSize: 256,
                     zoomOffset: 0,
                     opacity: 0,
+                    frame: i,
                   },
-                ).addTo(radarMap);
+                );
                 radarTime[i] = getRadarTimeString(d.valueOf() + i * framePeriod);
               }
-              radarImage[idx].setOpacity(1);
+
+              for (i = 0; i < (frameCount - 1); i++) {
+                radarImage[i].on('load', function(e) {
+                  radarImage[e.target.options.frame + 1].addTo(radarMap);
+                });
+              }
+
+              radarImage[0].addTo(radarMap);
+
+              radarImage[idx].setOpacity(0.5);
               document.getElementById('timestamp').innerHTML = radarTime[idx];
               d.setTime(d.valueOf() + (frameCount - 1) * framePeriod);
 
@@ -540,11 +551,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               setUpdateTimeout();
 
               function setUpdateTimeout() {
-                console.info('Enter setUpdateTimeout d=', d.valueOf());
                 d.setTime(d.valueOf() + framePeriod);
                 x = new Date();
                 setTimeout(triggerRadarUpdate, d.valueOf() - x.valueOf() + frameLag);
-                console.info('Timeout=', d.valueOf() - x.valueOf() + frameLag);
               }
 
               function triggerRadarUpdate() {
@@ -563,10 +572,6 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   tileSize: 256,
                   zoomOffset: 0,
                   opacity: 0,
-                });
-                newLayer.on('tileerror', function(error,tile) {
-                  console.info(error);
-                  console.info(tile);
                 });
                 newLayer.addTo(radarMap);
                 newTime = getRadarTimeString(d.valueOf());
@@ -634,7 +639,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 }
                 setTimeout(function() {
                   nextFrame();
-                }, timeout);
+                }, (idx == frameCount) ? restartDelay : timeout);
               }
 
               function skipNext() {
@@ -660,7 +665,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 }
                 document.getElementById("progress-bar").style.width = (idx+1)*barSize+"px";
                 document.getElementById('timestamp').innerHTML = radarTime[idx];
-                radarImage[idx].setOpacity(1);
+                radarImage[idx].setOpacity(0.5);
               }
 
               function nextImage() {
@@ -681,7 +686,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 }
                 if (idx < frameCount) {
                   document.getElementById('timestamp').innerHTML = radarTime[idx];
-                  radarImage[idx].setOpacity(1);
+                  radarImage[idx].setOpacity(0.5);
                 }
               }
 
