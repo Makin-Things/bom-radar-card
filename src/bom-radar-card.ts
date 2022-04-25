@@ -206,6 +206,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 [-15.451711, 128.120856, "Wyndham"]];
               const maxZoom = 10;
               const minZoom = 4;
+              var radarOpacity = 1.0;
               var zoomLevel = ${this._config.zoom_level !== undefined ? this._config.zoom_level : 4};
               var centerLat = ${this._config.center_latitude !== undefined ? this._config.center_latitude : -27.85};
               var centerLon = ${this._config.center_longitude !== undefined ? this._config.center_longitude : 133.75};
@@ -492,7 +493,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
               radarImage[0].addTo(radarMap);
 
-              radarImage[idx].setOpacity(0.5);
+              radarImage[idx].setOpacity(radarOpacity);
               document.getElementById('timestamp').innerHTML = radarTime[idx];
               d.setTime(d.valueOf() + (frameCount - 1) * framePeriod);
 
@@ -665,7 +666,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 }
                 document.getElementById("progress-bar").style.width = (idx+1)*barSize+"px";
                 document.getElementById('timestamp').innerHTML = radarTime[idx];
-                radarImage[idx].setOpacity(0.5);
+                radarImage[idx].setOpacity(radarOpacity);
               }
 
               function nextImage() {
@@ -686,7 +687,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 }
                 if (idx < frameCount) {
                   document.getElementById('timestamp').innerHTML = radarTime[idx];
-                  radarImage[idx].setOpacity(0.5);
+                  radarImage[idx].setOpacity(radarOpacity);
                 }
               }
 
