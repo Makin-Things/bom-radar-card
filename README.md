@@ -21,7 +21,7 @@ The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/
 
 ## Options
 
-All if the options below can be selected using the GUI config editor, there is no need to edit the yaml config directly.
+All of the options below can be selected using the GUI config editor, there is no need to edit the yaml config directly.
 
 | Name                       | Type    | Requirement  | Description                                                  | Default                                      |
 | -------------------------- | ------- | ------------ | ------------------------------------------------------------ | -------------------------------------------- |
