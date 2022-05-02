@@ -15,11 +15,13 @@ Hey dude! Help me out for a couple of :beers: or a :coffee:!
 
 ## Description
 
-The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/) now use map tiles to distribute the radar images. This allow for one continous map that can be zoomed and panned seamlessly. This card allows this to be displayed within Home Assistant. The one drawback of the new system is that currently the BOM only publishes new tiles every 10 minutes (compared to 6 minutes with the old radar products) and there is a bigger lag in them being published. This results in the most recent radar image being between 10 to 20 minutes old at any point in time. The upside is that the radar tiles are available for a much longer time frame. This means you can create radar loops of up to at least 24 hours.
+The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/) now use map tiles to distribute the radar images. This allows for one continous map that can be zoomed and panned seamlessly. This card allows this to be displayed within Home Assistant. The one drawback of the new system is that currently the BOM only publishes new tiles every 10 minutes (compared to 6 minutes with the old radar products) and there is a bigger lag in them being published. This results in the most recent radar image being between 10 to 20 minutes old at any point in time. The upside is that the radar tiles are available for a much longer time frame. This means you can create radar loops of up to at least 24 hours. The alternative tiles provided by RainViewer update every 5 minutes and are much more timely.
 
 ![BOM Radar card](https://raw.githubusercontent.com/makin-things/bom-radar-card/master/bom-radar-card.gif)
 
 ## Options
+
+All if the options below can be selected using the GUI config editor, there is no need to edit the yaml config directly.
 
 | Name                       | Type    | Requirement  | Description                                                  | Default                                      |
 | -------------------------- | ------- | ------------ | ------------------------------------------------------------ | -------------------------------------------- |
@@ -127,9 +129,17 @@ If you don't use HACS (seriously you should as it makes life so much easier), yo
                 └── leaflet.toolbar.min.js
                 └── pause.png
                 └── play.png
-                └── radar-colour-bar.png
+                └── radar-colour-bar-bom.png
+                └── radar-colour-bar-darksky.png
+                └── radar-colour-bar-meteored.png
+                └── radar-colour-bar-nexrad.png
+                └── radar-colour-bar-original.png
+                └── radar-colour-bar-rainbow.png
+                └── radar-colour-bar-titan.png
+                └── radar-colour-bar-twc.png
+                └── radar-colour-bar-universalblue.png
                 └── recenter.png
-                └── recenter.png
+                └── skip-back.png
                 └── skip-next.png
 ```
 
