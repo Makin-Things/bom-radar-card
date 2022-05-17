@@ -107,7 +107,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
               color: steelblue;
             }
             #timestamp {
+              font: 14px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
               margin: 0px 0px;
+              padding-top: 5px;
             }
             #color-bar {
               margin: 0px 0px;
@@ -121,8 +123,8 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
             </div>
             <div id="mapid" style="height: ${this.isPanel
         ? this.offsetParent
-          ? this.offsetParent.clientHeight - 34 - (this.editMode === true ? 59 : 0) + `px`
-          : `526px`
+          ? this.offsetParent.clientHeight - 48 - (this.editMode === true ? 59 : 0) + `px`
+          : `540px`
         : this._config.square_map !== undefined
           ? this._config.square_map
             ? this.getBoundingClientRect().width + 'px'
@@ -132,11 +134,11 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
             <div id="div-progress-bar" style="height: 8px; background-color: white;">
               <div id="progress-bar" style="height:8px;width:0; background-color: #ccf2ff;"></div>
             </div>
-            <div id="bottom-container" class="light-links" style="height: 18px; background-color: white;">
-              <div id="timestampid" class="text-container" style="width: 110px; height: 18px; float:left; position: absolute;">
+            <div id="bottom-container" class="light-links" style="height: 32px; background-color: white;">
+              <div id="timestampid" class="text-container" style="width: 120px; height: 32px; float:left; position: absolute;">
                 <p id="timestamp"></p>
               </div>
-              <div id="attribution" class="text-container-small" style="height: 18px; float:right;">
+              <div id="attribution" class="text-container-small" style="height: 32px; float:right;">
                 <span class="Map__Attribution-LjffR DKiFh" id="attribution"
                   ></span
                 >
@@ -223,54 +225,63 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-bom.png";
                   var framePeriod = 600000;
                   var frameLag = 600000;
+                  var radarData = 'Radar data &copy; <a href="http://www.bom.gov.au" target="_blank">BoM</a>';
                   break;
                 case "RainViewer-Original":
                   var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/1/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-original.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
+                  var radarData = 'Radar data by <a href="https://rainviewer.com" target="_blank">RainViewer</a>';
                   break;
                 case "RainViewer-UniversalBlue":
                   var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/2/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-universalblue.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
+                  var radarData = 'Radar data by <a href="https://rainviewer.com" target="_blank">RainViewer</a>';
                   break;
                 case "RainViewer-TITAN":
                   var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/3/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-titan.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
+                  var radarData = 'Radar data by <a href="https://rainviewer.com" target="_blank">RainViewer</a>';
                   break;
                 case "RainViewer-TWC":
                   var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/4/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-twc.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
+                  var radarData = 'Radar data by <a href="https://rainviewer.com" target="_blank">RainViewer</a>';
                   break;
                 case "RainViewer-Meteored":
                   var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/5/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-meteored.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
+                  var radarData = 'Radar data by <a href="https://rainviewer.com" target="_blank">RainViewer</a>';
                   break;
                 case "RainViewer-NEXRAD":
                   var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/6/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-nexrad.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
+                  var radarData = 'Radar data by <a href="https://rainviewer.com" target="_blank">RainViewer</a>';
                   break;
                 case "RainViewer-Rainbow":
                   var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/7/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-rainbow.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
+                  var radarData = 'Radar data by <a href="https://rainviewer.com" target="_blank">RainViewer</a>';
                   break;
                 case "RainViewer-DarkSky":
                   var tileURL = 'https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/8/1_0.png';
                   document.getElementById("img-color-bar").src = "/local/community/bom-radar-card/radar-colour-bar-darksky.png";
                   var framePeriod = 300000;
                   var frameLag = 60000;
+                  var radarData = 'Radar data by <a href="https://rainviewer.com" target="_blank">RainViewer</a>';
                   break;
               }
               resizeWindow();
@@ -296,7 +307,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   var label_url = 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'dark_only_labels';
                   var svg_icon = 'home-circle-light.svg';
-                  var attribution = '<a href="https://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> | &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a>';
+                  var attribution = '<a href="https://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> | &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a><br>'+radarData;
                   break;
                 case "voyager":
                   var basemap_url = 'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}.png';
@@ -304,7 +315,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   var label_url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'rastertiles/voyager_only_labels';
                   var svg_icon = 'home-circle-dark.svg';
-                  var attribution = '<a href="https://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> | &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a>';
+                  var attribution = '<a href="https://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> | &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a><br>'+radarData;
                   break;
                 case 'satellite':
                   var basemap_url = 'https://server.arcgisonline.com/ArcGIS/rest/services/{style}/MapServer/tile/{z}/{y}/{x}';
@@ -312,7 +323,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   var label_url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'proton_labels_std';
                   var svg_icon = 'home-circle-dark.svg';
-                  var attribution = '<a href="https://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> | &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="http://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" target="_blank">ESRI</a>';
+                  var attribution = '<a href="https://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> | &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="http://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" target="_blank">ESRI</a><br>'+radarData;
                   break;
                 case "light":
                 default:
@@ -321,7 +332,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                   var label_url = 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png';
                   var label_style = 'light_only_labels';
                   var svg_icon = 'home-circle-dark.svg';
-                  var attribution = '<a href="https://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> | &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a>';
+                  var attribution = '<a href="https://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> | &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attribution" target="_blank">CARTO</a><br>'+radarData;
               }
 
               var idx = 0;
@@ -698,7 +709,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 this.document.getElementById("mapid").width = this.frameElement.offsetWidth;
                 this.document.getElementById("mapid").height = ${this.isPanel
         ? this.offsetParent
-          ? this.offsetParent.clientHeight - 34 - (this.editMode === true ? 59 : 0)
+          ? this.offsetParent.clientHeight - 48 - (this.editMode === true ? 59 : 0)
           : 492
         : this._config.square_map !== undefined
           ? this._config.square_map
@@ -719,12 +730,12 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     const padding = this.isPanel
       ? this.offsetParent
         ? this.offsetParent.clientHeight - (this.editMode === true ? 59 : 0) + `px`
-        : `526px`
+        : `540px`
       : this._config.square_map !== undefined
         ? this._config.square_map
-          ? `${this.getBoundingClientRect().width + 34}px`
-          : `526px`
-        : `526px`;
+          ? `${this.getBoundingClientRect().width + 48}px`
+          : `540px`
+        : `540px`;
 
     const cardTitle = this._config.card_title !== undefined ? html`<div id="card-title">${this._config.card_title}</div>` : ``;
 
