@@ -70,6 +70,12 @@ export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implement
 
     return html`
       <div class="values">
+        <mwc-textfield
+            label="Card Title (optional)"
+            .value=${config.card_title ? config.card_title : ''}
+            .configValue=${'card_title'}
+            @input=${this._valueChangedString}
+        ></mwc-textfield>
         <mwc-select label="Data Source (optional)" .configValue=${'data_source'} .value=${config.data_source ?
               config.data_source : ''} @selected=${this._valueChangedString} @closed=${(ev)=>
               ev.stopPropagation()}
@@ -263,26 +269,6 @@ export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implement
               @input=${this._valueChangedString}
           ></mwc-textfield>
         </div>
-        <mwc-formfield alignEnd .label=${"Opacity"} style="width: 100%;">
-          <mwc-slider
-              discrete
-              min="0"
-              max="100"
-              .value=${config.opacity ? config.opacity : 100}
-              .configValue=${'opacity'}
-              @input=${this._valueChangedNumber}
-              style="width: 100%;"
-          ></mwc-slider>
-        </mwc-formfield>
-        <mwc-slider
-            discrete
-            min="0"
-            max="100"
-            .value=${config.opacity ? config.opacity : 100}
-            .configValue=${'opacity'}
-            @input=${this._valueChangedNumber}
-            style="width: 200px;"
-        ></mwc-slider>
       </div>
     `;
   }

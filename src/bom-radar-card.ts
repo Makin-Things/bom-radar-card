@@ -726,11 +726,14 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
           : `526px`
         : `526px`;
 
+    const cardTitle = this._config.card_title !== undefined ? html`<div id="card-title">${this._config.card_title}</div>` : ``;
+
     return html`
       <style>
         ${this.styles}
       </style>
       <ha-card class="type-iframe">
+        ${cardTitle}
         <div id="root" style="padding-top: ${padding}">
           <iframe srcdoc=${doc} scrolling="no"></iframe>
         </div>
@@ -762,12 +765,6 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       .text-container {
         font: 12px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
       }
-      #timestamp {
-        margin: 2px 0px;
-      }
-      #color-bar {
-        margin: 0px 0px;
-      }
       ha-card {
         overflow: hidden;
       }
@@ -782,6 +779,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         height: 100%;
         top: 0;
         left: 0;
+      }
+      #card-title {
+        margin: 8px 0px 4px 8px;
+        font-size: 1.5em;
       }
     `;
   }
