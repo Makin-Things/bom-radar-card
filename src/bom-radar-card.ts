@@ -157,6 +157,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 [-33.700764, 151.209470, "Sydney (Terry Hills)"],
                 [-35.158170, 147.456307, "Wagga Wagga"],
                 [-34.262389, 150.875099, "Wollongong (Appin)"],
+                [-32.744396, 148.708077, "Yeoval"],
                 [-37.855210, 144.755512, "Melbourne"],
                 [-34.287096, 141.598250, "Mildura"],
                 [-37.887532, 147.575475, "Bairnsdale"],
