@@ -175,6 +175,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
                 [-27.606344, 152.540084, "Marburg"],
                 [-16.670000, 139.170000, "Mornington Island"],
                 [-20.711204, 139.555281, "Mount Isa"],
+                [-20.751795, 143.141359, "Richmond"],
                 [-25.696071, 149.898161, "Taroom"],
                 [-19.419800, 146.550974, "Townsville (Hervey Range)"],
                 [-26.440193, 147.349130, "Warrego"],
