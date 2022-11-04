@@ -123,7 +123,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
             </div>
             <div id="mapid" style="height: ${this.isPanel
         ? this.offsetParent
-          ? this.offsetParent.clientHeight - 48 - (this.editMode === true ? 59 : 0) + `px`
+          ? this.offsetParent.clientHeight - 48 - 2 - (this.editMode === true ? 59 : 0) + `px`
           : `540px`
         : this._config.square_map !== undefined
           ? this._config.square_map
@@ -715,7 +715,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         this.document.getElementById("mapid").width = this.frameElement.offsetWidth;
         this.document.getElementById("mapid").height = ${this.isPanel
         ? this.offsetParent
-          ? this.offsetParent.clientHeight - 48 - (this.editMode === true ? 59 : 0)
+          ? this.offsetParent.clientHeight - 48 - 2 - (this.editMode === true ? 59 : 0)
           : 492
         : this._config.square_map !== undefined
           ? this._config.square_map
@@ -735,7 +735,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
     const padding = this.isPanel
       ? this.offsetParent
-        ? this.offsetParent.clientHeight - (this.editMode === true ? 59 : 0) + `px`
+        ? this.offsetParent.clientHeight - 2 - (this.editMode === true ? 59 : 0) + `px`
         : `540px`
       : this._config.square_map !== undefined
         ? this._config.square_map
