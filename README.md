@@ -15,6 +15,8 @@ Hey dude! Help me out for a couple of :beers: or a :coffee:!
 
 ## Description
 
+# The BOM have completely changed the way they deliver radar information. As such this card is no longer able to display radar tiles from the BOM. This can't be fixed and will require a complete rewrite of the card. Unfortunately I don't have the time to work on that.
+
 The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/) now use map tiles to distribute the radar images. This allows for one continous map that can be zoomed and panned seamlessly. This card allows this to be displayed within Home Assistant. The one drawback of the new system is that currently the BOM only publishes new tiles every 10 minutes (compared to 6 minutes with the old radar products) and there is a bigger lag in them being published. This results in the most recent radar image being between 10 to 20 minutes old at any point in time. The upside is that the radar tiles are available for a much longer time frame. This means you can create radar loops of up to at least 24 hours. The alternative tiles provided by RainViewer update every 5 minutes and are much more timely.
 
 ![BOM Radar card](https://raw.githubusercontent.com/makin-things/bom-radar-card/master/bom-radar-card.gif)
