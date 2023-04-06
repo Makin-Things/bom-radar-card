@@ -4,7 +4,7 @@ import { HomeAssistant, fireEvent, LovelaceCardEditor } from 'custom-card-helper
 
 import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
 import { BomRadarCardConfig } from './types';
-import { customElement, property, state } from 'lit/decorators';
+import { customElement, property, state } from 'lit/decorators.js';
 import { formfieldDefinition } from '../elements/formfield';
 import { selectDefinition } from '../elements/select';
 import { switchDefinition } from '../elements/switch';
@@ -77,8 +77,8 @@ export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implement
             @input=${this._valueChangedString}
         ></mwc-textfield>
         <mwc-select label="Data Source (optional)" .configValue=${'data_source'} .value=${config.data_source ?
-              config.data_source : ''} @selected=${this._valueChangedString} @closed=${(ev)=>
-              ev.stopPropagation()}
+        config.data_source : ''} @selected=${this._valueChangedString} @closed=${(ev) =>
+          ev.stopPropagation()}
             >
             <mwc-list-item></mwc-list-item>
             <mwc-list-item value="BoM">Bureau of Meteorology</mwc-list-item>
@@ -93,8 +93,8 @@ export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implement
         </mwc-select>
         <div class="side-by-side">
           <mwc-select label="Map Style (optional)" .configValue=${'map_style'} .value=${config.map_style ?
-              config.map_style : ''} @selected=${this._valueChangedString} @closed=${(ev)=>
-              ev.stopPropagation()}
+        config.map_style : ''} @selected=${this._valueChangedString} @closed=${(ev) =>
+          ev.stopPropagation()}
             >
             <mwc-list-item></mwc-list-item>
             <mwc-list-item value="Light">Light</mwc-list-item>
@@ -103,8 +103,8 @@ export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implement
             <mwc-list-item value="Dark">Dark</mwc-list-item>
           </mwc-select>
           <mwc-select label="Zoom Level (optional)" .configValue=${'zoom_level'} .value=${config.zoom_level ?
-              config.zoom_level.toString() : null} @selected=${this._valueChangedNumber} @closed=${(ev)=>
-              ev.stopPropagation()}
+        config.zoom_level.toString() : null} @selected=${this._valueChangedNumber} @closed=${(ev) =>
+          ev.stopPropagation()}
             >
             <mwc-list-item></mwc-list-item>
             <mwc-list-item value="4">4</mwc-list-item>
