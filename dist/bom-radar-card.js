@@ -10880,6 +10880,79 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                     projection: { name: 'equirectangular' },
                     attributionControl: false
                 });
+                const ts = '202304070450';
+                this.map.on('load', () => {
+                    // Add the Mapbox Terrain v2 vector tileset. Read more about
+                    // the structure of data in this tileset in the documentation:
+                    // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
+                    this.map.addSource('composite1', {
+                        type: 'vector',
+                        url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + ts
+                    });
+                    this.map.addLayer({
+                        'id': 'BOM-RainRateStaticReference-Observation1',
+                        'type': 'fill',
+                        'source': 'composite1',
+                        // Source has several layers. We visualize the one with name 'sequence'.
+                        'source-layer': ts,
+                        //          'layout': {
+                        //              'visibility': 'visible',
+                        //          		'fill-color':  'rgb(53, 175, 109)'
+                        //          		'line-cap': 'round',
+                        //          		'line-join': 'round'
+                        //          },
+                        //          'paint': {
+                        //          		'fill-color':  'rgb(53, 175, 109)'
+                        //	        	  'line-opacity': 1.0,
+                        //  	  	      'line-color': 'rgb(53, 175, 109)',
+                        //    	  	    'line-width': 1
+                        //          }
+                        "paint": {
+                            "fill-color": [
+                                "interpolate",
+                                [
+                                    "linear"
+                                ],
+                                [
+                                    "get",
+                                    "value"
+                                ],
+                                0,
+                                "hsla(240, 100%, 98%, 0)",
+                                0.4,
+                                "#f5f5ff",
+                                1.6,
+                                "#b4b4ff",
+                                3.1,
+                                "#7878ff",
+                                4.7,
+                                "#1414ff",
+                                7,
+                                "#00d8c3",
+                                10.5,
+                                "#009690",
+                                15.8,
+                                "#006666",
+                                23.7,
+                                "#ffff00",
+                                35.5,
+                                "#ffc800",
+                                53.4,
+                                "#ff9600",
+                                80.1,
+                                "#ff6400",
+                                120.3,
+                                "#ff0000",
+                                180.5,
+                                "#c80000",
+                                271.1,
+                                "#780000",
+                                406.9,
+                                "#280000"
+                            ]
+                        },
+                    });
+                });
             }
         });
     }
