@@ -46,6 +46,7 @@
     "@types/mapbox-gl": "^2.7.10",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "css-loader": "^6.7.3",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -60,7 +61,8 @@
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.3",
+    "typescript-plugin-css-modules": "^5.0.0"
   },
   "resolutions": {
     "lit": "^2.2.0",

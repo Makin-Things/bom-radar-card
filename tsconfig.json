@@ -13,6 +13,7 @@
     "noImplicitAny": false,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   }
 }
