@@ -82,7 +82,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
           attributionControl: false
         });
 
-        const ts = '202304070450';
+        // This is the timestamp in UTC time to show radar images for.
+        // There are between 6-7 hours worth of data (for each 5 minutes).
+        // Shortly after 5 minutes past the hour the data for hour -7 is removed up to an including the :00 data.
+        const ts = '202304080315';
         this.map.on('load', () => {
           // Add the Mapbox Terrain v2 vector tileset. Read more about
           // the structure of data in this tileset in the documentation:
