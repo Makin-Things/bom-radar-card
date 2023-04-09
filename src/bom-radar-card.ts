@@ -17,6 +17,8 @@ console.info(
   'color: white; font-weight: bold; background: dimgray',
 );
 
+const radarCapabilities = 'https://api.weather.bom.gov.au/v1/radar/capabilities';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (window as any).customCards = (window as any).customCards || [];
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,6 +41,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   @property({ type: Boolean, reflect: true })
   public map;
   public isPanel = false;
+  public currentTime = '';
 
   // TODO Add any properities that should cause your element to re-render here
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -66,6 +69,43 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     return 10;
   }
 
+  async getRadarCapabilities<T>(): Promise<T> {
+    const response = await fetch(radarCapabilities, {
+      headers: {
+        Accept: 'application/json',
+      }
+    });
+
+    if (!response || !response.ok) {
+      return Promise.reject(response);
+    }
+
+    const data = await response.json();
+    let latest = '';
+    for (const obj in data.data.rain) {
+      if (data.data.rain[obj].type === 'observation') {
+        latest = data.data.rain[obj].time;
+      }
+    }
+    this.currentTime = latest.replaceAll("-", "").replace("T", "").replace(":", "").replace("Z", "");
+    console.info(this.currentTime);
+
+    return data;
+  }
+
+  constructor() {
+    super();
+    this.getRadarCapabilities();
+    setInterval(() => {
+      this.getRadarCapabilities();
+    }, 60000);
+  }
+
+  // connectedCallback() {
+  //   super.connectedCallback();
+  //   this.getRadarCapabilities();
+  // }
+
   protected firstUpdated(): void {
     requestAnimationFrame(() => {
       const container = this.shadowRoot?.getElementById('map');
@@ -76,7 +116,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
           // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
           style: 'mapbox://styles/mapbox/dark-v11',
           //style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
-          zoom: 7,
+          zoom: 5,
           center: [149.1, -35.3],
           projection: { name: 'equirectangular' },
           attributionControl: false
@@ -85,21 +125,21 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         // This is the timestamp in UTC time to show radar images for.
         // There are between 6-7 hours worth of data (for each 5 minutes).
         // Shortly after 5 minutes past the hour the data for hour -7 is removed up to an including the :00 data.
-        const ts = '202304080315';
+        // const ts = '202304090710';
         this.map.on('load', () => {
           // Add the Mapbox Terrain v2 vector tileset. Read more about
           // the structure of data in this tileset in the documentation:
           // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
           this.map.addSource('composite1', {
             type: 'vector',
-            url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + ts
+            url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + this.currentTime
           });
           this.map.addLayer({
             'id': 'BOM-RainRateStaticReference-Observation1', // Layer ID
             'type': 'fill',
             'source': 'composite1', // ID of the tile source created above
             // Source has several layers. We visualize the one with name 'sequence'.
-            'source-layer': ts,
+            'source-layer': this.currentTime,
             //          'layout': {
             //              'visibility': 'visible',
             //          		'fill-color':  'rgb(53, 175, 109)'
@@ -850,6 +890,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       <ha-card id="card">
         ${cardTitle}
         <div id="root" style="height: ${padding}">
+          <div id="color-bar" style="height: 8px;">
+            <img id="img-color-bar" src="/local/community/bom-radar-card/radar-colour-bar-bom.png" height="8" style="vertical-align: top" />
+          </div>
           <div id='map'></div>
         </div>
       </ha-card>
@@ -888,7 +931,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         position: relative;
       }
       #map {
-        position: absolute;
+        position: relative;
         left: 0;
         top: 0;
         bottom: 0;

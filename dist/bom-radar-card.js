@@ -1,4 +1,4 @@
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -64,26 +64,26 @@ function __values(o) {
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const t$4=window,e$a=t$4.ShadowRoot&&(void 0===t$4.ShadyCSS||t$4.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s$4=Symbol(),n$4=new WeakMap;class o$6{constructor(t,e,n){if(this._$cssResult$=!0,n!==s$4)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e;}get styleSheet(){let t=this.o;const s=this.t;if(e$a&&void 0===t){const e=void 0!==s&&1===s.length;e&&(t=n$4.get(s)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&n$4.set(s,t));}return t}toString(){return this.cssText}}const r$3=t=>new o$6("string"==typeof t?t:t+"",void 0,s$4),i$5=(t,...e)=>{const n=1===t.length?t[0]:e.reduce(((e,s,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[n+1]),t[0]);return new o$6(n,t,s$4)},S$1=(s,n)=>{e$a?s.adoptedStyleSheets=n.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):n.forEach((e=>{const n=document.createElement("style"),o=t$4.litNonce;void 0!==o&&n.setAttribute("nonce",o),n.textContent=e.cssText,s.appendChild(n);}));},c$1=e$a?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r$3(e)})(t):t;
+const t$4=window,e$a=t$4.ShadowRoot&&(void 0===t$4.ShadyCSS||t$4.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s$4=Symbol(),n$5=new WeakMap;class o$7{constructor(t,e,n){if(this._$cssResult$=!0,n!==s$4)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e;}get styleSheet(){let t=this.o;const s=this.t;if(e$a&&void 0===t){const e=void 0!==s&&1===s.length;e&&(t=n$5.get(s)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&n$5.set(s,t));}return t}toString(){return this.cssText}}const r$3=t=>new o$7("string"==typeof t?t:t+"",void 0,s$4),i$5=(t,...e)=>{const n=1===t.length?t[0]:e.reduce(((e,s,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[n+1]),t[0]);return new o$7(n,t,s$4)},S$1=(s,n)=>{e$a?s.adoptedStyleSheets=n.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):n.forEach((e=>{const n=document.createElement("style"),o=t$4.litNonce;void 0!==o&&n.setAttribute("nonce",o),n.textContent=e.cssText,s.appendChild(n);}));},c$1=e$a?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r$3(e)})(t):t;
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */var s$3;const e$9=window,r$2=e$9.trustedTypes,h$1=r$2?r$2.emptyScript:"",o$5=e$9.reactiveElementPolyfillSupport,n$3={toAttribute(t,i){switch(i){case Boolean:t=t?h$1:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t);}return t},fromAttribute(t,i){let s=t;switch(i){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t);}catch(t){s=null;}}return s}},a$1=(t,i)=>i!==t&&(i==i||t==t),l$5={attribute:!0,type:String,converter:n$3,reflect:!1,hasChanged:a$1};class d$1 extends HTMLElement{constructor(){super(),this._$Ei=new Map,this.isUpdatePending=!1,this.hasUpdated=!1,this._$El=null,this.u();}static addInitializer(t){var i;this.finalize(),(null!==(i=this.h)&&void 0!==i?i:this.h=[]).push(t);}static get observedAttributes(){this.finalize();const t=[];return this.elementProperties.forEach(((i,s)=>{const e=this._$Ep(s,i);void 0!==e&&(this._$Ev.set(e,s),t.push(e));})),t}static createProperty(t,i=l$5){if(i.state&&(i.attribute=!1),this.finalize(),this.elementProperties.set(t,i),!i.noAccessor&&!this.prototype.hasOwnProperty(t)){const s="symbol"==typeof t?Symbol():"__"+t,e=this.getPropertyDescriptor(t,s,i);void 0!==e&&Object.defineProperty(this.prototype,t,e);}}static getPropertyDescriptor(t,i,s){return {get(){return this[i]},set(e){const r=this[t];this[i]=e,this.requestUpdate(t,r,s);},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)||l$5}static finalize(){if(this.hasOwnProperty("finalized"))return !1;this.finalized=!0;const t=Object.getPrototypeOf(this);if(t.finalize(),void 0!==t.h&&(this.h=[...t.h]),this.elementProperties=new Map(t.elementProperties),this._$Ev=new Map,this.hasOwnProperty("properties")){const t=this.properties,i=[...Object.getOwnPropertyNames(t),...Object.getOwnPropertySymbols(t)];for(const s of i)this.createProperty(s,t[s]);}return this.elementStyles=this.finalizeStyles(this.styles),!0}static finalizeStyles(i){const s=[];if(Array.isArray(i)){const e=new Set(i.flat(1/0).reverse());for(const i of e)s.unshift(c$1(i));}else void 0!==i&&s.push(c$1(i));return s}static _$Ep(t,i){const s=i.attribute;return !1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}u(){var t;this._$E_=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$Eg(),this.requestUpdate(),null===(t=this.constructor.h)||void 0===t||t.forEach((t=>t(this)));}addController(t){var i,s;(null!==(i=this._$ES)&&void 0!==i?i:this._$ES=[]).push(t),void 0!==this.renderRoot&&this.isConnected&&(null===(s=t.hostConnected)||void 0===s||s.call(t));}removeController(t){var i;null===(i=this._$ES)||void 0===i||i.splice(this._$ES.indexOf(t)>>>0,1);}_$Eg(){this.constructor.elementProperties.forEach(((t,i)=>{this.hasOwnProperty(i)&&(this._$Ei.set(i,this[i]),delete this[i]);}));}createRenderRoot(){var t;const s=null!==(t=this.shadowRoot)&&void 0!==t?t:this.attachShadow(this.constructor.shadowRootOptions);return S$1(s,this.constructor.elementStyles),s}connectedCallback(){var t;void 0===this.renderRoot&&(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostConnected)||void 0===i?void 0:i.call(t)}));}enableUpdating(t){}disconnectedCallback(){var t;null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostDisconnected)||void 0===i?void 0:i.call(t)}));}attributeChangedCallback(t,i,s){this._$AK(t,s);}_$EO(t,i,s=l$5){var e;const r=this.constructor._$Ep(t,s);if(void 0!==r&&!0===s.reflect){const h=(void 0!==(null===(e=s.converter)||void 0===e?void 0:e.toAttribute)?s.converter:n$3).toAttribute(i,s.type);this._$El=t,null==h?this.removeAttribute(r):this.setAttribute(r,h),this._$El=null;}}_$AK(t,i){var s;const e=this.constructor,r=e._$Ev.get(t);if(void 0!==r&&this._$El!==r){const t=e.getPropertyOptions(r),h="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==(null===(s=t.converter)||void 0===s?void 0:s.fromAttribute)?t.converter:n$3;this._$El=r,this[r]=h.fromAttribute(i,t.type),this._$El=null;}}requestUpdate(t,i,s){let e=!0;void 0!==t&&(((s=s||this.constructor.getPropertyOptions(t)).hasChanged||a$1)(this[t],i)?(this._$AL.has(t)||this._$AL.set(t,i),!0===s.reflect&&this._$El!==t&&(void 0===this._$EC&&(this._$EC=new Map),this._$EC.set(t,s))):e=!1),!this.isUpdatePending&&e&&(this._$E_=this._$Ej());}async _$Ej(){this.isUpdatePending=!0;try{await this._$E_;}catch(t){Promise.reject(t);}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var t;if(!this.isUpdatePending)return;this.hasUpdated,this._$Ei&&(this._$Ei.forEach(((t,i)=>this[i]=t)),this._$Ei=void 0);let i=!1;const s=this._$AL;try{i=this.shouldUpdate(s),i?(this.willUpdate(s),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostUpdate)||void 0===i?void 0:i.call(t)})),this.update(s)):this._$Ek();}catch(t){throw i=!1,this._$Ek(),t}i&&this._$AE(s);}willUpdate(t){}_$AE(t){var i;null===(i=this._$ES)||void 0===i||i.forEach((t=>{var i;return null===(i=t.hostUpdated)||void 0===i?void 0:i.call(t)})),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t);}_$Ek(){this._$AL=new Map,this.isUpdatePending=!1;}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$E_}shouldUpdate(t){return !0}update(t){void 0!==this._$EC&&(this._$EC.forEach(((t,i)=>this._$EO(i,this[i],t))),this._$EC=void 0),this._$Ek();}updated(t){}firstUpdated(t){}}d$1.finalized=!0,d$1.elementProperties=new Map,d$1.elementStyles=[],d$1.shadowRootOptions={mode:"open"},null==o$5||o$5({ReactiveElement:d$1}),(null!==(s$3=e$9.reactiveElementVersions)&&void 0!==s$3?s$3:e$9.reactiveElementVersions=[]).push("1.6.1");
+ */var s$3;const e$9=window,r$2=e$9.trustedTypes,h$1=r$2?r$2.emptyScript:"",o$6=e$9.reactiveElementPolyfillSupport,n$4={toAttribute(t,i){switch(i){case Boolean:t=t?h$1:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t);}return t},fromAttribute(t,i){let s=t;switch(i){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t);}catch(t){s=null;}}return s}},a$1=(t,i)=>i!==t&&(i==i||t==t),l$5={attribute:!0,type:String,converter:n$4,reflect:!1,hasChanged:a$1};class d$1 extends HTMLElement{constructor(){super(),this._$Ei=new Map,this.isUpdatePending=!1,this.hasUpdated=!1,this._$El=null,this.u();}static addInitializer(t){var i;this.finalize(),(null!==(i=this.h)&&void 0!==i?i:this.h=[]).push(t);}static get observedAttributes(){this.finalize();const t=[];return this.elementProperties.forEach(((i,s)=>{const e=this._$Ep(s,i);void 0!==e&&(this._$Ev.set(e,s),t.push(e));})),t}static createProperty(t,i=l$5){if(i.state&&(i.attribute=!1),this.finalize(),this.elementProperties.set(t,i),!i.noAccessor&&!this.prototype.hasOwnProperty(t)){const s="symbol"==typeof t?Symbol():"__"+t,e=this.getPropertyDescriptor(t,s,i);void 0!==e&&Object.defineProperty(this.prototype,t,e);}}static getPropertyDescriptor(t,i,s){return {get(){return this[i]},set(e){const r=this[t];this[i]=e,this.requestUpdate(t,r,s);},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)||l$5}static finalize(){if(this.hasOwnProperty("finalized"))return !1;this.finalized=!0;const t=Object.getPrototypeOf(this);if(t.finalize(),void 0!==t.h&&(this.h=[...t.h]),this.elementProperties=new Map(t.elementProperties),this._$Ev=new Map,this.hasOwnProperty("properties")){const t=this.properties,i=[...Object.getOwnPropertyNames(t),...Object.getOwnPropertySymbols(t)];for(const s of i)this.createProperty(s,t[s]);}return this.elementStyles=this.finalizeStyles(this.styles),!0}static finalizeStyles(i){const s=[];if(Array.isArray(i)){const e=new Set(i.flat(1/0).reverse());for(const i of e)s.unshift(c$1(i));}else void 0!==i&&s.push(c$1(i));return s}static _$Ep(t,i){const s=i.attribute;return !1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}u(){var t;this._$E_=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$Eg(),this.requestUpdate(),null===(t=this.constructor.h)||void 0===t||t.forEach((t=>t(this)));}addController(t){var i,s;(null!==(i=this._$ES)&&void 0!==i?i:this._$ES=[]).push(t),void 0!==this.renderRoot&&this.isConnected&&(null===(s=t.hostConnected)||void 0===s||s.call(t));}removeController(t){var i;null===(i=this._$ES)||void 0===i||i.splice(this._$ES.indexOf(t)>>>0,1);}_$Eg(){this.constructor.elementProperties.forEach(((t,i)=>{this.hasOwnProperty(i)&&(this._$Ei.set(i,this[i]),delete this[i]);}));}createRenderRoot(){var t;const s=null!==(t=this.shadowRoot)&&void 0!==t?t:this.attachShadow(this.constructor.shadowRootOptions);return S$1(s,this.constructor.elementStyles),s}connectedCallback(){var t;void 0===this.renderRoot&&(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostConnected)||void 0===i?void 0:i.call(t)}));}enableUpdating(t){}disconnectedCallback(){var t;null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostDisconnected)||void 0===i?void 0:i.call(t)}));}attributeChangedCallback(t,i,s){this._$AK(t,s);}_$EO(t,i,s=l$5){var e;const r=this.constructor._$Ep(t,s);if(void 0!==r&&!0===s.reflect){const h=(void 0!==(null===(e=s.converter)||void 0===e?void 0:e.toAttribute)?s.converter:n$4).toAttribute(i,s.type);this._$El=t,null==h?this.removeAttribute(r):this.setAttribute(r,h),this._$El=null;}}_$AK(t,i){var s;const e=this.constructor,r=e._$Ev.get(t);if(void 0!==r&&this._$El!==r){const t=e.getPropertyOptions(r),h="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==(null===(s=t.converter)||void 0===s?void 0:s.fromAttribute)?t.converter:n$4;this._$El=r,this[r]=h.fromAttribute(i,t.type),this._$El=null;}}requestUpdate(t,i,s){let e=!0;void 0!==t&&(((s=s||this.constructor.getPropertyOptions(t)).hasChanged||a$1)(this[t],i)?(this._$AL.has(t)||this._$AL.set(t,i),!0===s.reflect&&this._$El!==t&&(void 0===this._$EC&&(this._$EC=new Map),this._$EC.set(t,s))):e=!1),!this.isUpdatePending&&e&&(this._$E_=this._$Ej());}async _$Ej(){this.isUpdatePending=!0;try{await this._$E_;}catch(t){Promise.reject(t);}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var t;if(!this.isUpdatePending)return;this.hasUpdated,this._$Ei&&(this._$Ei.forEach(((t,i)=>this[i]=t)),this._$Ei=void 0);let i=!1;const s=this._$AL;try{i=this.shouldUpdate(s),i?(this.willUpdate(s),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostUpdate)||void 0===i?void 0:i.call(t)})),this.update(s)):this._$Ek();}catch(t){throw i=!1,this._$Ek(),t}i&&this._$AE(s);}willUpdate(t){}_$AE(t){var i;null===(i=this._$ES)||void 0===i||i.forEach((t=>{var i;return null===(i=t.hostUpdated)||void 0===i?void 0:i.call(t)})),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t);}_$Ek(){this._$AL=new Map,this.isUpdatePending=!1;}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$E_}shouldUpdate(t){return !0}update(t){void 0!==this._$EC&&(this._$EC.forEach(((t,i)=>this._$EO(i,this[i],t))),this._$EC=void 0),this._$Ek();}updated(t){}firstUpdated(t){}}d$1.finalized=!0,d$1.elementProperties=new Map,d$1.elementStyles=[],d$1.shadowRootOptions={mode:"open"},null==o$6||o$6({ReactiveElement:d$1}),(null!==(s$3=e$9.reactiveElementVersions)&&void 0!==s$3?s$3:e$9.reactiveElementVersions=[]).push("1.6.1");
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-var t$3;const i$4=window,s$2=i$4.trustedTypes,e$8=s$2?s$2.createPolicy("lit-html",{createHTML:t=>t}):void 0,o$4="$lit$",n$2=`lit$${(Math.random()+"").slice(9)}$`,l$4="?"+n$2,h=`<${l$4}>`,r$1=document,d=()=>r$1.createComment(""),u=t=>null===t||"object"!=typeof t&&"function"!=typeof t,c=Array.isArray,v=t=>c(t)||"function"==typeof(null==t?void 0:t[Symbol.iterator]),a="[ \t\n\f\r]",f$1=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,_=/-->/g,m=/>/g,p=RegExp(`>|${a}(?:([^\\s"'>=/]+)(${a}*=${a}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),g=/'/g,$=/"/g,y=/^(?:script|style|textarea|title)$/i,w=t=>(i,...s)=>({_$litType$:t,strings:i,values:s}),x=w(1),T=Symbol.for("lit-noChange"),A=Symbol.for("lit-nothing"),E=new WeakMap,C=r$1.createTreeWalker(r$1,129,null,!1),P=(t,i)=>{const s=t.length-1,l=[];let r,d=2===i?"<svg>":"",u=f$1;for(let i=0;i<s;i++){const s=t[i];let e,c,v=-1,a=0;for(;a<s.length&&(u.lastIndex=a,c=u.exec(s),null!==c);)a=u.lastIndex,u===f$1?"!--"===c[1]?u=_:void 0!==c[1]?u=m:void 0!==c[2]?(y.test(c[2])&&(r=RegExp("</"+c[2],"g")),u=p):void 0!==c[3]&&(u=p):u===p?">"===c[0]?(u=null!=r?r:f$1,v=-1):void 0===c[1]?v=-2:(v=u.lastIndex-c[2].length,e=c[1],u=void 0===c[3]?p:'"'===c[3]?$:g):u===$||u===g?u=p:u===_||u===m?u=f$1:(u=p,r=void 0);const w=u===p&&t[i+1].startsWith("/>")?" ":"";d+=u===f$1?s+h:v>=0?(l.push(e),s.slice(0,v)+o$4+s.slice(v)+n$2+w):s+n$2+(-2===v?(l.push(void 0),i):w);}const c=d+(t[s]||"<?>")+(2===i?"</svg>":"");if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return [void 0!==e$8?e$8.createHTML(c):c,l]};class V{constructor({strings:t,_$litType$:i},e){let h;this.parts=[];let r=0,u=0;const c=t.length-1,v=this.parts,[a,f]=P(t,i);if(this.el=V.createElement(a,e),C.currentNode=this.el.content,2===i){const t=this.el.content,i=t.firstChild;i.remove(),t.append(...i.childNodes);}for(;null!==(h=C.nextNode())&&v.length<c;){if(1===h.nodeType){if(h.hasAttributes()){const t=[];for(const i of h.getAttributeNames())if(i.endsWith(o$4)||i.startsWith(n$2)){const s=f[u++];if(t.push(i),void 0!==s){const t=h.getAttribute(s.toLowerCase()+o$4).split(n$2),i=/([.?@])?(.*)/.exec(s);v.push({type:1,index:r,name:i[2],strings:t,ctor:"."===i[1]?k:"?"===i[1]?I:"@"===i[1]?L:R});}else v.push({type:6,index:r});}for(const i of t)h.removeAttribute(i);}if(y.test(h.tagName)){const t=h.textContent.split(n$2),i=t.length-1;if(i>0){h.textContent=s$2?s$2.emptyScript:"";for(let s=0;s<i;s++)h.append(t[s],d()),C.nextNode(),v.push({type:2,index:++r});h.append(t[i],d());}}}else if(8===h.nodeType)if(h.data===l$4)v.push({type:2,index:r});else {let t=-1;for(;-1!==(t=h.data.indexOf(n$2,t+1));)v.push({type:7,index:r}),t+=n$2.length-1;}r++;}}static createElement(t,i){const s=r$1.createElement("template");return s.innerHTML=t,s}}function N(t,i,s=t,e){var o,n,l,h;if(i===T)return i;let r=void 0!==e?null===(o=s._$Co)||void 0===o?void 0:o[e]:s._$Cl;const d=u(i)?void 0:i._$litDirective$;return (null==r?void 0:r.constructor)!==d&&(null===(n=null==r?void 0:r._$AO)||void 0===n||n.call(r,!1),void 0===d?r=void 0:(r=new d(t),r._$AT(t,s,e)),void 0!==e?(null!==(l=(h=s)._$Co)&&void 0!==l?l:h._$Co=[])[e]=r:s._$Cl=r),void 0!==r&&(i=N(t,r._$AS(t,i.values),r,e)),i}class S{constructor(t,i){this.u=[],this._$AN=void 0,this._$AD=t,this._$AM=i;}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}v(t){var i;const{el:{content:s},parts:e}=this._$AD,o=(null!==(i=null==t?void 0:t.creationScope)&&void 0!==i?i:r$1).importNode(s,!0);C.currentNode=o;let n=C.nextNode(),l=0,h=0,d=e[0];for(;void 0!==d;){if(l===d.index){let i;2===d.type?i=new M(n,n.nextSibling,this,t):1===d.type?i=new d.ctor(n,d.name,d.strings,this,t):6===d.type&&(i=new z(n,this,t)),this.u.push(i),d=e[++h];}l!==(null==d?void 0:d.index)&&(n=C.nextNode(),l++);}return o}p(t){let i=0;for(const s of this.u)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,i),i+=s.strings.length-2):s._$AI(t[i])),i++;}}class M{constructor(t,i,s,e){var o;this.type=2,this._$AH=A,this._$AN=void 0,this._$AA=t,this._$AB=i,this._$AM=s,this.options=e,this._$Cm=null===(o=null==e?void 0:e.isConnected)||void 0===o||o;}get _$AU(){var t,i;return null!==(i=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==i?i:this._$Cm}get parentNode(){let t=this._$AA.parentNode;const i=this._$AM;return void 0!==i&&11===(null==t?void 0:t.nodeType)&&(t=i.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,i=this){t=N(this,t,i),u(t)?t===A||null==t||""===t?(this._$AH!==A&&this._$AR(),this._$AH=A):t!==this._$AH&&t!==T&&this.g(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):v(t)?this.k(t):this.g(t);}S(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.S(t));}g(t){this._$AH!==A&&u(this._$AH)?this._$AA.nextSibling.data=t:this.T(r$1.createTextNode(t)),this._$AH=t;}$(t){var i;const{values:s,_$litType$:e}=t,o="number"==typeof e?this._$AC(t):(void 0===e.el&&(e.el=V.createElement(e.h,this.options)),e);if((null===(i=this._$AH)||void 0===i?void 0:i._$AD)===o)this._$AH.p(s);else {const t=new S(o,this),i=t.v(this.options);t.p(s),this.T(i),this._$AH=t;}}_$AC(t){let i=E.get(t.strings);return void 0===i&&E.set(t.strings,i=new V(t)),i}k(t){c(this._$AH)||(this._$AH=[],this._$AR());const i=this._$AH;let s,e=0;for(const o of t)e===i.length?i.push(s=new M(this.S(d()),this.S(d()),this,this.options)):s=i[e],s._$AI(o),e++;e<i.length&&(this._$AR(s&&s._$AB.nextSibling,e),i.length=e);}_$AR(t=this._$AA.nextSibling,i){var s;for(null===(s=this._$AP)||void 0===s||s.call(this,!1,!0,i);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i;}}setConnected(t){var i;void 0===this._$AM&&(this._$Cm=t,null===(i=this._$AP)||void 0===i||i.call(this,t));}}class R{constructor(t,i,s,e,o){this.type=1,this._$AH=A,this._$AN=void 0,this.element=t,this.name=i,this._$AM=e,this.options=o,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=A;}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,i=this,s,e){const o=this.strings;let n=!1;if(void 0===o)t=N(this,t,i,0),n=!u(t)||t!==this._$AH&&t!==T,n&&(this._$AH=t);else {const e=t;let l,h;for(t=o[0],l=0;l<o.length-1;l++)h=N(this,e[s+l],i,l),h===T&&(h=this._$AH[l]),n||(n=!u(h)||h!==this._$AH[l]),h===A?t=A:t!==A&&(t+=(null!=h?h:"")+o[l+1]),this._$AH[l]=h;}n&&!e&&this.j(t);}j(t){t===A?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"");}}class k extends R{constructor(){super(...arguments),this.type=3;}j(t){this.element[this.name]=t===A?void 0:t;}}const H=s$2?s$2.emptyScript:"";class I extends R{constructor(){super(...arguments),this.type=4;}j(t){t&&t!==A?this.element.setAttribute(this.name,H):this.element.removeAttribute(this.name);}}class L extends R{constructor(t,i,s,e,o){super(t,i,s,e,o),this.type=5;}_$AI(t,i=this){var s;if((t=null!==(s=N(this,t,i,0))&&void 0!==s?s:A)===T)return;const e=this._$AH,o=t===A&&e!==A||t.capture!==e.capture||t.once!==e.once||t.passive!==e.passive,n=t!==A&&(e===A||o);o&&this.element.removeEventListener(this.name,this,e),n&&this.element.addEventListener(this.name,this,t),this._$AH=t;}handleEvent(t){var i,s;"function"==typeof this._$AH?this._$AH.call(null!==(s=null===(i=this.options)||void 0===i?void 0:i.host)&&void 0!==s?s:this.element,t):this._$AH.handleEvent(t);}}class z{constructor(t,i,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=i,this.options=s;}get _$AU(){return this._$AM._$AU}_$AI(t){N(this,t);}}const j=i$4.litHtmlPolyfillSupport;null==j||j(V,M),(null!==(t$3=i$4.litHtmlVersions)&&void 0!==t$3?t$3:i$4.litHtmlVersions=[]).push("2.7.0");const B=(t,i,s)=>{var e,o;const n=null!==(e=null==s?void 0:s.renderBefore)&&void 0!==e?e:i;let l=n._$litPart$;if(void 0===l){const t=null!==(o=null==s?void 0:s.renderBefore)&&void 0!==o?o:null;n._$litPart$=l=new M(i.insertBefore(d(),t),t,void 0,null!=s?s:{});}return l._$AI(t),l};
+var t$3;const i$4=window,s$2=i$4.trustedTypes,e$8=s$2?s$2.createPolicy("lit-html",{createHTML:t=>t}):void 0,o$5="$lit$",n$3=`lit$${(Math.random()+"").slice(9)}$`,l$4="?"+n$3,h=`<${l$4}>`,r$1=document,d=()=>r$1.createComment(""),u=t=>null===t||"object"!=typeof t&&"function"!=typeof t,c=Array.isArray,v=t=>c(t)||"function"==typeof(null==t?void 0:t[Symbol.iterator]),a="[ \t\n\f\r]",f$1=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,_=/-->/g,m=/>/g,p=RegExp(`>|${a}(?:([^\\s"'>=/]+)(${a}*=${a}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),g=/'/g,$=/"/g,y=/^(?:script|style|textarea|title)$/i,w=t=>(i,...s)=>({_$litType$:t,strings:i,values:s}),x=w(1),T=Symbol.for("lit-noChange"),A=Symbol.for("lit-nothing"),E=new WeakMap,C=r$1.createTreeWalker(r$1,129,null,!1),P=(t,i)=>{const s=t.length-1,l=[];let r,d=2===i?"<svg>":"",u=f$1;for(let i=0;i<s;i++){const s=t[i];let e,c,v=-1,a=0;for(;a<s.length&&(u.lastIndex=a,c=u.exec(s),null!==c);)a=u.lastIndex,u===f$1?"!--"===c[1]?u=_:void 0!==c[1]?u=m:void 0!==c[2]?(y.test(c[2])&&(r=RegExp("</"+c[2],"g")),u=p):void 0!==c[3]&&(u=p):u===p?">"===c[0]?(u=null!=r?r:f$1,v=-1):void 0===c[1]?v=-2:(v=u.lastIndex-c[2].length,e=c[1],u=void 0===c[3]?p:'"'===c[3]?$:g):u===$||u===g?u=p:u===_||u===m?u=f$1:(u=p,r=void 0);const w=u===p&&t[i+1].startsWith("/>")?" ":"";d+=u===f$1?s+h:v>=0?(l.push(e),s.slice(0,v)+o$5+s.slice(v)+n$3+w):s+n$3+(-2===v?(l.push(void 0),i):w);}const c=d+(t[s]||"<?>")+(2===i?"</svg>":"");if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return [void 0!==e$8?e$8.createHTML(c):c,l]};class V{constructor({strings:t,_$litType$:i},e){let h;this.parts=[];let r=0,u=0;const c=t.length-1,v=this.parts,[a,f]=P(t,i);if(this.el=V.createElement(a,e),C.currentNode=this.el.content,2===i){const t=this.el.content,i=t.firstChild;i.remove(),t.append(...i.childNodes);}for(;null!==(h=C.nextNode())&&v.length<c;){if(1===h.nodeType){if(h.hasAttributes()){const t=[];for(const i of h.getAttributeNames())if(i.endsWith(o$5)||i.startsWith(n$3)){const s=f[u++];if(t.push(i),void 0!==s){const t=h.getAttribute(s.toLowerCase()+o$5).split(n$3),i=/([.?@])?(.*)/.exec(s);v.push({type:1,index:r,name:i[2],strings:t,ctor:"."===i[1]?k:"?"===i[1]?I:"@"===i[1]?L:R});}else v.push({type:6,index:r});}for(const i of t)h.removeAttribute(i);}if(y.test(h.tagName)){const t=h.textContent.split(n$3),i=t.length-1;if(i>0){h.textContent=s$2?s$2.emptyScript:"";for(let s=0;s<i;s++)h.append(t[s],d()),C.nextNode(),v.push({type:2,index:++r});h.append(t[i],d());}}}else if(8===h.nodeType)if(h.data===l$4)v.push({type:2,index:r});else {let t=-1;for(;-1!==(t=h.data.indexOf(n$3,t+1));)v.push({type:7,index:r}),t+=n$3.length-1;}r++;}}static createElement(t,i){const s=r$1.createElement("template");return s.innerHTML=t,s}}function N(t,i,s=t,e){var o,n,l,h;if(i===T)return i;let r=void 0!==e?null===(o=s._$Co)||void 0===o?void 0:o[e]:s._$Cl;const d=u(i)?void 0:i._$litDirective$;return (null==r?void 0:r.constructor)!==d&&(null===(n=null==r?void 0:r._$AO)||void 0===n||n.call(r,!1),void 0===d?r=void 0:(r=new d(t),r._$AT(t,s,e)),void 0!==e?(null!==(l=(h=s)._$Co)&&void 0!==l?l:h._$Co=[])[e]=r:s._$Cl=r),void 0!==r&&(i=N(t,r._$AS(t,i.values),r,e)),i}class S{constructor(t,i){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=i;}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){var i;const{el:{content:s},parts:e}=this._$AD,o=(null!==(i=null==t?void 0:t.creationScope)&&void 0!==i?i:r$1).importNode(s,!0);C.currentNode=o;let n=C.nextNode(),l=0,h=0,d=e[0];for(;void 0!==d;){if(l===d.index){let i;2===d.type?i=new M(n,n.nextSibling,this,t):1===d.type?i=new d.ctor(n,d.name,d.strings,this,t):6===d.type&&(i=new z(n,this,t)),this._$AV.push(i),d=e[++h];}l!==(null==d?void 0:d.index)&&(n=C.nextNode(),l++);}return o}v(t){let i=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,i),i+=s.strings.length-2):s._$AI(t[i])),i++;}}class M{constructor(t,i,s,e){var o;this.type=2,this._$AH=A,this._$AN=void 0,this._$AA=t,this._$AB=i,this._$AM=s,this.options=e,this._$Cp=null===(o=null==e?void 0:e.isConnected)||void 0===o||o;}get _$AU(){var t,i;return null!==(i=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==i?i:this._$Cp}get parentNode(){let t=this._$AA.parentNode;const i=this._$AM;return void 0!==i&&11===(null==t?void 0:t.nodeType)&&(t=i.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,i=this){t=N(this,t,i),u(t)?t===A||null==t||""===t?(this._$AH!==A&&this._$AR(),this._$AH=A):t!==this._$AH&&t!==T&&this._(t):void 0!==t._$litType$?this.g(t):void 0!==t.nodeType?this.$(t):v(t)?this.T(t):this._(t);}k(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}$(t){this._$AH!==t&&(this._$AR(),this._$AH=this.k(t));}_(t){this._$AH!==A&&u(this._$AH)?this._$AA.nextSibling.data=t:this.$(r$1.createTextNode(t)),this._$AH=t;}g(t){var i;const{values:s,_$litType$:e}=t,o="number"==typeof e?this._$AC(t):(void 0===e.el&&(e.el=V.createElement(e.h,this.options)),e);if((null===(i=this._$AH)||void 0===i?void 0:i._$AD)===o)this._$AH.v(s);else {const t=new S(o,this),i=t.u(this.options);t.v(s),this.$(i),this._$AH=t;}}_$AC(t){let i=E.get(t.strings);return void 0===i&&E.set(t.strings,i=new V(t)),i}T(t){c(this._$AH)||(this._$AH=[],this._$AR());const i=this._$AH;let s,e=0;for(const o of t)e===i.length?i.push(s=new M(this.k(d()),this.k(d()),this,this.options)):s=i[e],s._$AI(o),e++;e<i.length&&(this._$AR(s&&s._$AB.nextSibling,e),i.length=e);}_$AR(t=this._$AA.nextSibling,i){var s;for(null===(s=this._$AP)||void 0===s||s.call(this,!1,!0,i);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i;}}setConnected(t){var i;void 0===this._$AM&&(this._$Cp=t,null===(i=this._$AP)||void 0===i||i.call(this,t));}}class R{constructor(t,i,s,e,o){this.type=1,this._$AH=A,this._$AN=void 0,this.element=t,this.name=i,this._$AM=e,this.options=o,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=A;}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,i=this,s,e){const o=this.strings;let n=!1;if(void 0===o)t=N(this,t,i,0),n=!u(t)||t!==this._$AH&&t!==T,n&&(this._$AH=t);else {const e=t;let l,h;for(t=o[0],l=0;l<o.length-1;l++)h=N(this,e[s+l],i,l),h===T&&(h=this._$AH[l]),n||(n=!u(h)||h!==this._$AH[l]),h===A?t=A:t!==A&&(t+=(null!=h?h:"")+o[l+1]),this._$AH[l]=h;}n&&!e&&this.j(t);}j(t){t===A?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"");}}class k extends R{constructor(){super(...arguments),this.type=3;}j(t){this.element[this.name]=t===A?void 0:t;}}const H=s$2?s$2.emptyScript:"";class I extends R{constructor(){super(...arguments),this.type=4;}j(t){t&&t!==A?this.element.setAttribute(this.name,H):this.element.removeAttribute(this.name);}}class L extends R{constructor(t,i,s,e,o){super(t,i,s,e,o),this.type=5;}_$AI(t,i=this){var s;if((t=null!==(s=N(this,t,i,0))&&void 0!==s?s:A)===T)return;const e=this._$AH,o=t===A&&e!==A||t.capture!==e.capture||t.once!==e.once||t.passive!==e.passive,n=t!==A&&(e===A||o);o&&this.element.removeEventListener(this.name,this,e),n&&this.element.addEventListener(this.name,this,t),this._$AH=t;}handleEvent(t){var i,s;"function"==typeof this._$AH?this._$AH.call(null!==(s=null===(i=this.options)||void 0===i?void 0:i.host)&&void 0!==s?s:this.element,t):this._$AH.handleEvent(t);}}class z{constructor(t,i,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=i,this.options=s;}get _$AU(){return this._$AM._$AU}_$AI(t){N(this,t);}}const j=i$4.litHtmlPolyfillSupport;null==j||j(V,M),(null!==(t$3=i$4.litHtmlVersions)&&void 0!==t$3?t$3:i$4.litHtmlVersions=[]).push("2.7.2");const B=(t,i,s)=>{var e,o;const n=null!==(e=null==s?void 0:s.renderBefore)&&void 0!==e?e:i;let l=n._$litPart$;if(void 0===l){const t=null!==(o=null==s?void 0:s.renderBefore)&&void 0!==o?o:null;n._$litPart$=l=new M(i.insertBefore(d(),t),t,void 0,null!=s?s:{});}return l._$AI(t),l};
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */var l$3,o$3;class s$1 extends d$1{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0;}createRenderRoot(){var t,e;const i=super.createRenderRoot();return null!==(t=(e=this.renderOptions).renderBefore)&&void 0!==t||(e.renderBefore=i.firstChild),i}update(t){const i=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=B(i,this.renderRoot,this.renderOptions);}connectedCallback(){var t;super.connectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!0);}disconnectedCallback(){var t;super.disconnectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!1);}render(){return T}}s$1.finalized=!0,s$1._$litElement$=!0,null===(l$3=globalThis.litElementHydrateSupport)||void 0===l$3||l$3.call(globalThis,{LitElement:s$1});const n$1=globalThis.litElementPolyfillSupport;null==n$1||n$1({LitElement:s$1});(null!==(o$3=globalThis.litElementVersions)&&void 0!==o$3?o$3:globalThis.litElementVersions=[]).push("3.3.0");
+ */var l$3,o$4;class s$1 extends d$1{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0;}createRenderRoot(){var t,e;const i=super.createRenderRoot();return null!==(t=(e=this.renderOptions).renderBefore)&&void 0!==t||(e.renderBefore=i.firstChild),i}update(t){const i=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=B(i,this.renderRoot,this.renderOptions);}connectedCallback(){var t;super.connectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!0);}disconnectedCallback(){var t;super.disconnectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!1);}render(){return T}}s$1.finalized=!0,s$1._$litElement$=!0,null===(l$3=globalThis.litElementHydrateSupport)||void 0===l$3||l$3.call(globalThis,{LitElement:s$1});const n$2=globalThis.litElementPolyfillSupport;null==n$2||n$2({LitElement:s$1});(null!==(o$4=globalThis.litElementVersions)&&void 0!==o$4?o$4:globalThis.litElementVersions=[]).push("3.3.1");
 
 /**
  * @license
@@ -110,38 +110,38 @@ const i$3=(i,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const o$2=({finisher:e,descriptor:t})=>(o,n)=>{var r;if(void 0===n){const n=null!==(r=o.originalKey)&&void 0!==r?r:o.key,i=null!=t?{kind:"method",placement:"prototype",key:n,descriptor:t(o.key)}:{...o,key:n};return null!=e&&(i.finisher=function(t){e(t,n);}),i}{const r=o.constructor;void 0!==t&&Object.defineProperty(o,n,t(n)),null==e||e(r,n);}};
+const o$3=({finisher:e,descriptor:t})=>(o,n)=>{var r;if(void 0===n){const n=null!==(r=o.originalKey)&&void 0!==r?r:o.key,i=null!=t?{kind:"method",placement:"prototype",key:n,descriptor:t(o.key)}:{...o,key:n};return null!=e&&(i.finisher=function(t){e(t,n);}),i}{const r=o.constructor;void 0!==t&&Object.defineProperty(o,n,t(n)),null==e||e(r,n);}};
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */function e$5(e){return o$2({finisher:(r,t)=>{Object.assign(r.prototype[t],e);}})}
+ */function e$5(e){return o$3({finisher:(r,t)=>{Object.assign(r.prototype[t],e);}})}
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */function i$2(i,n){return o$2({descriptor:o=>{const t={get(){var o,n;return null!==(n=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==n?n:null},enumerable:!0,configurable:!0};if(n){const n="symbol"==typeof o?Symbol():"__"+o;t.get=function(){var o,t;return void 0===this[n]&&(this[n]=null!==(t=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==t?t:null),this[n]};}return t}})}
+ */function i$2(i,n){return o$3({descriptor:o=>{const t={get(){var o,n;return null!==(n=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==n?n:null},enumerable:!0,configurable:!0};if(n){const n="symbol"==typeof o?Symbol():"__"+o;t.get=function(){var o,t;return void 0===this[n]&&(this[n]=null!==(t=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==t?t:null),this[n]};}return t}})}
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-function e$4(e){return o$2({descriptor:r=>({async get(){var r;return await this.updateComplete,null===(r=this.renderRoot)||void 0===r?void 0:r.querySelector(e)},enumerable:!0,configurable:!0})})}
+function e$4(e){return o$3({descriptor:r=>({async get(){var r;return await this.updateComplete,null===(r=this.renderRoot)||void 0===r?void 0:r.querySelector(e)},enumerable:!0,configurable:!0})})}
 
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */var n;const e$3=null!=(null===(n=window.HTMLSlotElement)||void 0===n?void 0:n.prototype.assignedElements)?(o,n)=>o.assignedElements(n):(o,n)=>o.assignedNodes(n).filter((o=>o.nodeType===Node.ELEMENT_NODE));function l$2(n){const{slot:l,selector:t}=null!=n?n:{};return o$2({descriptor:o=>({get(){var o;const r="slot"+(l?`[name=${l}]`:":not([name])"),i=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(r),s=null!=i?e$3(i,n):[];return t?s.filter((o=>o.matches(t))):s},enumerable:!0,configurable:!0})})}
+ */var n$1;const e$3=null!=(null===(n$1=window.HTMLSlotElement)||void 0===n$1?void 0:n$1.prototype.assignedElements)?(o,n)=>o.assignedElements(n):(o,n)=>o.assignedNodes(n).filter((o=>o.nodeType===Node.ELEMENT_NODE));function l$2(n){const{slot:l,selector:t}=null!=n?n:{};return o$3({descriptor:o=>({get(){var o;const r="slot"+(l?`[name=${l}]`:":not([name])"),i=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(r),s=null!=i?e$3(i,n):[];return t?s.filter((o=>o.matches(t))):s},enumerable:!0,configurable:!0})})}
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */function o$1(o,n,r){let l,s=o;return "object"==typeof o?(s=o.slot,l=o):l={flatten:n},r?l$2({slot:s,flatten:n,selector:r}):o$2({descriptor:e=>({get(){var e,t;const o="slot"+(s?`[name=${s}]`:":not([name])"),n=null===(e=this.renderRoot)||void 0===e?void 0:e.querySelector(o);return null!==(t=null==n?void 0:n.assignedNodes(l))&&void 0!==t?t:[]},enumerable:!0,configurable:!0})})}
+ */function o$2(o,n,r){let l,s=o;return "object"==typeof o?(s=o.slot,l=o):l={flatten:n},r?l$2({slot:s,flatten:n,selector:r}):o$3({descriptor:e=>({get(){var e,t;const o="slot"+(s?`[name=${s}]`:":not([name])"),n=null===(e=this.renderRoot)||void 0===e?void 0:e.querySelector(o);return null!==(t=null==n?void 0:n.assignedNodes(l))&&void 0!==t?t:[]},enumerable:!0,configurable:!0})})}
 
 var t$1,r;!function(e){e.language="language",e.system="system",e.comma_decimal="comma_decimal",e.decimal_comma="decimal_comma",e.space_comma="space_comma",e.none="none";}(t$1||(t$1={})),function(e){e.language="language",e.system="system",e.am_pm="12",e.twenty_four="24";}(r||(r={}));var ne=function(e,t,r,n){n=n||{},r=null==r?{}:r;var i=new Event(t,{bubbles:void 0===n.bubbles||n.bubbles,cancelable:Boolean(n.cancelable),composed:void 0===n.composed||n.composed});return i.detail=r,e.dispatchEvent(i),i};
 
@@ -173,7 +173,7 @@ var t$1,r;!function(e){e.language="language",e.system="system",e.comma_decimal="
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var MDCFoundation = /** @class */ (function () {
+var MDCFoundation$b = /** @class */ (function () {
     function MDCFoundation(adapter) {
         if (adapter === void 0) { adapter = {}; }
         this.adapter = adapter;
@@ -324,7 +324,7 @@ var MDCFormFieldFoundation = /** @class */ (function (_super) {
         });
     };
     return MDCFormFieldFoundation;
-}(MDCFoundation));
+}(MDCFoundation$b));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCFormFieldFoundation$1 = MDCFormFieldFoundation;
 
@@ -333,68 +333,14 @@ var MDCFormFieldFoundation$1 = MDCFormFieldFoundation;
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-// Style preference for leading underscores.
-// tslint:disable:strip-private-property-underscore
-/**
- * Determines whether a node is an element.
- *
- * @param node Node to check
- */
-const isNodeElement = (node) => {
-    return node.nodeType === Node.ELEMENT_NODE;
-};
-function addHasRemoveClass(element) {
-    return {
-        addClass: (className) => {
-            element.classList.add(className);
-        },
-        removeClass: (className) => {
-            element.classList.remove(className);
-        },
-        hasClass: (className) => element.classList.contains(className),
-    };
-}
-const fn = () => { };
-const optionsBlock = {
+const fn$8 = () => { };
+const optionsBlock$8 = {
     get passive() {
         return false;
     }
 };
-document.addEventListener('x', fn, optionsBlock);
-document.removeEventListener('x', fn);
-const deepActiveElementPath = (doc = window.document) => {
-    let activeElement = doc.activeElement;
-    const path = [];
-    if (!activeElement) {
-        return path;
-    }
-    while (activeElement) {
-        path.push(activeElement);
-        if (activeElement.shadowRoot) {
-            activeElement = activeElement.shadowRoot.activeElement;
-        }
-        else {
-            break;
-        }
-    }
-    return path;
-};
-const doesElementContainFocus = (element) => {
-    const activePath = deepActiveElementPath();
-    if (!activePath.length) {
-        return false;
-    }
-    const deepActiveElement = activePath[activePath.length - 1];
-    const focusEv = new Event('check-if-focused', { bubbles: true, composed: true });
-    let composedPath = [];
-    const listener = (ev) => {
-        composedPath = ev.composedPath();
-    };
-    document.body.addEventListener('check-if-focused', listener);
-    deepActiveElement.dispatchEvent(focusEv);
-    document.body.removeEventListener('check-if-focused', listener);
-    return composedPath.indexOf(element) !== -1;
-};
+document.addEventListener('x', fn$8, optionsBlock$8);
+document.removeEventListener('x', fn$8);
 
 /**
  * @license
@@ -402,7 +348,7 @@ const doesElementContainFocus = (element) => {
  * SPDX-License-Identifier: Apache-2.0
  */
 /** @soyCompatible */
-class BaseElement extends s$1 {
+class BaseElement$8 extends s$1 {
     click() {
         if (this.mdcRoot) {
             this.mdcRoot.focus();
@@ -433,11 +379,11 @@ class BaseElement extends s$1 {
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-var _a$1, _b$1;
+var _a$4, _b$4;
 // ShadyDOM should submit <input> elements in component internals
-const USING_SHADY_DOM = (_b$1 = (_a$1 = window.ShadyDOM) === null || _a$1 === void 0 ? void 0 : _a$1.inUse) !== null && _b$1 !== void 0 ? _b$1 : false;
+const USING_SHADY_DOM$3 = (_b$4 = (_a$4 = window.ShadyDOM) === null || _a$4 === void 0 ? void 0 : _a$4.inUse) !== null && _b$4 !== void 0 ? _b$4 : false;
 /** @soyCompatible */
-class FormElement extends BaseElement {
+class FormElement$3 extends BaseElement$8 {
     constructor() {
         super(...arguments);
         /**
@@ -459,7 +405,7 @@ class FormElement extends BaseElement {
         // If the component internals are not in Shadow DOM, subscribing to form
         // data events could lead to duplicated data, which may not work correctly
         // on the server side.
-        if (!this.shadowRoot || USING_SHADY_DOM) {
+        if (!this.shadowRoot || USING_SHADY_DOM$3) {
             return null;
         }
         const root = this.getRootNode();
@@ -498,10 +444,10 @@ class FormElement extends BaseElement {
         }
     }
 }
-FormElement.shadowRootOptions = { mode: 'open', delegatesFocus: true };
+FormElement$3.shadowRootOptions = { mode: 'open', delegatesFocus: true };
 __decorate([
     e$6({ type: Boolean })
-], FormElement.prototype, "disabled", void 0);
+], FormElement$3.prototype, "disabled", void 0);
 
 /**
  * @license
@@ -512,7 +458,7 @@ __decorate([
  * Specifies an observer callback that is run when the decorated property
  * changes. The observer receives the current and old value as arguments.
  */
-const observer = (observer) => 
+const observer$5 = (observer) => 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (proto, propName) => {
     // if we haven't wrapped `updated` in this class, do so
@@ -557,14 +503,14 @@ const t={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},e
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const o=e$1(class extends i$1{constructor(t$1){var i;if(super(t$1),t$1.type!==t.ATTRIBUTE||"class"!==t$1.name||(null===(i=t$1.strings)||void 0===i?void 0:i.length)>2)throw Error("`classMap()` can only be used in the `class` attribute and must be the only part in the attribute.")}render(t){return " "+Object.keys(t).filter((i=>t[i])).join(" ")+" "}update(i,[s]){var r,o;if(void 0===this.nt){this.nt=new Set,void 0!==i.strings&&(this.st=new Set(i.strings.join(" ").split(/\s/).filter((t=>""!==t))));for(const t in s)s[t]&&!(null===(r=this.st)||void 0===r?void 0:r.has(t))&&this.nt.add(t);return this.render(s)}const e=i.element.classList;this.nt.forEach((t=>{t in s||(e.remove(t),this.nt.delete(t));}));for(const t in s){const i=!!s[t];i===this.nt.has(t)||(null===(o=this.st)||void 0===o?void 0:o.has(t))||(i?(e.add(t),this.nt.add(t)):(e.remove(t),this.nt.delete(t)));}return T}});
+ */const o$1=e$1(class extends i$1{constructor(t$1){var i;if(super(t$1),t$1.type!==t.ATTRIBUTE||"class"!==t$1.name||(null===(i=t$1.strings)||void 0===i?void 0:i.length)>2)throw Error("`classMap()` can only be used in the `class` attribute and must be the only part in the attribute.")}render(t){return " "+Object.keys(t).filter((i=>t[i])).join(" ")+" "}update(i,[s]){var r,o;if(void 0===this.it){this.it=new Set,void 0!==i.strings&&(this.nt=new Set(i.strings.join(" ").split(/\s/).filter((t=>""!==t))));for(const t in s)s[t]&&!(null===(r=this.nt)||void 0===r?void 0:r.has(t))&&this.it.add(t);return this.render(s)}const e=i.element.classList;this.it.forEach((t=>{t in s||(e.remove(t),this.it.delete(t));}));for(const t in s){const i=!!s[t];i===this.it.has(t)||(null===(o=this.nt)||void 0===o?void 0:o.has(t))||(i?(e.add(t),this.it.add(t)):(e.remove(t),this.it.delete(t)));}return T}});
 
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-class FormfieldBase extends BaseElement {
+class FormfieldBase extends BaseElement$8 {
     constructor() {
         super(...arguments);
         this.alignEnd = false;
@@ -583,7 +529,7 @@ class FormfieldBase extends BaseElement {
             },
             activateInputRipple: async () => {
                 const input = this.input;
-                if (input instanceof FormElement) {
+                if (input instanceof FormElement$3) {
                     const ripple = await input.ripple;
                     if (ripple) {
                         ripple.startPress();
@@ -592,7 +538,7 @@ class FormfieldBase extends BaseElement {
             },
             deactivateInputRipple: async () => {
                 const input = this.input;
-                if (input instanceof FormElement) {
+                if (input instanceof FormElement$3) {
                     const ripple = await input.ripple;
                     if (ripple) {
                         ripple.endPress();
@@ -612,7 +558,7 @@ class FormfieldBase extends BaseElement {
             'mdc-form-field--nowrap': this.nowrap
         };
         return x `
-      <div class="mdc-form-field ${o(classes)}">
+      <div class="mdc-form-field ${o$1(classes)}">
         <slot></slot>
         <label class="mdc-label"
                @click="${this._labelClick}">${this.label}</label>
@@ -640,7 +586,7 @@ __decorate([
 ], FormfieldBase.prototype, "nowrap", void 0);
 __decorate([
     e$6({ type: String }),
-    observer(async function (label) {
+    observer$5(async function (label) {
         var _a;
         (_a = this.input) === null || _a === void 0 ? void 0 : _a.setAttribute('aria-label', label);
     })
@@ -649,7 +595,7 @@ __decorate([
     i$2('.mdc-form-field')
 ], FormfieldBase.prototype, "mdcRoot", void 0);
 __decorate([
-    o$1('', true, '*')
+    o$2('', true, '*')
 ], FormfieldBase.prototype, "slottedInputs", void 0);
 __decorate([
     i$2('label')
@@ -695,7 +641,7 @@ const formfieldDefinition = {
 /**
  * KEY provides normalized string values for keys.
  */
-var KEY = {
+var KEY$3 = {
     UNKNOWN: 'Unknown',
     BACKSPACE: 'Backspace',
     ENTER: 'Enter',
@@ -712,24 +658,24 @@ var KEY = {
     ESCAPE: 'Escape',
     TAB: 'Tab',
 };
-var normalizedKeys = new Set();
+var normalizedKeys$3 = new Set();
 // IE11 has no support for new Map with iterable so we need to initialize this
 // by hand.
-normalizedKeys.add(KEY.BACKSPACE);
-normalizedKeys.add(KEY.ENTER);
-normalizedKeys.add(KEY.SPACEBAR);
-normalizedKeys.add(KEY.PAGE_UP);
-normalizedKeys.add(KEY.PAGE_DOWN);
-normalizedKeys.add(KEY.END);
-normalizedKeys.add(KEY.HOME);
-normalizedKeys.add(KEY.ARROW_LEFT);
-normalizedKeys.add(KEY.ARROW_UP);
-normalizedKeys.add(KEY.ARROW_RIGHT);
-normalizedKeys.add(KEY.ARROW_DOWN);
-normalizedKeys.add(KEY.DELETE);
-normalizedKeys.add(KEY.ESCAPE);
-normalizedKeys.add(KEY.TAB);
-var KEY_CODE = {
+normalizedKeys$3.add(KEY$3.BACKSPACE);
+normalizedKeys$3.add(KEY$3.ENTER);
+normalizedKeys$3.add(KEY$3.SPACEBAR);
+normalizedKeys$3.add(KEY$3.PAGE_UP);
+normalizedKeys$3.add(KEY$3.PAGE_DOWN);
+normalizedKeys$3.add(KEY$3.END);
+normalizedKeys$3.add(KEY$3.HOME);
+normalizedKeys$3.add(KEY$3.ARROW_LEFT);
+normalizedKeys$3.add(KEY$3.ARROW_UP);
+normalizedKeys$3.add(KEY$3.ARROW_RIGHT);
+normalizedKeys$3.add(KEY$3.ARROW_DOWN);
+normalizedKeys$3.add(KEY$3.DELETE);
+normalizedKeys$3.add(KEY$3.ESCAPE);
+normalizedKeys$3.add(KEY$3.TAB);
+var KEY_CODE$3 = {
     BACKSPACE: 8,
     ENTER: 13,
     SPACEBAR: 32,
@@ -745,49 +691,169 @@ var KEY_CODE = {
     ESCAPE: 27,
     TAB: 9,
 };
-var mappedKeyCodes = new Map();
+var mappedKeyCodes$3 = new Map();
 // IE11 has no support for new Map with iterable so we need to initialize this
 // by hand.
-mappedKeyCodes.set(KEY_CODE.BACKSPACE, KEY.BACKSPACE);
-mappedKeyCodes.set(KEY_CODE.ENTER, KEY.ENTER);
-mappedKeyCodes.set(KEY_CODE.SPACEBAR, KEY.SPACEBAR);
-mappedKeyCodes.set(KEY_CODE.PAGE_UP, KEY.PAGE_UP);
-mappedKeyCodes.set(KEY_CODE.PAGE_DOWN, KEY.PAGE_DOWN);
-mappedKeyCodes.set(KEY_CODE.END, KEY.END);
-mappedKeyCodes.set(KEY_CODE.HOME, KEY.HOME);
-mappedKeyCodes.set(KEY_CODE.ARROW_LEFT, KEY.ARROW_LEFT);
-mappedKeyCodes.set(KEY_CODE.ARROW_UP, KEY.ARROW_UP);
-mappedKeyCodes.set(KEY_CODE.ARROW_RIGHT, KEY.ARROW_RIGHT);
-mappedKeyCodes.set(KEY_CODE.ARROW_DOWN, KEY.ARROW_DOWN);
-mappedKeyCodes.set(KEY_CODE.DELETE, KEY.DELETE);
-mappedKeyCodes.set(KEY_CODE.ESCAPE, KEY.ESCAPE);
-mappedKeyCodes.set(KEY_CODE.TAB, KEY.TAB);
-var navigationKeys = new Set();
+mappedKeyCodes$3.set(KEY_CODE$3.BACKSPACE, KEY$3.BACKSPACE);
+mappedKeyCodes$3.set(KEY_CODE$3.ENTER, KEY$3.ENTER);
+mappedKeyCodes$3.set(KEY_CODE$3.SPACEBAR, KEY$3.SPACEBAR);
+mappedKeyCodes$3.set(KEY_CODE$3.PAGE_UP, KEY$3.PAGE_UP);
+mappedKeyCodes$3.set(KEY_CODE$3.PAGE_DOWN, KEY$3.PAGE_DOWN);
+mappedKeyCodes$3.set(KEY_CODE$3.END, KEY$3.END);
+mappedKeyCodes$3.set(KEY_CODE$3.HOME, KEY$3.HOME);
+mappedKeyCodes$3.set(KEY_CODE$3.ARROW_LEFT, KEY$3.ARROW_LEFT);
+mappedKeyCodes$3.set(KEY_CODE$3.ARROW_UP, KEY$3.ARROW_UP);
+mappedKeyCodes$3.set(KEY_CODE$3.ARROW_RIGHT, KEY$3.ARROW_RIGHT);
+mappedKeyCodes$3.set(KEY_CODE$3.ARROW_DOWN, KEY$3.ARROW_DOWN);
+mappedKeyCodes$3.set(KEY_CODE$3.DELETE, KEY$3.DELETE);
+mappedKeyCodes$3.set(KEY_CODE$3.ESCAPE, KEY$3.ESCAPE);
+mappedKeyCodes$3.set(KEY_CODE$3.TAB, KEY$3.TAB);
+var navigationKeys$3 = new Set();
 // IE11 has no support for new Set with iterable so we need to initialize this
 // by hand.
-navigationKeys.add(KEY.PAGE_UP);
-navigationKeys.add(KEY.PAGE_DOWN);
-navigationKeys.add(KEY.END);
-navigationKeys.add(KEY.HOME);
-navigationKeys.add(KEY.ARROW_LEFT);
-navigationKeys.add(KEY.ARROW_UP);
-navigationKeys.add(KEY.ARROW_RIGHT);
-navigationKeys.add(KEY.ARROW_DOWN);
+navigationKeys$3.add(KEY$3.PAGE_UP);
+navigationKeys$3.add(KEY$3.PAGE_DOWN);
+navigationKeys$3.add(KEY$3.END);
+navigationKeys$3.add(KEY$3.HOME);
+navigationKeys$3.add(KEY$3.ARROW_LEFT);
+navigationKeys$3.add(KEY$3.ARROW_UP);
+navigationKeys$3.add(KEY$3.ARROW_RIGHT);
+navigationKeys$3.add(KEY$3.ARROW_DOWN);
 /**
  * normalizeKey returns the normalized string for a navigational action.
  */
-function normalizeKey(evt) {
+function normalizeKey$3(evt) {
     var key = evt.key;
     // If the event already has a normalized key, return it
-    if (normalizedKeys.has(key)) {
+    if (normalizedKeys$3.has(key)) {
         return key;
     }
     // tslint:disable-next-line:deprecation
-    var mappedKey = mappedKeyCodes.get(evt.keyCode);
+    var mappedKey = mappedKeyCodes$3.get(evt.keyCode);
     if (mappedKey) {
         return mappedKey;
     }
-    return KEY.UNKNOWN;
+    return KEY$3.UNKNOWN;
+}
+
+/**
+ * @license
+ * Copyright 2020 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+/**
+ * KEY provides normalized string values for keys.
+ */
+var KEY$2 = {
+    UNKNOWN: 'Unknown',
+    BACKSPACE: 'Backspace',
+    ENTER: 'Enter',
+    SPACEBAR: 'Spacebar',
+    PAGE_UP: 'PageUp',
+    PAGE_DOWN: 'PageDown',
+    END: 'End',
+    HOME: 'Home',
+    ARROW_LEFT: 'ArrowLeft',
+    ARROW_UP: 'ArrowUp',
+    ARROW_RIGHT: 'ArrowRight',
+    ARROW_DOWN: 'ArrowDown',
+    DELETE: 'Delete',
+    ESCAPE: 'Escape',
+    TAB: 'Tab',
+};
+var normalizedKeys$2 = new Set();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+normalizedKeys$2.add(KEY$2.BACKSPACE);
+normalizedKeys$2.add(KEY$2.ENTER);
+normalizedKeys$2.add(KEY$2.SPACEBAR);
+normalizedKeys$2.add(KEY$2.PAGE_UP);
+normalizedKeys$2.add(KEY$2.PAGE_DOWN);
+normalizedKeys$2.add(KEY$2.END);
+normalizedKeys$2.add(KEY$2.HOME);
+normalizedKeys$2.add(KEY$2.ARROW_LEFT);
+normalizedKeys$2.add(KEY$2.ARROW_UP);
+normalizedKeys$2.add(KEY$2.ARROW_RIGHT);
+normalizedKeys$2.add(KEY$2.ARROW_DOWN);
+normalizedKeys$2.add(KEY$2.DELETE);
+normalizedKeys$2.add(KEY$2.ESCAPE);
+normalizedKeys$2.add(KEY$2.TAB);
+var KEY_CODE$2 = {
+    BACKSPACE: 8,
+    ENTER: 13,
+    SPACEBAR: 32,
+    PAGE_UP: 33,
+    PAGE_DOWN: 34,
+    END: 35,
+    HOME: 36,
+    ARROW_LEFT: 37,
+    ARROW_UP: 38,
+    ARROW_RIGHT: 39,
+    ARROW_DOWN: 40,
+    DELETE: 46,
+    ESCAPE: 27,
+    TAB: 9,
+};
+var mappedKeyCodes$2 = new Map();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+mappedKeyCodes$2.set(KEY_CODE$2.BACKSPACE, KEY$2.BACKSPACE);
+mappedKeyCodes$2.set(KEY_CODE$2.ENTER, KEY$2.ENTER);
+mappedKeyCodes$2.set(KEY_CODE$2.SPACEBAR, KEY$2.SPACEBAR);
+mappedKeyCodes$2.set(KEY_CODE$2.PAGE_UP, KEY$2.PAGE_UP);
+mappedKeyCodes$2.set(KEY_CODE$2.PAGE_DOWN, KEY$2.PAGE_DOWN);
+mappedKeyCodes$2.set(KEY_CODE$2.END, KEY$2.END);
+mappedKeyCodes$2.set(KEY_CODE$2.HOME, KEY$2.HOME);
+mappedKeyCodes$2.set(KEY_CODE$2.ARROW_LEFT, KEY$2.ARROW_LEFT);
+mappedKeyCodes$2.set(KEY_CODE$2.ARROW_UP, KEY$2.ARROW_UP);
+mappedKeyCodes$2.set(KEY_CODE$2.ARROW_RIGHT, KEY$2.ARROW_RIGHT);
+mappedKeyCodes$2.set(KEY_CODE$2.ARROW_DOWN, KEY$2.ARROW_DOWN);
+mappedKeyCodes$2.set(KEY_CODE$2.DELETE, KEY$2.DELETE);
+mappedKeyCodes$2.set(KEY_CODE$2.ESCAPE, KEY$2.ESCAPE);
+mappedKeyCodes$2.set(KEY_CODE$2.TAB, KEY$2.TAB);
+var navigationKeys$2 = new Set();
+// IE11 has no support for new Set with iterable so we need to initialize this
+// by hand.
+navigationKeys$2.add(KEY$2.PAGE_UP);
+navigationKeys$2.add(KEY$2.PAGE_DOWN);
+navigationKeys$2.add(KEY$2.END);
+navigationKeys$2.add(KEY$2.HOME);
+navigationKeys$2.add(KEY$2.ARROW_LEFT);
+navigationKeys$2.add(KEY$2.ARROW_UP);
+navigationKeys$2.add(KEY$2.ARROW_RIGHT);
+navigationKeys$2.add(KEY$2.ARROW_DOWN);
+/**
+ * normalizeKey returns the normalized string for a navigational action.
+ */
+function normalizeKey$2(evt) {
+    var key = evt.key;
+    // If the event already has a normalized key, return it
+    if (normalizedKeys$2.has(key)) {
+        return key;
+    }
+    // tslint:disable-next-line:deprecation
+    var mappedKey = mappedKeyCodes$2.get(evt.keyCode);
+    if (mappedKey) {
+        return mappedKey;
+    }
+    return KEY$2.UNKNOWN;
 }
 
 /**
@@ -812,7 +878,7 @@ function normalizeKey(evt) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var _a, _b;
+var _a$3, _b$3;
 var cssClasses$a = {
     LIST_ITEM_ACTIVATED_CLASS: 'mdc-list-item--activated',
     LIST_ITEM_CLASS: 'mdc-list-item',
@@ -822,23 +888,23 @@ var cssClasses$a = {
     LIST_ITEM_PRIMARY_TEXT_CLASS: 'mdc-list-item__primary-text',
     ROOT: 'mdc-list',
 };
-(_a = {},
-    _a["" + cssClasses$a.LIST_ITEM_ACTIVATED_CLASS] = 'mdc-list-item--activated',
-    _a["" + cssClasses$a.LIST_ITEM_CLASS] = 'mdc-list-item',
-    _a["" + cssClasses$a.LIST_ITEM_DISABLED_CLASS] = 'mdc-list-item--disabled',
-    _a["" + cssClasses$a.LIST_ITEM_SELECTED_CLASS] = 'mdc-list-item--selected',
-    _a["" + cssClasses$a.LIST_ITEM_PRIMARY_TEXT_CLASS] = 'mdc-list-item__primary-text',
-    _a["" + cssClasses$a.ROOT] = 'mdc-list',
-    _a);
-var deprecatedClassNameMap = (_b = {},
-    _b["" + cssClasses$a.LIST_ITEM_ACTIVATED_CLASS] = 'mdc-deprecated-list-item--activated',
-    _b["" + cssClasses$a.LIST_ITEM_CLASS] = 'mdc-deprecated-list-item',
-    _b["" + cssClasses$a.LIST_ITEM_DISABLED_CLASS] = 'mdc-deprecated-list-item--disabled',
-    _b["" + cssClasses$a.LIST_ITEM_SELECTED_CLASS] = 'mdc-deprecated-list-item--selected',
-    _b["" + cssClasses$a.LIST_ITEM_TEXT_CLASS] = 'mdc-deprecated-list-item__text',
-    _b["" + cssClasses$a.LIST_ITEM_PRIMARY_TEXT_CLASS] = 'mdc-deprecated-list-item__primary-text',
-    _b["" + cssClasses$a.ROOT] = 'mdc-deprecated-list',
-    _b);
+(_a$3 = {},
+    _a$3["" + cssClasses$a.LIST_ITEM_ACTIVATED_CLASS] = 'mdc-list-item--activated',
+    _a$3["" + cssClasses$a.LIST_ITEM_CLASS] = 'mdc-list-item',
+    _a$3["" + cssClasses$a.LIST_ITEM_DISABLED_CLASS] = 'mdc-list-item--disabled',
+    _a$3["" + cssClasses$a.LIST_ITEM_SELECTED_CLASS] = 'mdc-list-item--selected',
+    _a$3["" + cssClasses$a.LIST_ITEM_PRIMARY_TEXT_CLASS] = 'mdc-list-item__primary-text',
+    _a$3["" + cssClasses$a.ROOT] = 'mdc-list',
+    _a$3);
+var deprecatedClassNameMap = (_b$3 = {},
+    _b$3["" + cssClasses$a.LIST_ITEM_ACTIVATED_CLASS] = 'mdc-deprecated-list-item--activated',
+    _b$3["" + cssClasses$a.LIST_ITEM_CLASS] = 'mdc-deprecated-list-item',
+    _b$3["" + cssClasses$a.LIST_ITEM_DISABLED_CLASS] = 'mdc-deprecated-list-item--disabled',
+    _b$3["" + cssClasses$a.LIST_ITEM_SELECTED_CLASS] = 'mdc-deprecated-list-item--selected',
+    _b$3["" + cssClasses$a.LIST_ITEM_TEXT_CLASS] = 'mdc-deprecated-list-item__text',
+    _b$3["" + cssClasses$a.LIST_ITEM_PRIMARY_TEXT_CLASS] = 'mdc-deprecated-list-item__primary-text',
+    _b$3["" + cssClasses$a.ROOT] = 'mdc-deprecated-list',
+    _b$3);
 var strings$7 = {
     ACTION_EVENT: 'MDCList:action',
     ARIA_CHECKED: 'aria-checked',
@@ -1139,14 +1205,14 @@ function clearBuffer(state) {
  */
 function handleKeydown(opts, state) {
     var event = opts.event, isTargetListItem = opts.isTargetListItem, focusedItemIndex = opts.focusedItemIndex, focusItemAtIndex = opts.focusItemAtIndex, sortedIndexByFirstChar = opts.sortedIndexByFirstChar, isItemAtIndexDisabled = opts.isItemAtIndexDisabled;
-    var isArrowLeft = normalizeKey(event) === 'ArrowLeft';
-    var isArrowUp = normalizeKey(event) === 'ArrowUp';
-    var isArrowRight = normalizeKey(event) === 'ArrowRight';
-    var isArrowDown = normalizeKey(event) === 'ArrowDown';
-    var isHome = normalizeKey(event) === 'Home';
-    var isEnd = normalizeKey(event) === 'End';
-    var isEnter = normalizeKey(event) === 'Enter';
-    var isSpace = normalizeKey(event) === 'Spacebar';
+    var isArrowLeft = normalizeKey$2(event) === 'ArrowLeft';
+    var isArrowUp = normalizeKey$2(event) === 'ArrowUp';
+    var isArrowRight = normalizeKey$2(event) === 'ArrowRight';
+    var isArrowDown = normalizeKey$2(event) === 'ArrowDown';
+    var isHome = normalizeKey$2(event) === 'Home';
+    var isEnd = normalizeKey$2(event) === 'End';
+    var isEnter = normalizeKey$2(event) === 'Enter';
+    var isSpace = normalizeKey$2(event) === 'Spacebar';
     if (event.ctrlKey || event.metaKey || isArrowLeft || isArrowUp ||
         isArrowRight || isArrowDown || isHome || isEnd || isEnter) {
         return -1;
@@ -1185,6 +1251,264 @@ function handleKeydown(opts, state) {
     }
     return -1;
 }
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// Style preference for leading underscores.
+// tslint:disable:strip-private-property-underscore
+/**
+ * Determines whether a node is an element.
+ *
+ * @param node Node to check
+ */
+const isNodeElement$1 = (node) => {
+    return node.nodeType === Node.ELEMENT_NODE;
+};
+function addHasRemoveClass$3(element) {
+    return {
+        addClass: (className) => {
+            element.classList.add(className);
+        },
+        removeClass: (className) => {
+            element.classList.remove(className);
+        },
+        hasClass: (className) => element.classList.contains(className),
+    };
+}
+const fn$7 = () => { };
+const optionsBlock$7 = {
+    get passive() {
+        return false;
+    }
+};
+document.addEventListener('x', fn$7, optionsBlock$7);
+document.removeEventListener('x', fn$7);
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @soyCompatible */
+class BaseElement$7 extends s$1 {
+    click() {
+        if (this.mdcRoot) {
+            this.mdcRoot.focus();
+            this.mdcRoot.click();
+            return;
+        }
+        super.click();
+    }
+    /**
+     * Create and attach the MDC Foundation to the instance
+     */
+    createFoundation() {
+        if (this.mdcFoundation !== undefined) {
+            this.mdcFoundation.destroy();
+        }
+        if (this.mdcFoundationClass) {
+            this.mdcFoundation = new this.mdcFoundationClass(this.createAdapter());
+            this.mdcFoundation.init();
+        }
+    }
+    firstUpdated() {
+        this.createFoundation();
+    }
+}
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+var _a$2, _b$2;
+// ShadyDOM should submit <input> elements in component internals
+const USING_SHADY_DOM$2 = (_b$2 = (_a$2 = window.ShadyDOM) === null || _a$2 === void 0 ? void 0 : _a$2.inUse) !== null && _b$2 !== void 0 ? _b$2 : false;
+/** @soyCompatible */
+class FormElement$2 extends BaseElement$7 {
+    constructor() {
+        super(...arguments);
+        /**
+         * Disabled state for the component. When `disabled` is set to `true`, the
+         * component will not be added to form submission.
+         */
+        this.disabled = false;
+        /**
+         * Form element that contains this element
+         */
+        this.containingForm = null;
+        this.formDataListener = (ev) => {
+            if (!this.disabled) {
+                this.setFormData(ev.formData);
+            }
+        };
+    }
+    findFormElement() {
+        // If the component internals are not in Shadow DOM, subscribing to form
+        // data events could lead to duplicated data, which may not work correctly
+        // on the server side.
+        if (!this.shadowRoot || USING_SHADY_DOM$2) {
+            return null;
+        }
+        const root = this.getRootNode();
+        const forms = root.querySelectorAll('form');
+        for (const form of Array.from(forms)) {
+            if (form.contains(this)) {
+                return form;
+            }
+        }
+        return null;
+    }
+    connectedCallback() {
+        var _a;
+        super.connectedCallback();
+        this.containingForm = this.findFormElement();
+        (_a = this.containingForm) === null || _a === void 0 ? void 0 : _a.addEventListener('formdata', this.formDataListener);
+    }
+    disconnectedCallback() {
+        var _a;
+        super.disconnectedCallback();
+        (_a = this.containingForm) === null || _a === void 0 ? void 0 : _a.removeEventListener('formdata', this.formDataListener);
+        this.containingForm = null;
+    }
+    click() {
+        if (this.formElement && !this.disabled) {
+            this.formElement.focus();
+            this.formElement.click();
+        }
+    }
+    firstUpdated() {
+        super.firstUpdated();
+        if (this.shadowRoot) {
+            this.mdcRoot.addEventListener('change', (e) => {
+                this.dispatchEvent(new Event('change', e));
+            });
+        }
+    }
+}
+FormElement$2.shadowRootOptions = { mode: 'open', delegatesFocus: true };
+__decorate([
+    e$6({ type: Boolean })
+], FormElement$2.prototype, "disabled", void 0);
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * Specifies an observer callback that is run when the decorated property
+ * changes. The observer receives the current and old value as arguments.
+ */
+const observer$4 = (observer) => 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(proto, propName) => {
+    // if we haven't wrapped `updated` in this class, do so
+    if (!proto.constructor
+        ._observers) {
+        proto.constructor._observers = new Map();
+        const userUpdated = proto.updated;
+        proto.updated = function (changedProperties) {
+            userUpdated.call(this, changedProperties);
+            changedProperties.forEach((v, k) => {
+                const observers = this.constructor
+                    ._observers;
+                const observer = observers.get(k);
+                if (observer !== undefined) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    observer.call(this, this[k], v);
+                }
+            });
+        };
+        // clone any existing observers (superclasses)
+        // eslint-disable-next-line no-prototype-builtins
+    }
+    else if (!proto.constructor.hasOwnProperty('_observers')) {
+        const observers = proto.constructor._observers;
+        proto.constructor._observers = new Map();
+        observers.forEach(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (v, k) => proto.constructor._observers.set(k, v));
+    }
+    // set this method
+    proto.constructor._observers.set(propName, observer);
+};
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$a = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -1328,7 +1652,7 @@ var MDCFloatingLabelFoundation = /** @class */ (function (_super) {
         this.adapter.removeClass(LABEL_SHAKE);
     };
     return MDCFloatingLabelFoundation;
-}(MDCFoundation));
+}(MDCFoundation$a));
 
 /**
  * @license
@@ -1385,6 +1709,79 @@ class FloatingLabelDirective extends i$1 {
     }
 }
 const floatingLabel = e$1(FloatingLabelDirective);
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$9 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -1498,7 +1895,7 @@ var MDCLineRippleFoundation = /** @class */ (function (_super) {
         }
     };
     return MDCLineRippleFoundation;
-}(MDCFoundation));
+}(MDCFoundation$9));
 
 /**
  * @license
@@ -1555,6 +1952,199 @@ class LineRippleDirective extends i$1 {
     }
 }
 const lineRipple = e$1(LineRippleDirective);
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$8 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
+
+/**
+ * @license
+ * Copyright 2020 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+/**
+ * KEY provides normalized string values for keys.
+ */
+var KEY$1 = {
+    UNKNOWN: 'Unknown',
+    BACKSPACE: 'Backspace',
+    ENTER: 'Enter',
+    SPACEBAR: 'Spacebar',
+    PAGE_UP: 'PageUp',
+    PAGE_DOWN: 'PageDown',
+    END: 'End',
+    HOME: 'Home',
+    ARROW_LEFT: 'ArrowLeft',
+    ARROW_UP: 'ArrowUp',
+    ARROW_RIGHT: 'ArrowRight',
+    ARROW_DOWN: 'ArrowDown',
+    DELETE: 'Delete',
+    ESCAPE: 'Escape',
+    TAB: 'Tab',
+};
+var normalizedKeys$1 = new Set();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+normalizedKeys$1.add(KEY$1.BACKSPACE);
+normalizedKeys$1.add(KEY$1.ENTER);
+normalizedKeys$1.add(KEY$1.SPACEBAR);
+normalizedKeys$1.add(KEY$1.PAGE_UP);
+normalizedKeys$1.add(KEY$1.PAGE_DOWN);
+normalizedKeys$1.add(KEY$1.END);
+normalizedKeys$1.add(KEY$1.HOME);
+normalizedKeys$1.add(KEY$1.ARROW_LEFT);
+normalizedKeys$1.add(KEY$1.ARROW_UP);
+normalizedKeys$1.add(KEY$1.ARROW_RIGHT);
+normalizedKeys$1.add(KEY$1.ARROW_DOWN);
+normalizedKeys$1.add(KEY$1.DELETE);
+normalizedKeys$1.add(KEY$1.ESCAPE);
+normalizedKeys$1.add(KEY$1.TAB);
+var KEY_CODE$1 = {
+    BACKSPACE: 8,
+    ENTER: 13,
+    SPACEBAR: 32,
+    PAGE_UP: 33,
+    PAGE_DOWN: 34,
+    END: 35,
+    HOME: 36,
+    ARROW_LEFT: 37,
+    ARROW_UP: 38,
+    ARROW_RIGHT: 39,
+    ARROW_DOWN: 40,
+    DELETE: 46,
+    ESCAPE: 27,
+    TAB: 9,
+};
+var mappedKeyCodes$1 = new Map();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+mappedKeyCodes$1.set(KEY_CODE$1.BACKSPACE, KEY$1.BACKSPACE);
+mappedKeyCodes$1.set(KEY_CODE$1.ENTER, KEY$1.ENTER);
+mappedKeyCodes$1.set(KEY_CODE$1.SPACEBAR, KEY$1.SPACEBAR);
+mappedKeyCodes$1.set(KEY_CODE$1.PAGE_UP, KEY$1.PAGE_UP);
+mappedKeyCodes$1.set(KEY_CODE$1.PAGE_DOWN, KEY$1.PAGE_DOWN);
+mappedKeyCodes$1.set(KEY_CODE$1.END, KEY$1.END);
+mappedKeyCodes$1.set(KEY_CODE$1.HOME, KEY$1.HOME);
+mappedKeyCodes$1.set(KEY_CODE$1.ARROW_LEFT, KEY$1.ARROW_LEFT);
+mappedKeyCodes$1.set(KEY_CODE$1.ARROW_UP, KEY$1.ARROW_UP);
+mappedKeyCodes$1.set(KEY_CODE$1.ARROW_RIGHT, KEY$1.ARROW_RIGHT);
+mappedKeyCodes$1.set(KEY_CODE$1.ARROW_DOWN, KEY$1.ARROW_DOWN);
+mappedKeyCodes$1.set(KEY_CODE$1.DELETE, KEY$1.DELETE);
+mappedKeyCodes$1.set(KEY_CODE$1.ESCAPE, KEY$1.ESCAPE);
+mappedKeyCodes$1.set(KEY_CODE$1.TAB, KEY$1.TAB);
+var navigationKeys$1 = new Set();
+// IE11 has no support for new Set with iterable so we need to initialize this
+// by hand.
+navigationKeys$1.add(KEY$1.PAGE_UP);
+navigationKeys$1.add(KEY$1.PAGE_DOWN);
+navigationKeys$1.add(KEY$1.END);
+navigationKeys$1.add(KEY$1.HOME);
+navigationKeys$1.add(KEY$1.ARROW_LEFT);
+navigationKeys$1.add(KEY$1.ARROW_UP);
+navigationKeys$1.add(KEY$1.ARROW_RIGHT);
+navigationKeys$1.add(KEY$1.ARROW_DOWN);
+/**
+ * normalizeKey returns the normalized string for a navigational action.
+ */
+function normalizeKey$1(evt) {
+    var key = evt.key;
+    // If the event already has a normalized key, return it
+    if (normalizedKeys$1.has(key)) {
+        return key;
+    }
+    // tslint:disable-next-line:deprecation
+    var mappedKey = mappedKeyCodes$1.get(evt.keyCode);
+    if (mappedKey) {
+        return mappedKey;
+    }
+    return KEY$1.UNKNOWN;
+}
 
 /**
  * @license
@@ -1996,10 +2586,10 @@ var MDCSelectFoundation = /** @class */ (function (_super) {
         if (this.isMenuOpen || !this.adapter.hasClass(cssClasses$6.FOCUSED)) {
             return;
         }
-        var isEnter = normalizeKey(event) === KEY.ENTER;
-        var isSpace = normalizeKey(event) === KEY.SPACEBAR;
-        var arrowUp = normalizeKey(event) === KEY.ARROW_UP;
-        var arrowDown = normalizeKey(event) === KEY.ARROW_DOWN;
+        var isEnter = normalizeKey$1(event) === KEY$1.ENTER;
+        var isSpace = normalizeKey$1(event) === KEY$1.SPACEBAR;
+        var arrowUp = normalizeKey$1(event) === KEY$1.ARROW_UP;
+        var arrowDown = normalizeKey$1(event) === KEY$1.ARROW_DOWN;
         var isModifier = event.ctrlKey || event.metaKey;
         // Typeahead
         if (!isModifier &&
@@ -2154,7 +2744,7 @@ var MDCSelectFoundation = /** @class */ (function (_super) {
         this.recentlyClicked = true;
     };
     return MDCSelectFoundation;
-}(MDCFoundation));
+}(MDCFoundation$8));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCSelectFoundation$1 = MDCSelectFoundation;
 
@@ -2200,7 +2790,7 @@ const createValidityObj$1 = (customValidity = {}) => {
  * @fires change
  * @fires invalid
  */
-class SelectBase extends FormElement {
+class SelectBase extends FormElement$2 {
     constructor() {
         super(...arguments);
         this.mdcFoundationClass = MDCSelectFoundation$1;
@@ -2280,7 +2870,7 @@ class SelectBase extends FormElement {
         const describedby = this.shouldRenderHelperText ? 'helper-text' : undefined;
         return x `
       <div
-          class="mdc-select ${o(classes)}">
+          class="mdc-select ${o$1(classes)}">
         <input
             class="formElement"
             name="${this.name}"
@@ -2332,7 +2922,7 @@ class SelectBase extends FormElement {
         <mwc-menu
             innerRole="listbox"
             wrapFocus
-            class="mdc-select__menu mdc-menu mdc-menu-surface ${o(menuClasses)}"
+            class="mdc-select__menu mdc-menu mdc-menu-surface ${o$1(menuClasses)}"
             activatable
             .fullwidth=${this.fixedMenuPosition ? false : !this.naturalMenuWidth}
             .open=${this.menuOpen}
@@ -2402,11 +2992,11 @@ class SelectBase extends FormElement {
         };
         return x `
         <p
-          class="mdc-select-helper-text ${o(classes)}"
+          class="mdc-select-helper-text ${o$1(classes)}"
           id="helper-text">${showValidationMessage ? this.validationMessage : this.helper}</p>`;
     }
     createAdapter() {
-        return Object.assign(Object.assign({}, addHasRemoveClass(this.mdcRoot)), { activateBottomLine: () => {
+        return Object.assign(Object.assign({}, addHasRemoveClass$3(this.mdcRoot)), { activateBottomLine: () => {
                 if (this.lineRippleElement) {
                     this.lineRippleElement.lineRippleFoundation.activate();
                 }
@@ -2689,8 +3279,8 @@ class SelectBase extends FormElement {
         }
     }
     onKeydown(evt) {
-        const arrowUp = normalizeKey(evt) === KEY.ARROW_UP;
-        const arrowDown = normalizeKey(evt) === KEY.ARROW_DOWN;
+        const arrowUp = normalizeKey$3(evt) === KEY$3.ARROW_UP;
+        const arrowDown = normalizeKey$3(evt) === KEY$3.ARROW_DOWN;
         if (arrowDown || arrowUp) {
             const shouldSelectNextItem = arrowUp && this.index > 0;
             const shouldSelectPrevItem = arrowDown && this.index < this.items.length - 1;
@@ -2712,7 +3302,7 @@ class SelectBase extends FormElement {
             return;
         }
         const focusedItemIndex = this.menuElement.getFocusedItemIndex();
-        const target = isNodeElement(event.target) ?
+        const target = isNodeElement$1(event.target) ?
             event.target :
             null;
         const isTargetListItem = target ? target.hasAttribute('mwc-list-item') : false;
@@ -2826,7 +3416,7 @@ __decorate([
 ], SelectBase.prototype, "anchorElement", void 0);
 __decorate([
     e$6({ type: Boolean, attribute: 'disabled', reflect: true }),
-    observer(function (value) {
+    observer$4(function (value) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setDisabled(value);
         }
@@ -2834,7 +3424,7 @@ __decorate([
 ], SelectBase.prototype, "disabled", void 0);
 __decorate([
     e$6({ type: Boolean }),
-    observer(function (_newVal, oldVal) {
+    observer$4(function (_newVal, oldVal) {
         if (oldVal !== undefined && this.outlined !== oldVal) {
             this.layout(false);
         }
@@ -2842,7 +3432,7 @@ __decorate([
 ], SelectBase.prototype, "outlined", void 0);
 __decorate([
     e$6({ type: String }),
-    observer(function (_newVal, oldVal) {
+    observer$4(function (_newVal, oldVal) {
         if (oldVal !== undefined && this.label !== oldVal) {
             this.layout(false);
         }
@@ -2856,7 +3446,7 @@ __decorate([
 ], SelectBase.prototype, "outlineWidth", void 0);
 __decorate([
     e$6({ type: String }),
-    observer(function (value) {
+    observer$4(function (value) {
         if (this.mdcFoundation) {
             const initialization = this.selected === null && !!value;
             const valueSetByUser = this.selected && this.selected.value !== value;
@@ -2906,6 +3496,331 @@ __decorate([
 
 /**
  * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// Style preference for leading underscores.
+// tslint:disable:strip-private-property-underscore
+/**
+ * Determines whether a node is an element.
+ *
+ * @param node Node to check
+ */
+const isNodeElement = (node) => {
+    return node.nodeType === Node.ELEMENT_NODE;
+};
+const fn$6 = () => { };
+const optionsBlock$6 = {
+    get passive() {
+        return false;
+    }
+};
+document.addEventListener('x', fn$6, optionsBlock$6);
+document.removeEventListener('x', fn$6);
+const deepActiveElementPath$2 = (doc = window.document) => {
+    let activeElement = doc.activeElement;
+    const path = [];
+    if (!activeElement) {
+        return path;
+    }
+    while (activeElement) {
+        path.push(activeElement);
+        if (activeElement.shadowRoot) {
+            activeElement = activeElement.shadowRoot.activeElement;
+        }
+        else {
+            break;
+        }
+    }
+    return path;
+};
+const doesElementContainFocus$1 = (element) => {
+    const activePath = deepActiveElementPath$2();
+    if (!activePath.length) {
+        return false;
+    }
+    const deepActiveElement = activePath[activePath.length - 1];
+    const focusEv = new Event('check-if-focused', { bubbles: true, composed: true });
+    let composedPath = [];
+    const listener = (ev) => {
+        composedPath = ev.composedPath();
+    };
+    document.body.addEventListener('check-if-focused', listener);
+    deepActiveElement.dispatchEvent(focusEv);
+    document.body.removeEventListener('check-if-focused', listener);
+    return composedPath.indexOf(element) !== -1;
+};
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @soyCompatible */
+class BaseElement$6 extends s$1 {
+    click() {
+        if (this.mdcRoot) {
+            this.mdcRoot.focus();
+            this.mdcRoot.click();
+            return;
+        }
+        super.click();
+    }
+    /**
+     * Create and attach the MDC Foundation to the instance
+     */
+    createFoundation() {
+        if (this.mdcFoundation !== undefined) {
+            this.mdcFoundation.destroy();
+        }
+        if (this.mdcFoundationClass) {
+            this.mdcFoundation = new this.mdcFoundationClass(this.createAdapter());
+            this.mdcFoundation.init();
+        }
+    }
+    firstUpdated() {
+        this.createFoundation();
+    }
+}
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * Specifies an observer callback that is run when the decorated property
+ * changes. The observer receives the current and old value as arguments.
+ */
+const observer$3 = (observer) => 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(proto, propName) => {
+    // if we haven't wrapped `updated` in this class, do so
+    if (!proto.constructor
+        ._observers) {
+        proto.constructor._observers = new Map();
+        const userUpdated = proto.updated;
+        proto.updated = function (changedProperties) {
+            userUpdated.call(this, changedProperties);
+            changedProperties.forEach((v, k) => {
+                const observers = this.constructor
+                    ._observers;
+                const observer = observers.get(k);
+                if (observer !== undefined) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    observer.call(this, this[k], v);
+                }
+            });
+        };
+        // clone any existing observers (superclasses)
+        // eslint-disable-next-line no-prototype-builtins
+    }
+    else if (!proto.constructor.hasOwnProperty('_observers')) {
+        const observers = proto.constructor._observers;
+        proto.constructor._observers = new Map();
+        observers.forEach(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (v, k) => proto.constructor._observers.set(k, v));
+    }
+    // set this method
+    proto.constructor._observers.set(propName, observer);
+};
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$7 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
+
+/**
+ * @license
+ * Copyright 2020 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+/**
+ * KEY provides normalized string values for keys.
+ */
+var KEY = {
+    UNKNOWN: 'Unknown',
+    BACKSPACE: 'Backspace',
+    ENTER: 'Enter',
+    SPACEBAR: 'Spacebar',
+    PAGE_UP: 'PageUp',
+    PAGE_DOWN: 'PageDown',
+    END: 'End',
+    HOME: 'Home',
+    ARROW_LEFT: 'ArrowLeft',
+    ARROW_UP: 'ArrowUp',
+    ARROW_RIGHT: 'ArrowRight',
+    ARROW_DOWN: 'ArrowDown',
+    DELETE: 'Delete',
+    ESCAPE: 'Escape',
+    TAB: 'Tab',
+};
+var normalizedKeys = new Set();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+normalizedKeys.add(KEY.BACKSPACE);
+normalizedKeys.add(KEY.ENTER);
+normalizedKeys.add(KEY.SPACEBAR);
+normalizedKeys.add(KEY.PAGE_UP);
+normalizedKeys.add(KEY.PAGE_DOWN);
+normalizedKeys.add(KEY.END);
+normalizedKeys.add(KEY.HOME);
+normalizedKeys.add(KEY.ARROW_LEFT);
+normalizedKeys.add(KEY.ARROW_UP);
+normalizedKeys.add(KEY.ARROW_RIGHT);
+normalizedKeys.add(KEY.ARROW_DOWN);
+normalizedKeys.add(KEY.DELETE);
+normalizedKeys.add(KEY.ESCAPE);
+normalizedKeys.add(KEY.TAB);
+var KEY_CODE = {
+    BACKSPACE: 8,
+    ENTER: 13,
+    SPACEBAR: 32,
+    PAGE_UP: 33,
+    PAGE_DOWN: 34,
+    END: 35,
+    HOME: 36,
+    ARROW_LEFT: 37,
+    ARROW_UP: 38,
+    ARROW_RIGHT: 39,
+    ARROW_DOWN: 40,
+    DELETE: 46,
+    ESCAPE: 27,
+    TAB: 9,
+};
+var mappedKeyCodes = new Map();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+mappedKeyCodes.set(KEY_CODE.BACKSPACE, KEY.BACKSPACE);
+mappedKeyCodes.set(KEY_CODE.ENTER, KEY.ENTER);
+mappedKeyCodes.set(KEY_CODE.SPACEBAR, KEY.SPACEBAR);
+mappedKeyCodes.set(KEY_CODE.PAGE_UP, KEY.PAGE_UP);
+mappedKeyCodes.set(KEY_CODE.PAGE_DOWN, KEY.PAGE_DOWN);
+mappedKeyCodes.set(KEY_CODE.END, KEY.END);
+mappedKeyCodes.set(KEY_CODE.HOME, KEY.HOME);
+mappedKeyCodes.set(KEY_CODE.ARROW_LEFT, KEY.ARROW_LEFT);
+mappedKeyCodes.set(KEY_CODE.ARROW_UP, KEY.ARROW_UP);
+mappedKeyCodes.set(KEY_CODE.ARROW_RIGHT, KEY.ARROW_RIGHT);
+mappedKeyCodes.set(KEY_CODE.ARROW_DOWN, KEY.ARROW_DOWN);
+mappedKeyCodes.set(KEY_CODE.DELETE, KEY.DELETE);
+mappedKeyCodes.set(KEY_CODE.ESCAPE, KEY.ESCAPE);
+mappedKeyCodes.set(KEY_CODE.TAB, KEY.TAB);
+var navigationKeys = new Set();
+// IE11 has no support for new Set with iterable so we need to initialize this
+// by hand.
+navigationKeys.add(KEY.PAGE_UP);
+navigationKeys.add(KEY.PAGE_DOWN);
+navigationKeys.add(KEY.END);
+navigationKeys.add(KEY.HOME);
+navigationKeys.add(KEY.ARROW_LEFT);
+navigationKeys.add(KEY.ARROW_UP);
+navigationKeys.add(KEY.ARROW_RIGHT);
+navigationKeys.add(KEY.ARROW_DOWN);
+/**
+ * normalizeKey returns the normalized string for a navigational action.
+ */
+function normalizeKey(evt) {
+    var key = evt.key;
+    // If the event already has a normalized key, return it
+    if (normalizedKeys.has(key)) {
+        return key;
+    }
+    // tslint:disable-next-line:deprecation
+    var mappedKey = mappedKeyCodes.get(evt.keyCode);
+    if (mappedKey) {
+        return mappedKey;
+    }
+    return KEY.UNKNOWN;
+}
+
+/**
+ * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -2949,7 +3864,7 @@ const createSetFromIndex = (index) => {
     const entry = index === numbers$7.UNSET_INDEX ? new Set() : index;
     return isIndexSet(entry) ? new Set(entry) : new Set([entry]);
 };
-class MDCListFoundation extends MDCFoundation {
+class MDCListFoundation extends MDCFoundation$7 {
     constructor(adapter) {
         super(Object.assign(Object.assign({}, MDCListFoundation.defaultAdapter), adapter));
         this.isMulti_ = false;
@@ -3420,7 +4335,7 @@ function clearAndCreateItemsReadyPromise() {
  * @fires action {ActionDetail}
  * @fires items-updated
  */
-class ListBase extends BaseElement {
+class ListBase extends BaseElement$6 {
     constructor() {
         super();
         this.mdcAdapter = null;
@@ -3659,7 +4574,7 @@ class ListBase extends BaseElement {
                 this.dispatchEvent(ev);
             },
             isFocusInsideList: () => {
-                return doesElementContainFocus(this);
+                return doesElementContainFocus$1(this);
             },
             isRootFocused: () => {
                 const mdcRoot = this.mdcRoot;
@@ -3760,7 +4675,7 @@ class ListBase extends BaseElement {
         if (!this.items.length) {
             return -1;
         }
-        const activeElementPath = deepActiveElementPath();
+        const activeElementPath = deepActiveElementPath$2();
         if (!activeElementPath.length) {
             return -1;
         }
@@ -3802,14 +4717,14 @@ __decorate([
     i$2('.mdc-deprecated-list')
 ], ListBase.prototype, "mdcRoot", void 0);
 __decorate([
-    o$1('', true, '*')
+    o$2('', true, '*')
 ], ListBase.prototype, "assignedElements", void 0);
 __decorate([
-    o$1('', true, '[tabindex="0"]')
+    o$2('', true, '[tabindex="0"]')
 ], ListBase.prototype, "tabbableElements", void 0);
 __decorate([
     e$6({ type: Boolean }),
-    observer(function (value) {
+    observer$3(function (value) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setUseActivatedClass(value);
         }
@@ -3817,7 +4732,7 @@ __decorate([
 ], ListBase.prototype, "activatable", void 0);
 __decorate([
     e$6({ type: Boolean }),
-    observer(function (newValue, oldValue) {
+    observer$3(function (newValue, oldValue) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setMulti(newValue);
         }
@@ -3828,7 +4743,7 @@ __decorate([
 ], ListBase.prototype, "multi", void 0);
 __decorate([
     e$6({ type: Boolean }),
-    observer(function (value) {
+    observer$3(function (value) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setWrapFocus(value);
         }
@@ -3836,7 +4751,7 @@ __decorate([
 ], ListBase.prototype, "wrapFocus", void 0);
 __decorate([
     e$6({ type: String }),
-    observer(function (_newValue, oldValue) {
+    observer$3(function (_newValue, oldValue) {
         if (oldValue !== undefined) {
             this.updateItems();
         }
@@ -3853,7 +4768,7 @@ __decorate([
 ], ListBase.prototype, "rootTabbable", void 0);
 __decorate([
     e$6({ type: Boolean, reflect: true }),
-    observer(function (value) {
+    observer$3(function (value) {
         var _a, _b;
         if (value) {
             const tabbable = (_b = (_a = this.tabbableElements) === null || _a === void 0 ? void 0 : _a[0]) !== null && _b !== void 0 ? _b : null;
@@ -4037,7 +4952,7 @@ class ListItemBase extends s$1 {
             multi: this.multipleGraphics,
         };
         return x `
-      <span class="mdc-deprecated-list-item__graphic material-icons ${o(graphicClasses)}">
+      <span class="mdc-deprecated-list-item__graphic material-icons ${o$1(graphicClasses)}">
         <slot name="graphic"></slot>
       </span>`;
     }
@@ -4132,7 +5047,7 @@ __decorate([
 ], ListItemBase.prototype, "tabindex", void 0);
 __decorate([
     e$6({ type: Boolean, reflect: true }),
-    observer(function (value) {
+    observer$3(function (value) {
         if (value) {
             this.setAttribute('aria-disabled', 'true');
         }
@@ -4158,7 +5073,7 @@ __decorate([
 ], ListItemBase.prototype, "hasMeta", void 0);
 __decorate([
     e$6({ type: Boolean, reflect: true }),
-    observer(function (value) {
+    observer$3(function (value) {
         if (value) {
             this.removeAttribute('aria-checked');
             this.removeAttribute('mwc-list-item');
@@ -4173,7 +5088,7 @@ __decorate([
 ], ListItemBase.prototype, "noninteractive", void 0);
 __decorate([
     e$6({ type: Boolean, reflect: true }),
-    observer(function (value) {
+    observer$3(function (value) {
         const role = this.getAttribute('role');
         const isAriaSelectable = role === 'gridcell' || role === 'option' ||
             role === 'row' || role === 'tab';
@@ -4245,6 +5160,152 @@ var DefaultFocusState;
     DefaultFocusState[DefaultFocusState["FIRST_ITEM"] = 2] = "FIRST_ITEM";
     DefaultFocusState[DefaultFocusState["LAST_ITEM"] = 3] = "LAST_ITEM";
 })(DefaultFocusState || (DefaultFocusState = {}));
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$6 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$5 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -4838,7 +5899,7 @@ var MDCMenuSurfaceFoundation = /** @class */ (function (_super) {
         return typeof num === 'number' && isFinite(num);
     };
     return MDCMenuSurfaceFoundation;
-}(MDCFoundation));
+}(MDCFoundation$5));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCMenuSurfaceFoundation$1 = MDCMenuSurfaceFoundation;
 
@@ -5023,9 +6084,142 @@ var MDCMenuFoundation = /** @class */ (function (_super) {
         }
     };
     return MDCMenuFoundation;
-}(MDCFoundation));
+}(MDCFoundation$6));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCMenuFoundation$1 = MDCMenuFoundation;
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+function addHasRemoveClass$2(element) {
+    return {
+        addClass: (className) => {
+            element.classList.add(className);
+        },
+        removeClass: (className) => {
+            element.classList.remove(className);
+        },
+        hasClass: (className) => element.classList.contains(className),
+    };
+}
+const fn$5 = () => { };
+const optionsBlock$5 = {
+    get passive() {
+        return false;
+    }
+};
+document.addEventListener('x', fn$5, optionsBlock$5);
+document.removeEventListener('x', fn$5);
+const deepActiveElementPath$1 = (doc = window.document) => {
+    let activeElement = doc.activeElement;
+    const path = [];
+    if (!activeElement) {
+        return path;
+    }
+    while (activeElement) {
+        path.push(activeElement);
+        if (activeElement.shadowRoot) {
+            activeElement = activeElement.shadowRoot.activeElement;
+        }
+        else {
+            break;
+        }
+    }
+    return path;
+};
+const doesElementContainFocus = (element) => {
+    const activePath = deepActiveElementPath$1();
+    if (!activePath.length) {
+        return false;
+    }
+    const deepActiveElement = activePath[activePath.length - 1];
+    const focusEv = new Event('check-if-focused', { bubbles: true, composed: true });
+    let composedPath = [];
+    const listener = (ev) => {
+        composedPath = ev.composedPath();
+    };
+    document.body.addEventListener('check-if-focused', listener);
+    deepActiveElement.dispatchEvent(focusEv);
+    document.body.removeEventListener('check-if-focused', listener);
+    return composedPath.indexOf(element) !== -1;
+};
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @soyCompatible */
+class BaseElement$5 extends s$1 {
+    click() {
+        if (this.mdcRoot) {
+            this.mdcRoot.focus();
+            this.mdcRoot.click();
+            return;
+        }
+        super.click();
+    }
+    /**
+     * Create and attach the MDC Foundation to the instance
+     */
+    createFoundation() {
+        if (this.mdcFoundation !== undefined) {
+            this.mdcFoundation.destroy();
+        }
+        if (this.mdcFoundationClass) {
+            this.mdcFoundation = new this.mdcFoundationClass(this.createAdapter());
+            this.mdcFoundation.init();
+        }
+    }
+    firstUpdated() {
+        this.createFoundation();
+    }
+}
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * Specifies an observer callback that is run when the decorated property
+ * changes. The observer receives the current and old value as arguments.
+ */
+const observer$2 = (observer) => 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(proto, propName) => {
+    // if we haven't wrapped `updated` in this class, do so
+    if (!proto.constructor
+        ._observers) {
+        proto.constructor._observers = new Map();
+        const userUpdated = proto.updated;
+        proto.updated = function (changedProperties) {
+            userUpdated.call(this, changedProperties);
+            changedProperties.forEach((v, k) => {
+                const observers = this.constructor
+                    ._observers;
+                const observer = observers.get(k);
+                if (observer !== undefined) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    observer.call(this, this[k], v);
+                }
+            });
+        };
+        // clone any existing observers (superclasses)
+        // eslint-disable-next-line no-prototype-builtins
+    }
+    else if (!proto.constructor.hasOwnProperty('_observers')) {
+        const observers = proto.constructor._observers;
+        proto.constructor._observers = new Map();
+        observers.forEach(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (v, k) => proto.constructor._observers.set(k, v));
+    }
+    // set this method
+    proto.constructor._observers.set(propName, observer);
+};
 
 /**
  * @license
@@ -5039,7 +6233,7 @@ var MDCMenuFoundation$1 = MDCMenuFoundation;
  * @fires opened
  * @fires closed
  */
-class MenuBase extends BaseElement {
+class MenuBase extends BaseElement$5 {
     constructor() {
         super(...arguments);
         this.mdcFoundationClass = MDCMenuFoundation$1;
@@ -5395,7 +6589,7 @@ __decorate([
 ], MenuBase.prototype, "stayOpenOnBodyClick", void 0);
 __decorate([
     e$6({ type: String }),
-    observer(function (value) {
+    observer$2(function (value) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setDefaultFocusState(DefaultFocusState[value]);
         }
@@ -5406,7 +6600,7 @@ __decorate([
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const i=e$1(class extends i$1{constructor(t$1){var e;if(super(t$1),t$1.type!==t.ATTRIBUTE||"style"!==t$1.name||(null===(e=t$1.strings)||void 0===e?void 0:e.length)>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(t){return Object.keys(t).reduce(((e,r)=>{const s=t[r];return null==s?e:e+`${r=r.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${s};`}),"")}update(e,[r]){const{style:s}=e.element;if(void 0===this.vt){this.vt=new Set;for(const t in r)this.vt.add(t);return this.render(r)}this.vt.forEach((t=>{null==r[t]&&(this.vt.delete(t),t.includes("-")?s.removeProperty(t):s[t]="");}));for(const t in r){const e=r[t];null!=e&&(this.vt.add(t),t.includes("-")?s.setProperty(t,e):s[t]=e);}return T}});
+ */const i="important",n=" !"+i,o=e$1(class extends i$1{constructor(t$1){var e;if(super(t$1),t$1.type!==t.ATTRIBUTE||"style"!==t$1.name||(null===(e=t$1.strings)||void 0===e?void 0:e.length)>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(t){return Object.keys(t).reduce(((e,r)=>{const s=t[r];return null==s?e:e+`${r=r.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${s};`}),"")}update(e,[r]){const{style:s}=e.element;if(void 0===this.ut){this.ut=new Set;for(const t in r)this.ut.add(t);return this.render(r)}this.ut.forEach((t=>{null==r[t]&&(this.ut.delete(t),t.includes("-")?s.removeProperty(t):s[t]="");}));for(const t in r){const e=r[t];if(null!=e){this.ut.add(t);const r="string"==typeof e&&e.endsWith(n);t.includes("-")||r?s.setProperty(t,r?e.slice(0,-11):e,r?i:""):s[t]=e;}}return T}});
 
 /**
  * @license
@@ -5429,7 +6623,7 @@ const stringToCorner = {
  * @fires opened
  * @fires closed
  */
-class MenuSurfaceBase extends BaseElement {
+class MenuSurfaceBase extends BaseElement$5 {
     constructor() {
         super(...arguments);
         this.mdcFoundationClass = MDCMenuSurfaceFoundation$1;
@@ -5473,8 +6667,8 @@ class MenuSurfaceBase extends BaseElement {
         };
         return x `
       <div
-          class="mdc-menu-surface ${o(classes)}"
-          style="${i(styles)}"
+          class="mdc-menu-surface ${o$1(classes)}"
+          style="${o(styles)}"
           @keydown=${this.onKeydown}
           @opened=${this.registerBodyClick}
           @closed=${this.deregisterBodyClick}>
@@ -5482,7 +6676,7 @@ class MenuSurfaceBase extends BaseElement {
       </div>`;
     }
     createAdapter() {
-        return Object.assign(Object.assign({}, addHasRemoveClass(this.mdcRoot)), { hasAnchor: () => {
+        return Object.assign(Object.assign({}, addHasRemoveClass$2(this.mdcRoot)), { hasAnchor: () => {
                 return !!this.anchor;
             }, notifyClose: () => {
                 const init = { bubbles: true, composed: true };
@@ -5512,7 +6706,7 @@ class MenuSurfaceBase extends BaseElement {
             }, isFocused: () => {
                 return doesElementContainFocus(this);
             }, saveFocus: () => {
-                const activeElementPath = deepActiveElementPath();
+                const activeElementPath = deepActiveElementPath$1();
                 const pathLength = activeElementPath.length;
                 if (!pathLength) {
                     this.previouslyFocused = null;
@@ -5606,7 +6800,7 @@ __decorate([
 ], MenuSurfaceBase.prototype, "slotElement", void 0);
 __decorate([
     e$6({ type: Boolean }),
-    observer(function (isAbsolute) {
+    observer$2(function (isAbsolute) {
         if (this.mdcFoundation && !this.fixed) {
             this.mdcFoundation.setIsHoisted(isAbsolute);
         }
@@ -5617,7 +6811,7 @@ __decorate([
 ], MenuSurfaceBase.prototype, "fullwidth", void 0);
 __decorate([
     e$6({ type: Boolean }),
-    observer(function (isFixed) {
+    observer$2(function (isFixed) {
         if (this.mdcFoundation && !this.absolute) {
             this.mdcFoundation.setFixedPosition(isFixed);
         }
@@ -5625,7 +6819,7 @@ __decorate([
 ], MenuSurfaceBase.prototype, "fixed", void 0);
 __decorate([
     e$6({ type: Number }),
-    observer(function (value) {
+    observer$2(function (value) {
         if (this.mdcFoundation && this.y !== null && value !== null) {
             this.mdcFoundation.setAbsolutePosition(value, this.y);
             this.mdcFoundation.setAnchorMargin({ left: value, top: this.y, right: -value, bottom: this.y });
@@ -5634,7 +6828,7 @@ __decorate([
 ], MenuSurfaceBase.prototype, "x", void 0);
 __decorate([
     e$6({ type: Number }),
-    observer(function (value) {
+    observer$2(function (value) {
         if (this.mdcFoundation && this.x !== null && value !== null) {
             this.mdcFoundation.setAbsolutePosition(this.x, value);
             this.mdcFoundation.setAnchorMargin({ left: this.x, top: value, right: -this.x, bottom: value });
@@ -5643,7 +6837,7 @@ __decorate([
 ], MenuSurfaceBase.prototype, "y", void 0);
 __decorate([
     e$6({ type: Boolean }),
-    observer(function (value) {
+    observer$2(function (value) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setQuickOpen(value);
         }
@@ -5651,7 +6845,7 @@ __decorate([
 ], MenuSurfaceBase.prototype, "quick", void 0);
 __decorate([
     e$6({ type: Boolean, reflect: true }),
-    observer(function (isOpen, wasOpen) {
+    observer$2(function (isOpen, wasOpen) {
         if (this.mdcFoundation) {
             if (isOpen) {
                 this.mdcFoundation.open();
@@ -5668,7 +6862,7 @@ __decorate([
 ], MenuSurfaceBase.prototype, "stayOpenOnBodyClick", void 0);
 __decorate([
     t$2(),
-    observer(function (value) {
+    observer$2(function (value) {
         if (this.mdcFoundation) {
             if (value) {
                 this.mdcFoundation.setAnchorCorner(value);
@@ -5681,7 +6875,7 @@ __decorate([
 ], MenuSurfaceBase.prototype, "bitwiseCorner", void 0);
 __decorate([
     e$6({ type: String }),
-    observer(function (value) {
+    observer$2(function (value) {
         if (this.mdcFoundation) {
             const isValidValue = value === 'START' || value === 'END';
             const isFirstTimeSet = this.previousMenuCorner === null;
@@ -5697,7 +6891,7 @@ __decorate([
 ], MenuSurfaceBase.prototype, "menuCorner", void 0);
 __decorate([
     e$6({ type: String }),
-    observer(function (value) {
+    observer$2(function (value) {
         if (this.mdcFoundation) {
             if (value) {
                 let newCorner = stringToCorner[value];
@@ -5756,6 +6950,125 @@ function matches(element, selector) {
         || element.msMatchesSelector;
     return nativeMatches.call(element, selector);
 }
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+const fn$4 = () => { };
+const optionsBlock$4 = {
+    get passive() {
+        return false;
+    }
+};
+document.addEventListener('x', fn$4, optionsBlock$4);
+document.removeEventListener('x', fn$4);
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @soyCompatible */
+class BaseElement$4 extends s$1 {
+    click() {
+        if (this.mdcRoot) {
+            this.mdcRoot.focus();
+            this.mdcRoot.click();
+            return;
+        }
+        super.click();
+    }
+    /**
+     * Create and attach the MDC Foundation to the instance
+     */
+    createFoundation() {
+        if (this.mdcFoundation !== undefined) {
+            this.mdcFoundation.destroy();
+        }
+        if (this.mdcFoundationClass) {
+            this.mdcFoundation = new this.mdcFoundationClass(this.createAdapter());
+            this.mdcFoundation.init();
+        }
+    }
+    firstUpdated() {
+        this.createFoundation();
+    }
+}
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$4 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -6347,7 +7660,7 @@ var MDCRippleFoundation = /** @class */ (function (_super) {
         }
     };
     return MDCRippleFoundation;
-}(MDCFoundation));
+}(MDCFoundation$4));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCRippleFoundation$1 = MDCRippleFoundation;
 
@@ -6357,7 +7670,7 @@ var MDCRippleFoundation$1 = MDCRippleFoundation;
  * SPDX-License-Identifier: Apache-2.0
  */
 /** @soyCompatible */
-class RippleBase extends BaseElement {
+class RippleBase extends BaseElement$4 {
     constructor() {
         super(...arguments);
         this.primary = false;
@@ -6517,8 +7830,8 @@ class RippleBase extends BaseElement {
             'mdc-ripple-surface--internal-use-state-layer-custom-properties': this.internalUseStateLayerCustomProperties,
         };
         return x `
-        <div class="mdc-ripple-surface mdc-ripple-upgraded ${o(classes)}"
-          style="${i({
+        <div class="mdc-ripple-surface mdc-ripple-upgraded ${o$1(classes)}"
+          style="${o({
             '--mdc-ripple-fg-scale': this.fgScale,
             '--mdc-ripple-fg-size': this.fgSize,
             '--mdc-ripple-fg-translate-end': this.translateEnd,
@@ -6582,6 +7895,125 @@ __decorate([
 __decorate([
     t$2()
 ], RippleBase.prototype, "topPos", void 0);
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+const fn$3 = () => { };
+const optionsBlock$3 = {
+    get passive() {
+        return false;
+    }
+};
+document.addEventListener('x', fn$3, optionsBlock$3);
+document.removeEventListener('x', fn$3);
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @soyCompatible */
+class BaseElement$3 extends s$1 {
+    click() {
+        if (this.mdcRoot) {
+            this.mdcRoot.focus();
+            this.mdcRoot.click();
+            return;
+        }
+        super.click();
+    }
+    /**
+     * Create and attach the MDC Foundation to the instance
+     */
+    createFoundation() {
+        if (this.mdcFoundation !== undefined) {
+            this.mdcFoundation.destroy();
+        }
+        if (this.mdcFoundationClass) {
+            this.mdcFoundation = new this.mdcFoundationClass(this.createAdapter());
+            this.mdcFoundation.init();
+        }
+    }
+    firstUpdated() {
+        this.createFoundation();
+    }
+}
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$3 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -6703,14 +8135,14 @@ var MDCNotchedOutlineFoundation = /** @class */ (function (_super) {
         this.adapter.removeNotchWidthProperty();
     };
     return MDCNotchedOutlineFoundation;
-}(MDCFoundation));
+}(MDCFoundation$3));
 
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-class NotchedOutlineBase extends BaseElement {
+class NotchedOutlineBase extends BaseElement$3 {
     constructor() {
         super(...arguments);
         this.mdcFoundationClass = MDCNotchedOutlineFoundation;
@@ -6739,7 +8171,7 @@ class NotchedOutlineBase extends BaseElement {
     }
     render() {
         this.openOrClose(this.open, this.width);
-        const classes = o({
+        const classes = o$1({
             'mdc-notched-outline--notched': this.open,
         });
         return x `
@@ -6861,7 +8293,7 @@ const selectDefinition = {
  * TypeScript version of the decorator
  * @see https://www.typescriptlang.org/docs/handbook/decorators.html#property-decorators
  */
-function tsDecorator(prototype, name, descriptor) {
+function tsDecorator$1(prototype, name, descriptor) {
     const constructor = prototype.constructor;
     if (!descriptor) {
         /**
@@ -6934,16 +8366,189 @@ function tsDecorator(prototype, name, descriptor) {
  * @category Decorator
  * @ExportDecoratedItems
  */
-function ariaProperty(protoOrDescriptor, name, 
+function ariaProperty$1(protoOrDescriptor, name, 
 // tslint:disable-next-line:no-any any is required as a return type from decorators
 descriptor) {
     if (name !== undefined) {
-        return tsDecorator(protoOrDescriptor, name, descriptor);
+        return tsDecorator$1(protoOrDescriptor, name, descriptor);
     }
     else {
         throw new Error('@ariaProperty only supports TypeScript Decorators');
     }
 }
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+function addHasRemoveClass$1(element) {
+    return {
+        addClass: (className) => {
+            element.classList.add(className);
+        },
+        removeClass: (className) => {
+            element.classList.remove(className);
+        },
+        hasClass: (className) => element.classList.contains(className),
+    };
+}
+const fn$2 = () => { };
+const optionsBlock$2 = {
+    get passive() {
+        return false;
+    }
+};
+document.addEventListener('x', fn$2, optionsBlock$2);
+document.removeEventListener('x', fn$2);
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @soyCompatible */
+class BaseElement$2 extends s$1 {
+    click() {
+        if (this.mdcRoot) {
+            this.mdcRoot.focus();
+            this.mdcRoot.click();
+            return;
+        }
+        super.click();
+    }
+    /**
+     * Create and attach the MDC Foundation to the instance
+     */
+    createFoundation() {
+        if (this.mdcFoundation !== undefined) {
+            this.mdcFoundation.destroy();
+        }
+        if (this.mdcFoundationClass) {
+            this.mdcFoundation = new this.mdcFoundationClass(this.createAdapter());
+            this.mdcFoundation.init();
+        }
+    }
+    firstUpdated() {
+        this.createFoundation();
+    }
+}
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * Specifies an observer callback that is run when the decorated property
+ * changes. The observer receives the current and old value as arguments.
+ */
+const observer$1 = (observer) => 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(proto, propName) => {
+    // if we haven't wrapped `updated` in this class, do so
+    if (!proto.constructor
+        ._observers) {
+        proto.constructor._observers = new Map();
+        const userUpdated = proto.updated;
+        proto.updated = function (changedProperties) {
+            userUpdated.call(this, changedProperties);
+            changedProperties.forEach((v, k) => {
+                const observers = this.constructor
+                    ._observers;
+                const observer = observers.get(k);
+                if (observer !== undefined) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    observer.call(this, this[k], v);
+                }
+            });
+        };
+        // clone any existing observers (superclasses)
+        // eslint-disable-next-line no-prototype-builtins
+    }
+    else if (!proto.constructor.hasOwnProperty('_observers')) {
+        const observers = proto.constructor._observers;
+        proto.constructor._observers = new Map();
+        observers.forEach(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (v, k) => proto.constructor._observers.set(k, v));
+    }
+    // set this method
+    proto.constructor._observers.set(propName, observer);
+};
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$2 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -7076,7 +8681,7 @@ var MDCSwitchFoundation = /** @class */ (function (_super) {
         this.adapter.setNativeControlAttr(strings$1.ARIA_CHECKED_ATTR, "" + !!checked);
     };
     return MDCSwitchFoundation;
-}(MDCFoundation));
+}(MDCFoundation$2));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCSwitchFoundation$1 = MDCSwitchFoundation;
 
@@ -7085,7 +8690,7 @@ var MDCSwitchFoundation$1 = MDCSwitchFoundation;
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-class SwitchBase extends BaseElement {
+class SwitchBase extends BaseElement$2 {
     constructor() {
         super(...arguments);
         this.checked = false;
@@ -7103,7 +8708,7 @@ class SwitchBase extends BaseElement {
         this.checked = this.formElement.checked;
     }
     createAdapter() {
-        return Object.assign(Object.assign({}, addHasRemoveClass(this.mdcRoot)), { setNativeControlChecked: (checked) => {
+        return Object.assign(Object.assign({}, addHasRemoveClass$1(this.mdcRoot)), { setNativeControlChecked: (checked) => {
                 this.formElement.checked = checked;
             }, setNativeControlDisabled: (disabled) => {
                 this.formElement.disabled = disabled;
@@ -7204,22 +8809,22 @@ class SwitchBase extends BaseElement {
 }
 __decorate([
     e$6({ type: Boolean }),
-    observer(function (value) {
+    observer$1(function (value) {
         this.mdcFoundation.setChecked(value);
     })
 ], SwitchBase.prototype, "checked", void 0);
 __decorate([
     e$6({ type: Boolean }),
-    observer(function (value) {
+    observer$1(function (value) {
         this.mdcFoundation.setDisabled(value);
     })
 ], SwitchBase.prototype, "disabled", void 0);
 __decorate([
-    ariaProperty,
+    ariaProperty$1,
     e$6({ attribute: 'aria-label' })
 ], SwitchBase.prototype, "ariaLabel", void 0);
 __decorate([
-    ariaProperty,
+    ariaProperty$1,
     e$6({ attribute: 'aria-labelledby' })
 ], SwitchBase.prototype, "ariaLabelledBy", void 0);
 __decorate([
@@ -7260,6 +8865,254 @@ const switchDefinition = {
     }
   }
 };
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+function addHasRemoveClass(element) {
+    return {
+        addClass: (className) => {
+            element.classList.add(className);
+        },
+        removeClass: (className) => {
+            element.classList.remove(className);
+        },
+        hasClass: (className) => element.classList.contains(className),
+    };
+}
+const fn$1 = () => { };
+const optionsBlock$1 = {
+    get passive() {
+        return false;
+    }
+};
+document.addEventListener('x', fn$1, optionsBlock$1);
+document.removeEventListener('x', fn$1);
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @soyCompatible */
+class BaseElement$1 extends s$1 {
+    click() {
+        if (this.mdcRoot) {
+            this.mdcRoot.focus();
+            this.mdcRoot.click();
+            return;
+        }
+        super.click();
+    }
+    /**
+     * Create and attach the MDC Foundation to the instance
+     */
+    createFoundation() {
+        if (this.mdcFoundation !== undefined) {
+            this.mdcFoundation.destroy();
+        }
+        if (this.mdcFoundationClass) {
+            this.mdcFoundation = new this.mdcFoundationClass(this.createAdapter());
+            this.mdcFoundation.init();
+        }
+    }
+    firstUpdated() {
+        this.createFoundation();
+    }
+}
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+var _a$1, _b$1;
+// ShadyDOM should submit <input> elements in component internals
+const USING_SHADY_DOM$1 = (_b$1 = (_a$1 = window.ShadyDOM) === null || _a$1 === void 0 ? void 0 : _a$1.inUse) !== null && _b$1 !== void 0 ? _b$1 : false;
+/** @soyCompatible */
+class FormElement$1 extends BaseElement$1 {
+    constructor() {
+        super(...arguments);
+        /**
+         * Disabled state for the component. When `disabled` is set to `true`, the
+         * component will not be added to form submission.
+         */
+        this.disabled = false;
+        /**
+         * Form element that contains this element
+         */
+        this.containingForm = null;
+        this.formDataListener = (ev) => {
+            if (!this.disabled) {
+                this.setFormData(ev.formData);
+            }
+        };
+    }
+    findFormElement() {
+        // If the component internals are not in Shadow DOM, subscribing to form
+        // data events could lead to duplicated data, which may not work correctly
+        // on the server side.
+        if (!this.shadowRoot || USING_SHADY_DOM$1) {
+            return null;
+        }
+        const root = this.getRootNode();
+        const forms = root.querySelectorAll('form');
+        for (const form of Array.from(forms)) {
+            if (form.contains(this)) {
+                return form;
+            }
+        }
+        return null;
+    }
+    connectedCallback() {
+        var _a;
+        super.connectedCallback();
+        this.containingForm = this.findFormElement();
+        (_a = this.containingForm) === null || _a === void 0 ? void 0 : _a.addEventListener('formdata', this.formDataListener);
+    }
+    disconnectedCallback() {
+        var _a;
+        super.disconnectedCallback();
+        (_a = this.containingForm) === null || _a === void 0 ? void 0 : _a.removeEventListener('formdata', this.formDataListener);
+        this.containingForm = null;
+    }
+    click() {
+        if (this.formElement && !this.disabled) {
+            this.formElement.focus();
+            this.formElement.click();
+        }
+    }
+    firstUpdated() {
+        super.firstUpdated();
+        if (this.shadowRoot) {
+            this.mdcRoot.addEventListener('change', (e) => {
+                this.dispatchEvent(new Event('change', e));
+            });
+        }
+    }
+}
+FormElement$1.shadowRootOptions = { mode: 'open', delegatesFocus: true };
+__decorate([
+    e$6({ type: Boolean })
+], FormElement$1.prototype, "disabled", void 0);
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * Specifies an observer callback that is run when the decorated property
+ * changes. The observer receives the current and old value as arguments.
+ */
+const observer = (observer) => 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(proto, propName) => {
+    // if we haven't wrapped `updated` in this class, do so
+    if (!proto.constructor
+        ._observers) {
+        proto.constructor._observers = new Map();
+        const userUpdated = proto.updated;
+        proto.updated = function (changedProperties) {
+            userUpdated.call(this, changedProperties);
+            changedProperties.forEach((v, k) => {
+                const observers = this.constructor
+                    ._observers;
+                const observer = observers.get(k);
+                if (observer !== undefined) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    observer.call(this, this[k], v);
+                }
+            });
+        };
+        // clone any existing observers (superclasses)
+        // eslint-disable-next-line no-prototype-builtins
+    }
+    else if (!proto.constructor.hasOwnProperty('_observers')) {
+        const observers = proto.constructor._observers;
+        proto.constructor._observers = new Map();
+        observers.forEach(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (v, k) => proto.constructor._observers.set(k, v));
+    }
+    // set this method
+    proto.constructor._observers.set(propName, observer);
+};
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$1 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -7916,7 +9769,7 @@ var MDCTextFieldFoundation = /** @class */ (function (_super) {
         };
     };
     return MDCTextFieldFoundation;
-}(MDCFoundation));
+}(MDCFoundation$1));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCTextFieldFoundation$1 = MDCTextFieldFoundation;
 
@@ -7962,7 +9815,7 @@ const createValidityObj = (customValidity = {}) => {
     return Object.assign({ badInput: false, customError: false, patternMismatch: false, rangeOverflow: false, rangeUnderflow: false, stepMismatch: false, tooLong: false, tooShort: false, typeMismatch: false, valid: true, valueMissing: false }, objectifiedCustomValidity);
 };
 /** @soyCompatible */
-class TextFieldBase extends FormElement {
+class TextFieldBase extends FormElement$1 {
     constructor() {
         super(...arguments);
         this.mdcFoundationClass = MDCTextFieldFoundation$1;
@@ -8065,7 +9918,7 @@ class TextFieldBase extends FormElement {
             'mdc-text-field--end-aligned': this.endAligned,
         };
         return x `
-      <label class="mdc-text-field ${o(classes)}">
+      <label class="mdc-text-field ${o$1(classes)}">
         ${this.renderRipple()}
         ${this.outlined ? this.renderOutline() : this.renderLabel()}
         ${this.renderLeadingIcon()}
@@ -8128,7 +9981,7 @@ class TextFieldBase extends FormElement {
             'mdc-text-field__icon--leading': !isTrailingIcon,
             'mdc-text-field__icon--trailing': isTrailingIcon
         };
-        return x `<i class="material-icons mdc-text-field__icon ${o(classes)}">${icon}</i>`;
+        return x `<i class="material-icons mdc-text-field__icon ${o$1(classes)}">${icon}</i>`;
     }
     /** @soyTemplate */
     renderPrefix() {
@@ -8145,7 +9998,7 @@ class TextFieldBase extends FormElement {
             'mdc-text-field__affix--prefix': !isSuffix,
             'mdc-text-field__affix--suffix': isSuffix
         };
-        return x `<span class="mdc-text-field__affix ${o(classes)}">
+        return x `<span class="mdc-text-field__affix ${o$1(classes)}">
         ${content}</span>`;
     }
     /** @soyTemplate */
@@ -8214,7 +10067,7 @@ class TextFieldBase extends FormElement {
       <div class="mdc-text-field-helper-line">
         <div id="helper-text"
              aria-hidden="${l$1(ariaHiddenOrUndef)}"
-             class="mdc-text-field-helper-text ${o(classes)}"
+             class="mdc-text-field-helper-text ${o$1(classes)}"
              >${helperText}</div>
         ${this.renderCharCounter(shouldRenderCharCounter)}
       </div>`;
@@ -8556,6 +10409,37 @@ const textfieldDefinition = {
 
 /**
  * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+const fn = () => { };
+const optionsBlock = {
+    get passive() {
+        return false;
+    }
+};
+document.addEventListener('x', fn, optionsBlock);
+document.removeEventListener('x', fn);
+const deepActiveElementPath = (doc = window.document) => {
+    let activeElement = doc.activeElement;
+    const path = [];
+    if (!activeElement) {
+        return path;
+    }
+    while (activeElement) {
+        path.push(activeElement);
+        if (activeElement.shadowRoot) {
+            activeElement = activeElement.shadowRoot.activeElement;
+        }
+        else {
+            break;
+        }
+    }
+    return path;
+};
+
+/**
+ * @license
  * Copyright 2020 Google Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -8594,6 +10478,206 @@ var Thumb;
     // or only thumb on single point slider).
     Thumb[Thumb["END"] = 2] = "END";
 })(Thumb || (Thumb = {}));
+
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * TypeScript version of the decorator
+ * @see https://www.typescriptlang.org/docs/handbook/decorators.html#property-decorators
+ */
+function tsDecorator(prototype, name, descriptor) {
+    const constructor = prototype.constructor;
+    if (!descriptor) {
+        /**
+         * lit uses internal properties with two leading underscores to
+         * provide storage for accessors
+         */
+        const litInternalPropertyKey = `__${name}`;
+        descriptor =
+            constructor.getPropertyDescriptor(name, litInternalPropertyKey);
+        if (!descriptor) {
+            throw new Error('@ariaProperty must be used after a @property decorator');
+        }
+    }
+    // descriptor must exist at this point, reassign so typescript understands
+    const propDescriptor = descriptor;
+    let attribute = '';
+    if (!propDescriptor.set) {
+        throw new Error(`@ariaProperty requires a setter for ${name}`);
+    }
+    // TODO(b/202853219): Remove this check when internal tooling is
+    // compatible
+    // tslint:disable-next-line:no-any bail if applied to internal generated class
+    if (prototype.dispatchWizEvent) {
+        return descriptor;
+    }
+    const wrappedDescriptor = {
+        configurable: true,
+        enumerable: true,
+        set(value) {
+            if (attribute === '') {
+                const options = constructor.getPropertyOptions(name);
+                // if attribute is not a string, use `name` instead
+                attribute =
+                    typeof options.attribute === 'string' ? options.attribute : name;
+            }
+            if (this.hasAttribute(attribute)) {
+                this.removeAttribute(attribute);
+            }
+            propDescriptor.set.call(this, value);
+        }
+    };
+    if (propDescriptor.get) {
+        wrappedDescriptor.get = function () {
+            return propDescriptor.get.call(this);
+        };
+    }
+    return wrappedDescriptor;
+}
+/**
+ * A property decorator proxies an aria attribute to an internal node
+ *
+ * This decorator is only intended for use with ARIA attributes, such as `role`
+ * and `aria-label` due to screenreader needs.
+ *
+ * Upon first render, `@ariaProperty` will remove the attribute from the host
+ * element to prevent screenreaders from reading the host instead of the
+ * internal node.
+ *
+ * This decorator should only be used for non-Symbol public fields decorated
+ * with `@property`, or on a setter with an optional getter.
+ *
+ * @example
+ * ```ts
+ * class MyElement {
+ *   @ariaProperty
+ *   @property({ type: String, attribute: 'aria-label' })
+ *   ariaLabel!: string;
+ * }
+ * ```
+ * @category Decorator
+ * @ExportDecoratedItems
+ */
+function ariaProperty(protoOrDescriptor, name, 
+// tslint:disable-next-line:no-any any is required as a return type from decorators
+descriptor) {
+    if (name !== undefined) {
+        return tsDecorator(protoOrDescriptor, name, descriptor);
+    }
+    else {
+        throw new Error('@ariaProperty only supports TypeScript Decorators');
+    }
+}
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @soyCompatible */
+class BaseElement extends s$1 {
+    click() {
+        if (this.mdcRoot) {
+            this.mdcRoot.focus();
+            this.mdcRoot.click();
+            return;
+        }
+        super.click();
+    }
+    /**
+     * Create and attach the MDC Foundation to the instance
+     */
+    createFoundation() {
+        if (this.mdcFoundation !== undefined) {
+            this.mdcFoundation.destroy();
+        }
+        if (this.mdcFoundationClass) {
+            this.mdcFoundation = new this.mdcFoundationClass(this.createAdapter());
+            this.mdcFoundation.init();
+        }
+    }
+    firstUpdated() {
+        this.createFoundation();
+    }
+}
+
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+var _a, _b;
+// ShadyDOM should submit <input> elements in component internals
+const USING_SHADY_DOM = (_b = (_a = window.ShadyDOM) === null || _a === void 0 ? void 0 : _a.inUse) !== null && _b !== void 0 ? _b : false;
+/** @soyCompatible */
+class FormElement extends BaseElement {
+    constructor() {
+        super(...arguments);
+        /**
+         * Disabled state for the component. When `disabled` is set to `true`, the
+         * component will not be added to form submission.
+         */
+        this.disabled = false;
+        /**
+         * Form element that contains this element
+         */
+        this.containingForm = null;
+        this.formDataListener = (ev) => {
+            if (!this.disabled) {
+                this.setFormData(ev.formData);
+            }
+        };
+    }
+    findFormElement() {
+        // If the component internals are not in Shadow DOM, subscribing to form
+        // data events could lead to duplicated data, which may not work correctly
+        // on the server side.
+        if (!this.shadowRoot || USING_SHADY_DOM) {
+            return null;
+        }
+        const root = this.getRootNode();
+        const forms = root.querySelectorAll('form');
+        for (const form of Array.from(forms)) {
+            if (form.contains(this)) {
+                return form;
+            }
+        }
+        return null;
+    }
+    connectedCallback() {
+        var _a;
+        super.connectedCallback();
+        this.containingForm = this.findFormElement();
+        (_a = this.containingForm) === null || _a === void 0 ? void 0 : _a.addEventListener('formdata', this.formDataListener);
+    }
+    disconnectedCallback() {
+        var _a;
+        super.disconnectedCallback();
+        (_a = this.containingForm) === null || _a === void 0 ? void 0 : _a.removeEventListener('formdata', this.formDataListener);
+        this.containingForm = null;
+    }
+    click() {
+        if (this.formElement && !this.disabled) {
+            this.formElement.focus();
+            this.formElement.click();
+        }
+    }
+    firstUpdated() {
+        super.firstUpdated();
+        if (this.shadowRoot) {
+            this.mdcRoot.addEventListener('change', (e) => {
+                this.dispatchEvent(new Event('change', e));
+            });
+        }
+    }
+}
+FormElement.shadowRootOptions = { mode: 'open', delegatesFocus: true };
+__decorate([
+    e$6({ type: Boolean })
+], FormElement.prototype, "disabled", void 0);
 
 /**
  * @license
@@ -8728,6 +10812,79 @@ function getCorrectPropertyName(windowObj, cssProperty) {
     }
     return cssProperty;
 }
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -9771,7 +11928,7 @@ class SliderBase extends FormElement {
       ${this.renderEndThumb()}`);
     }
     renderRootEl(content) {
-        const rootClasses = o({
+        const rootClasses = o$1({
             'mdc-slider--disabled': this.disabled,
             'mdc-slider--discrete': this.discrete,
         });
@@ -9825,11 +11982,11 @@ class SliderBase extends FormElement {
         return A;
     }
     renderEndThumb() {
-        const endThumbClasses = o({
+        const endThumbClasses = o$1({
             'mdc-slider__thumb--with-indicator': this.endThumbWithIndicator,
             'mdc-slider__thumb--top': this.endThumbTop,
         });
-        const endThumbStyles = i({
+        const endThumbStyles = o({
             '-webkit-transform': this.endThumbTransformStyle,
             'transform': this.endThumbTransformStyle,
             '-webkit-transition': this.endThumbTransitionStyle,
@@ -10062,7 +12219,7 @@ class SliderSingleBase extends SliderBase {
         this.valueEnd = newVal;
     }
     renderTrack() {
-        const trackStyles = i({
+        const trackStyles = o({
             'transform-origin': this.trackTransformOriginStyle,
             'left': this.trackLeftStyle,
             'right': this.trackRightStyle,
@@ -10828,6 +12985,7 @@ var mapboxGl = {
 
 /* eslint no-console: 0 */
 console.info(`%c  BOM-RADAR-CARD \n%c  ${localize('common.version')} ${CARD_VERSION}    `, 'color: orange; font-weight: bold; background: black', 'color: white; font-weight: bold; background: dimgray');
+const radarCapabilities = 'https://api.weather.bom.gov.au/v1/radar/capabilities';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 window.customCards = window.customCards || [];
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -10837,10 +12995,6 @@ window.customCards.push({
     description: 'A rain radar card using the new vector tiles from the Australian BoM',
 });
 let BomRadarCard = class BomRadarCard extends s$1 {
-    constructor() {
-        super(...arguments);
-        this.isPanel = false;
-    }
     static async getConfigElement() {
         return document.createElement('bom-radar-card-editor');
     }
@@ -10864,6 +13018,39 @@ let BomRadarCard = class BomRadarCard extends s$1 {
     getCardSize() {
         return 10;
     }
+    async getRadarCapabilities() {
+        const response = await fetch(radarCapabilities, {
+            headers: {
+                Accept: 'application/json',
+            }
+        });
+        if (!response || !response.ok) {
+            return Promise.reject(response);
+        }
+        const data = await response.json();
+        let latest = '';
+        for (const obj in data.data.rain) {
+            if (data.data.rain[obj].type === 'observation') {
+                latest = data.data.rain[obj].time;
+            }
+        }
+        this.currentTime = latest.replaceAll("-", "").replace("T", "").replace(":", "").replace("Z", "");
+        console.info(this.currentTime);
+        return data;
+    }
+    constructor() {
+        super();
+        this.isPanel = false;
+        this.currentTime = '';
+        this.getRadarCapabilities();
+        setInterval(() => {
+            this.getRadarCapabilities();
+        }, 60000);
+    }
+    // connectedCallback() {
+    //   super.connectedCallback();
+    //   this.getRadarCapabilities();
+    // }
     firstUpdated() {
         requestAnimationFrame(() => {
             var _a;
@@ -10875,7 +13062,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                     // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
                     style: 'mapbox://styles/mapbox/dark-v11',
                     //style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
-                    zoom: 7,
+                    zoom: 5,
                     center: [149.1, -35.3],
                     projection: { name: 'equirectangular' },
                     attributionControl: false
@@ -10883,21 +13070,21 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                 // This is the timestamp in UTC time to show radar images for.
                 // There are between 6-7 hours worth of data (for each 5 minutes).
                 // Shortly after 5 minutes past the hour the data for hour -7 is removed up to an including the :00 data.
-                const ts = '202304080315';
+                // const ts = '202304090710';
                 this.map.on('load', () => {
                     // Add the Mapbox Terrain v2 vector tileset. Read more about
                     // the structure of data in this tileset in the documentation:
                     // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
                     this.map.addSource('composite1', {
                         type: 'vector',
-                        url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + ts
+                        url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + this.currentTime
                     });
                     this.map.addLayer({
                         'id': 'BOM-RainRateStaticReference-Observation1',
                         'type': 'fill',
                         'source': 'composite1',
                         // Source has several layers. We visualize the one with name 'sequence'.
-                        'source-layer': ts,
+                        'source-layer': this.currentTime,
                         //          'layout': {
                         //              'visibility': 'visible',
                         //          		'fill-color':  'rgb(53, 175, 109)'
@@ -11641,6 +13828,9 @@ let BomRadarCard = class BomRadarCard extends s$1 {
       <ha-card id="card">
         ${cardTitle}
         <div id="root" style="height: ${padding}">
+          <div id="color-bar" style="height: 8px;">
+            <img id="img-color-bar" src="/local/community/bom-radar-card/radar-colour-bar-bom.png" height="8" style="vertical-align: top" />
+          </div>
           <div id='map'></div>
         </div>
       </ha-card>
@@ -11675,7 +13865,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         position: relative;
       }
       #map {
-        position: absolute;
+        position: relative;
         left: 0;
         top: 0;
         bottom: 0;
