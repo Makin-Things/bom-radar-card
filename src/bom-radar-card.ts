@@ -1,4 +1,4 @@
-import { LitElement, html, css, CSSResult, TemplateResult } from 'lit';
+import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
 import { HomeAssistant, LovelaceCardEditor, LovelaceCard } from 'custom-card-helpers';
 
@@ -41,12 +41,13 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   @property({ type: Boolean, reflect: true })
   public map;
   public isPanel = false;
-  public currentTime = '';
 
   // TODO Add any properities that should cause your element to re-render here
   @property({ attribute: false }) public hass!: HomeAssistant;
   @property({ attribute: false }) private _config!: BomRadarCardConfig;
   @property({ attribute: false }) public editMode?: boolean;
+  @property({ attribute: false }) public mapLoaded = false;
+  @property() currentTime = '';
 
   public setConfig(config: BomRadarCardConfig): void {
     // TODO Check for required fields and that they are of the proper format
@@ -70,10 +71,16 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   }
 
   async getRadarCapabilities<T>(): Promise<T> {
+    const headers = new Headers({
+      "Accept": "application/json",
+      "Accept-Encoding": "gzip",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Site": "cross-site",
+    });
     const response = await fetch(radarCapabilities, {
-      headers: {
-        Accept: 'application/json',
-      }
+      method: 'GET',
+      mode: 'cors',
+      headers: headers,
     });
 
     if (!response || !response.ok) {
@@ -101,10 +108,90 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     }, 60000);
   }
 
-  // connectedCallback() {
-  //   super.connectedCallback();
-  //   this.getRadarCapabilities();
-  // }
+  protected addRadarLayer() {
+    if ((this.map !== undefined) && (this.currentTime !== '') && (this.mapLoaded === true)) {
+      // Add the Mapbox Terrain v2 vector tileset. Read more about
+      // the structure of data in this tileset in the documentation:
+      // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
+      this.map.addSource('composite1', {
+        type: 'vector',
+        url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + this.currentTime
+      });
+
+      this.map.addLayer({
+        'id': 'BOM-RainRateStaticReference-Observation1', // Layer ID
+        'type': 'fill',
+        'source': 'composite1', // ID of the tile source created above
+        // Source has several layers. We visualize the one with name 'sequence'.
+        'source-layer': this.currentTime,
+        //          'layout': {
+        //              'visibility': 'visible',
+        //          		'fill-color':  'rgb(53, 175, 109)'
+        //          		'line-cap': 'round',
+        //          		'line-join': 'round'
+        //          },
+        //          'paint': {
+        //          		'fill-color':  'rgb(53, 175, 109)'
+        //	        	  'line-opacity': 1.0,
+        //  	  	      'line-color': 'rgb(53, 175, 109)',
+        //    	  	    'line-width': 1
+        //          }
+        "paint": {
+          "fill-color": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "get",
+              "value"
+            ],
+            0,
+            "hsla(240, 100%, 98%, 0)",
+            0.4,
+            "#f5f5ff",
+            1.6,
+            "#b4b4ff",
+            3.1,
+            "#7878ff",
+            4.7,
+            "#1414ff",
+            7,
+            "#00d8c3",
+            10.5,
+            "#009690",
+            15.8,
+            "#006666",
+            23.7,
+            "#ffff00",
+            35.5,
+            "#ffc800",
+            53.4,
+            "#ff9600",
+            80.1,
+            "#ff6400",
+            120.3,
+            "#ff0000",
+            180.5,
+            "#c80000",
+            271.1,
+            "#780000",
+            406.9,
+            "#280000"
+          ]
+        },
+      });
+    }
+  }
+
+  protected removeRadarLayer(id: string) {
+    if (this.map !== undefined) {
+      if (this.map.getLayer(id)) {
+        this.map.removeLayer(id);
+        this.map.removeSource('composite1');
+      }
+    }
+  }
 
   protected firstUpdated(): void {
     requestAnimationFrame(() => {
@@ -119,7 +206,8 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
           zoom: 5,
           center: [149.1, -35.3],
           projection: { name: 'equirectangular' },
-          attributionControl: false
+          attributionControl: false,
+          maxBounds: [109, -47, 158.1, -7]
         });
 
         // This is the timestamp in UTC time to show radar images for.
@@ -127,88 +215,40 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         // Shortly after 5 minutes past the hour the data for hour -7 is removed up to an including the :00 data.
         // const ts = '202304090710';
         this.map.on('load', () => {
-          // Add the Mapbox Terrain v2 vector tileset. Read more about
-          // the structure of data in this tileset in the documentation:
-          // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
-          this.map.addSource('composite1', {
-            type: 'vector',
-            url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + this.currentTime
-          });
-          this.map.addLayer({
-            'id': 'BOM-RainRateStaticReference-Observation1', // Layer ID
-            'type': 'fill',
-            'source': 'composite1', // ID of the tile source created above
-            // Source has several layers. We visualize the one with name 'sequence'.
-            'source-layer': this.currentTime,
-            //          'layout': {
-            //              'visibility': 'visible',
-            //          		'fill-color':  'rgb(53, 175, 109)'
-            //          		'line-cap': 'round',
-            //          		'line-join': 'round'
-            //          },
-            //          'paint': {
-            //          		'fill-color':  'rgb(53, 175, 109)'
-            //	        	  'line-opacity': 1.0,
-            //  	  	      'line-color': 'rgb(53, 175, 109)',
-            //    	  	    'line-width': 1
-            //          }
-            "paint": {
-              "fill-color": [
-                "interpolate",
-                [
-                  "linear"
-                ],
-                [
-                  "get",
-                  "value"
-                ],
-                0,
-                "hsla(240, 100%, 98%, 0)",
-                0.4,
-                "#f5f5ff",
-                1.6,
-                "#b4b4ff",
-                3.1,
-                "#7878ff",
-                4.7,
-                "#1414ff",
-                7,
-                "#00d8c3",
-                10.5,
-                "#009690",
-                15.8,
-                "#006666",
-                23.7,
-                "#ffff00",
-                35.5,
-                "#ffc800",
-                53.4,
-                "#ff9600",
-                80.1,
-                "#ff6400",
-                120.3,
-                "#ff0000",
-                180.5,
-                "#c80000",
-                271.1,
-                "#780000",
-                406.9,
-                "#280000"
-              ]
-            },
-          }
-          );
+          console.info('map loaded');
+          this.mapLoaded = true;
         });
       }
     });
   }
 
-  protected shouldUpdate(/*changedProps: PropertyValues*/): boolean {
-    return true;
-    //    return hasConfigOrEntityChanged(this, changedProps, false);
+  protected shouldUpdate(changedProps: PropertyValues): boolean {
+    if (this.mapLoaded === false) {
+      return true;
+    }
+
+    if ((changedProps.has('mapLoaded')) && (this.mapLoaded === true)) {
+      return true;
+    }
+
+    if ((changedProps.has('currentTime')) && (this.currentTime !== '')) {
+      if (this.map !== undefined) {
+        console.info('shouldUpdate');
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  protected willUpdate() {
+    console.info('willUpdate');
+    this.removeRadarLayer('BOM-RainRateStaticReference-Observation1');
+    this.addRadarLayer();
   }
 
   protected render(): TemplateResult | void {
+    console.info('render');
     // TODO Check for stateObj or other necessary things and render a warning if missing
     if (this._config.show_warning) {
       return this.showWarning(localize('common.show_warning'));
