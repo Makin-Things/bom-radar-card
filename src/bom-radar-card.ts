@@ -207,7 +207,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
           center: [149.1, -35.3],
           projection: { name: 'equirectangular' },
           attributionControl: false,
-          maxBounds: [109, -47, 158.1, -7]
+          maxBounds: [109, -47, 158.1, -7],
+          minZoom: 3,
+          maxZoom: 10,
         });
 
         // This is the timestamp in UTC time to show radar images for.

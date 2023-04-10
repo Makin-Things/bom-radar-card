@@ -13151,7 +13151,9 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                     center: [149.1, -35.3],
                     projection: { name: 'equirectangular' },
                     attributionControl: false,
-                    maxBounds: [109, -47, 158.1, -7]
+                    maxBounds: [109, -47, 158.1, -7],
+                    minZoom: 3,
+                    maxZoom: 10,
                 });
                 // This is the timestamp in UTC time to show radar images for.
                 // There are between 6-7 hours worth of data (for each 5 minutes).
