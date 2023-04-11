@@ -13042,33 +13042,39 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         }
         this.currentTime = latest.replaceAll("-", "").replace("T", "").replace(":", "").replace("Z", "");
         console.info(this.currentTime);
-        return data;
+        return latest;
     }
     constructor() {
         super();
         this.isPanel = false;
+        this.mapLayers = [];
         this.mapLoaded = false;
         this.currentTime = '';
-        this.getRadarCapabilities();
+        this.getRadarCapabilities().then((t) => {
+            console.info('inital last time ' + t);
+            const frames = this._config.frame_count != undefined ? this._config.frame_count : 10;
+            this.start_time = Date.parse(t) - ((frames - 1) * 5 * 60 * 1000);
+            console.info(this.start_time);
+        });
         setInterval(() => {
             this.getRadarCapabilities();
         }, 60000);
     }
-    addRadarLayer() {
-        if ((this.map !== undefined) && (this.currentTime !== '') && (this.mapLoaded === true)) {
+    addRadarLayer(id) {
+        if ((this.map !== undefined) && (id !== '') && (this.mapLoaded === true)) {
             // Add the Mapbox Terrain v2 vector tileset. Read more about
             // the structure of data in this tileset in the documentation:
             // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
-            this.map.addSource('composite1', {
+            this.map.addSource(id, {
                 type: 'vector',
-                url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + this.currentTime
+                url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + id
             });
             this.map.addLayer({
-                'id': 'BOM-RainRateStaticReference-Observation1',
+                'id': id,
                 'type': 'fill',
-                'source': 'composite1',
+                'source': id,
                 // Source has several layers. We visualize the one with name 'sequence'.
-                'source-layer': this.currentTime,
+                'source-layer': id,
                 //          'layout': {
                 //              'visibility': 'visible',
                 //          		'fill-color':  'rgb(53, 175, 109)'
@@ -13125,15 +13131,29 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                         "#280000"
                     ]
                 },
-            });
+            }, 'BOM-towns MIN_zoom 9-10');
         }
     }
     removeRadarLayer(id) {
         if (this.map !== undefined) {
             if (this.map.getLayer(id)) {
                 this.map.removeLayer(id);
-                this.map.removeSource('composite1');
+                this.map.removeSource(id);
             }
+        }
+    }
+    loadRadarLayers() {
+        const frame_count = this._config.frame_count != undefined ? this._config.frame_count : 10;
+        console.info('frame_count ' + frame_count.toString());
+        console.info('frame_delay ' + (this._config.frame_delay !== undefined ? this._config.frame_delay : 500).toString());
+        console.info('frame_restart ' + (this._config.restart_delay !== undefined ? this._config.restart_delay : 1000).toString());
+        console.info('times:');
+        for (let i = 0; i < frame_count; i++) {
+            const time = this.start_time + (i * 5 * 60 * 1000);
+            const id = new Date(time).toISOString().replace(':00.000Z', '').replaceAll('-', '').replace('T', '').replace(':', '');
+            this.mapLayers.push(id);
+            this.addRadarLayer(id);
+            console.info('  ' + id);
         }
     }
     firstUpdated() {
@@ -13145,8 +13165,9 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                     accessToken: 'pk.eyJ1IjoiYm9tLWRjLXByb2QiLCJhIjoiY2w4dHA5ZHE3MDlsejN3bnFwZW5vZ2xxdyJ9.KQjQkhGAu78U2Lu5Rxxh4w',
                     container: container,
                     // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-                    style: 'mapbox://styles/mapbox/dark-v11',
-                    //style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
+                    //style: 'mapbox://styles/mapbox/dark-v11',
+                    //bom-dc-prod/cl82p806e000b15q6o92eppcb
+                    style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
                     zoom: 5,
                     center: [149.1, -35.3],
                     projection: { name: 'equirectangular' },
@@ -13162,6 +13183,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                 this.map.on('load', () => {
                     console.info('map loaded');
                     this.mapLoaded = true;
+                    this.loadRadarLayers();
                 });
             }
         });
@@ -13170,9 +13192,9 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         if (this.mapLoaded === false) {
             return true;
         }
-        if ((changedProps.has('mapLoaded')) && (this.mapLoaded === true)) {
-            return true;
-        }
+        // if ((changedProps.has('mapLoaded')) && (this.mapLoaded === true)) {
+        //   return true;
+        // }
         if ((changedProps.has('currentTime')) && (this.currentTime !== '')) {
             if (this.map !== undefined) {
                 console.info('shouldUpdate');
@@ -13182,9 +13204,14 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         return false;
     }
     willUpdate() {
-        console.info('willUpdate');
-        this.removeRadarLayer('BOM-RainRateStaticReference-Observation1');
-        this.addRadarLayer();
+        if (this.mapLoaded) {
+            console.info('willUpdate');
+            const oldLayer = this.mapLayers.shift();
+            if (oldLayer !== undefined) {
+                this.removeRadarLayer(oldLayer);
+            }
+            this.addRadarLayer(this.currentTime);
+        }
     }
     render() {
         console.info('render');
@@ -14735,7 +14762,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
 };
 __decorate([
     e$6({ type: Boolean, reflect: true })
-], BomRadarCard.prototype, "map", void 0);
+], BomRadarCard.prototype, "isPanel", void 0);
 __decorate([
     e$6({ attribute: false })
 ], BomRadarCard.prototype, "hass", void 0);

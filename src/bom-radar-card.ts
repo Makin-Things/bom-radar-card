@@ -39,8 +39,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   }
 
   @property({ type: Boolean, reflect: true })
-  public map;
   public isPanel = false;
+  private map;
+  private start_time;
+  private mapLayers: string[] = [];
 
   // TODO Add any properities that should cause your element to re-render here
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -70,7 +72,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     return 10;
   }
 
-  async getRadarCapabilities<T>(): Promise<T> {
+  async getRadarCapabilities(): Promise<string> {
     const headers = new Headers({
       "Accept": "application/json",
       "Accept-Encoding": "gzip",
@@ -97,33 +99,38 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     this.currentTime = latest.replaceAll("-", "").replace("T", "").replace(":", "").replace("Z", "");
     console.info(this.currentTime);
 
-    return data;
+    return latest;
   }
 
   constructor() {
     super();
-    this.getRadarCapabilities();
+    this.getRadarCapabilities().then((t) => {
+      console.info('inital last time ' + t);
+      const frames = this._config.frame_count != undefined ? this._config.frame_count : 10;
+      this.start_time = Date.parse(t) - ((frames - 1) * 5 * 60 * 1000);
+      console.info(this.start_time);
+    });
     setInterval(() => {
       this.getRadarCapabilities();
     }, 60000);
   }
 
-  protected addRadarLayer() {
-    if ((this.map !== undefined) && (this.currentTime !== '') && (this.mapLoaded === true)) {
+  protected addRadarLayer(id: string) {
+    if ((this.map !== undefined) && (id !== '') && (this.mapLoaded === true)) {
       // Add the Mapbox Terrain v2 vector tileset. Read more about
       // the structure of data in this tileset in the documentation:
       // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
-      this.map.addSource('composite1', {
+      this.map.addSource(id, {
         type: 'vector',
-        url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + this.currentTime
+        url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + id
       });
 
       this.map.addLayer({
-        'id': 'BOM-RainRateStaticReference-Observation1', // Layer ID
+        'id': id, // Layer ID
         'type': 'fill',
-        'source': 'composite1', // ID of the tile source created above
+        'source': id, // ID of the tile source created above
         // Source has several layers. We visualize the one with name 'sequence'.
-        'source-layer': this.currentTime,
+        'source-layer': id,
         //          'layout': {
         //              'visibility': 'visible',
         //          		'fill-color':  'rgb(53, 175, 109)'
@@ -180,7 +187,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
             "#280000"
           ]
         },
-      });
+      }, 'BOM-towns MIN_zoom 9-10');
     }
   }
 
@@ -188,8 +195,23 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     if (this.map !== undefined) {
       if (this.map.getLayer(id)) {
         this.map.removeLayer(id);
-        this.map.removeSource('composite1');
+        this.map.removeSource(id);
       }
+    }
+  }
+
+  protected loadRadarLayers() {
+    const frame_count = this._config.frame_count != undefined ? this._config.frame_count : 10;
+    console.info('frame_count ' + frame_count.toString());
+    console.info('frame_delay ' + (this._config.frame_delay !== undefined ? this._config.frame_delay : 500).toString());
+    console.info('frame_restart ' + (this._config.restart_delay !== undefined ? this._config.restart_delay : 1000).toString());
+    console.info('times:');
+    for (let i = 0; i < frame_count; i++) {
+      const time = this.start_time + (i * 5 * 60 * 1000);
+      const id = new Date(time).toISOString().replace(':00.000Z', '').replaceAll('-', '').replace('T', '').replace(':', '');
+      this.mapLayers.push(id);
+      this.addRadarLayer(id);
+      console.info('  ' + id);
     }
   }
 
@@ -201,8 +223,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
           accessToken: 'pk.eyJ1IjoiYm9tLWRjLXByb2QiLCJhIjoiY2w4dHA5ZHE3MDlsejN3bnFwZW5vZ2xxdyJ9.KQjQkhGAu78U2Lu5Rxxh4w',
           container: container,
           // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-          style: 'mapbox://styles/mapbox/dark-v11',
-          //style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
+          //style: 'mapbox://styles/mapbox/dark-v11',
+          //bom-dc-prod/cl82p806e000b15q6o92eppcb
+          style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
           zoom: 5,
           center: [149.1, -35.3],
           projection: { name: 'equirectangular' },
@@ -219,6 +242,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         this.map.on('load', () => {
           console.info('map loaded');
           this.mapLoaded = true;
+          this.loadRadarLayers();
         });
       }
     });
@@ -229,9 +253,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       return true;
     }
 
-    if ((changedProps.has('mapLoaded')) && (this.mapLoaded === true)) {
-      return true;
-    }
+    // if ((changedProps.has('mapLoaded')) && (this.mapLoaded === true)) {
+    //   return true;
+    // }
 
     if ((changedProps.has('currentTime')) && (this.currentTime !== '')) {
       if (this.map !== undefined) {
@@ -244,9 +268,14 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   }
 
   protected willUpdate() {
-    console.info('willUpdate');
-    this.removeRadarLayer('BOM-RainRateStaticReference-Observation1');
-    this.addRadarLayer();
+    if (this.mapLoaded) {
+      console.info('willUpdate');
+      const oldLayer = this.mapLayers.shift();
+      if (oldLayer !== undefined) {
+        this.removeRadarLayer(oldLayer);
+      }
+      this.addRadarLayer(this.currentTime);
+    }
   }
 
   protected render(): TemplateResult | void {
