@@ -13048,6 +13048,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         super();
         this.isPanel = false;
         this.mapLayers = [];
+        this.frame = 0;
         this.mapLoaded = false;
         this.currentTime = '';
         this.getRadarCapabilities().then((t) => {
@@ -13061,15 +13062,15 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         }, 60000);
     }
     addRadarLayer(id) {
-        if ((this.map !== undefined) && (id !== '') && (this.mapLoaded === true)) {
+        if ((this._map !== undefined) && (id !== '') && (this.mapLoaded === true)) {
             // Add the Mapbox Terrain v2 vector tileset. Read more about
             // the structure of data in this tileset in the documentation:
             // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
-            this.map.addSource(id, {
+            this._map.addSource(id, {
                 type: 'vector',
                 url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + id
             });
-            this.map.addLayer({
+            this._map.addLayer({
                 'id': id,
                 'type': 'fill',
                 'source': id,
@@ -13087,58 +13088,62 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                 //  	  	      'line-color': 'rgb(53, 175, 109)',
                 //    	  	    'line-width': 1
                 //          }
-                "paint": {
-                    "fill-color": [
-                        "interpolate",
+                'layout': {
+                    'visibility': 'none'
+                },
+                'paint': {
+                    'fill-color': [
+                        'interpolate',
                         [
-                            "linear"
+                            'linear'
                         ],
                         [
-                            "get",
-                            "value"
+                            'get',
+                            'value'
                         ],
                         0,
-                        "hsla(240, 100%, 98%, 0)",
+                        'hsla(240, 100%, 98%, 0)',
                         0.4,
-                        "#f5f5ff",
+                        '#f5f5ff',
                         1.6,
-                        "#b4b4ff",
+                        '#b4b4ff',
                         3.1,
-                        "#7878ff",
+                        '#7878ff',
                         4.7,
-                        "#1414ff",
+                        '#1414ff',
                         7,
-                        "#00d8c3",
+                        '#00d8c3',
                         10.5,
-                        "#009690",
+                        '#009690',
                         15.8,
-                        "#006666",
+                        '#006666',
                         23.7,
-                        "#ffff00",
+                        '#ffff00',
                         35.5,
-                        "#ffc800",
+                        '#ffc800',
                         53.4,
-                        "#ff9600",
+                        '#ff9600',
                         80.1,
-                        "#ff6400",
+                        '#ff6400',
                         120.3,
-                        "#ff0000",
+                        '#ff0000',
                         180.5,
-                        "#c80000",
+                        '#c80000',
                         271.1,
-                        "#780000",
+                        '#780000',
                         406.9,
-                        "#280000"
+                        '#280000'
                     ]
                 },
-            }, 'BOM-towns MIN_zoom 9-10');
+                //      }, 'BOM-towns MIN_zoom 9-10');
+            });
         }
     }
     removeRadarLayer(id) {
-        if (this.map !== undefined) {
-            if (this.map.getLayer(id)) {
-                this.map.removeLayer(id);
-                this.map.removeSource(id);
+        if (this._map !== undefined) {
+            if (this._map.getLayer(id)) {
+                this._map.removeLayer(id);
+                this._map.removeSource(id);
             }
         }
     }
@@ -13156,18 +13161,25 @@ let BomRadarCard = class BomRadarCard extends s$1 {
             console.info('  ' + id);
         }
     }
+    changeRadarFrame() {
+        var _a;
+        if (this._map !== undefined) {
+            const next = (this.frame + 1) % this.mapLayers.length;
+            (_a = this._map) === null || _a === void 0 ? void 0 : _a.setLayoutProperty(this.mapLayers[next], 'visibility', 'visible').setLayoutProperty(this.mapLayers[this.frame], 'visibility', 'none');
+            this.frame = next;
+        }
+    }
     firstUpdated() {
         requestAnimationFrame(() => {
             var _a;
             const container = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.getElementById('map');
             if (container) {
-                this.map = new mapboxGlExports.Map({
+                this._map = new mapboxGlExports.Map({
                     accessToken: 'pk.eyJ1IjoiYm9tLWRjLXByb2QiLCJhIjoiY2w4dHA5ZHE3MDlsejN3bnFwZW5vZ2xxdyJ9.KQjQkhGAu78U2Lu5Rxxh4w',
                     container: container,
                     // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-                    //style: 'mapbox://styles/mapbox/dark-v11',
-                    //bom-dc-prod/cl82p806e000b15q6o92eppcb
-                    style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
+                    style: 'mapbox://styles/mapbox/dark-v11',
+                    //style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
                     zoom: 5,
                     center: [149.1, -35.3],
                     projection: { name: 'equirectangular' },
@@ -13180,10 +13192,14 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                 // There are between 6-7 hours worth of data (for each 5 minutes).
                 // Shortly after 5 minutes past the hour the data for hour -7 is removed up to an including the :00 data.
                 // const ts = '202304090710';
-                this.map.on('load', () => {
+                this._map.on('load', () => {
+                    var _a;
                     console.info('map loaded');
                     this.mapLoaded = true;
                     this.loadRadarLayers();
+                    this.frame = this.mapLayers.length - 1;
+                    (_a = this._map) === null || _a === void 0 ? void 0 : _a.setLayoutProperty(this.mapLayers[this.frame], 'visibility', 'visible');
+                    this.frameTimer = setInterval(() => this.changeRadarFrame(), 200);
                 });
             }
         });
@@ -13196,7 +13212,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         //   return true;
         // }
         if ((changedProps.has('currentTime')) && (this.currentTime !== '')) {
-            if (this.map !== undefined) {
+            if (this._map !== undefined) {
                 console.info('shouldUpdate');
                 return true;
             }
