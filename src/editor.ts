@@ -81,15 +81,8 @@ export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implement
           ev.stopPropagation()}
             >
             <mwc-list-item></mwc-list-item>
-            <mwc-list-item value="BoM">Bureau of Meteorology</mwc-list-item>
-            <mwc-list-item value="RainViewer-Original">RainViewer - Original</mwc-list-item>
-            <mwc-list-item value="RainViewer-UniversalBlue">RainViewer - Universal Blue</mwc-list-item>
-            <mwc-list-item value="RainViewer-TITAN">RainViewer - TITAN</mwc-list-item>
-            <mwc-list-item value="RainViewer-TWC">RainViewer - The Weather Channel</mwc-list-item>
-            <mwc-list-item value="RainViewer-Meteored">RainViewer - Meteored</mwc-list-item>
-            <mwc-list-item value="RainViewer-NEXRAD">RainViewer - NEXRAD Level III</mwc-list-item>
-            <mwc-list-item value="RainViewer-Rainbow">RainViewer - Rainbow @ SELEX-IS</mwc-list-item>
-            <mwc-list-item value="RainViewer-DarkSky">RainViewer - Dark Sky</mwc-list-item>
+            <mwc-list-item value="Light">BOM - Light</mwc-list-item>
+            <mwc-list-item value="Dark">Mapbox - Dark</mwc-list-item>
         </mwc-select>
         <div class="side-by-side">
           <mwc-select label="Map Style (optional)" .configValue=${'map_style'} .value=${config.map_style ?

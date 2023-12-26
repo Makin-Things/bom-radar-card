@@ -12570,15 +12570,8 @@ let BomRadarCardEditor = class BomRadarCardEditor extends e$2(s$1) {
             config.data_source : ''} @selected=${this._valueChangedString} @closed=${(ev) => ev.stopPropagation()}
             >
             <mwc-list-item></mwc-list-item>
-            <mwc-list-item value="BoM">Bureau of Meteorology</mwc-list-item>
-            <mwc-list-item value="RainViewer-Original">RainViewer - Original</mwc-list-item>
-            <mwc-list-item value="RainViewer-UniversalBlue">RainViewer - Universal Blue</mwc-list-item>
-            <mwc-list-item value="RainViewer-TITAN">RainViewer - TITAN</mwc-list-item>
-            <mwc-list-item value="RainViewer-TWC">RainViewer - The Weather Channel</mwc-list-item>
-            <mwc-list-item value="RainViewer-Meteored">RainViewer - Meteored</mwc-list-item>
-            <mwc-list-item value="RainViewer-NEXRAD">RainViewer - NEXRAD Level III</mwc-list-item>
-            <mwc-list-item value="RainViewer-Rainbow">RainViewer - Rainbow @ SELEX-IS</mwc-list-item>
-            <mwc-list-item value="RainViewer-DarkSky">RainViewer - Dark Sky</mwc-list-item>
+            <mwc-list-item value="Light">BOM - Light</mwc-list-item>
+            <mwc-list-item value="Dark">Mapbox - Dark</mwc-list-item>
         </mwc-select>
         <div class="side-by-side">
           <mwc-select label="Map Style (optional)" .configValue=${'map_style'} .value=${config.map_style ?
@@ -13019,6 +13012,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         return 10;
     }
     async getRadarCapabilities() {
+        console.info('getRadarCapabilities ' + Date.now());
         const headers = new Headers({
             "Accept": "application/json",
             "Accept-Encoding": "gzip",
@@ -13031,6 +13025,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
             headers: headers,
         });
         if (!response || !response.ok) {
+            setTimeout(() => { this.getRadarCapabilities(); }, 5000);
             return Promise.reject(response);
         }
         const data = await response.json();
@@ -13040,26 +13035,44 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                 latest = data.data.rain[obj].time;
             }
         }
-        this.currentTime = latest.replaceAll("-", "").replace("T", "").replace(":", "").replace("Z", "");
-        console.info(this.currentTime);
-        return latest;
+        const newTime = latest.replaceAll("-", "").replace("T", "").replace(":", "").replace("Z", "");
+        if (this.currentTime == newTime) {
+            setTimeout(() => { this.getRadarCapabilities(); }, 5000);
+            return Date.parse(latest);
+        }
+        this.currentTime = newTime;
+        console.info('Latest ' + this.currentTime);
+        const t = Date.parse(latest);
+        this.setNextUpdateTimeout(t);
+        return t;
     }
     constructor() {
         super();
         this.isPanel = false;
+        this.start_time = 0;
+        this.frame_count = 12;
+        this.frame_delay = 250;
+        this.restart_delay = 1000;
         this.mapLayers = [];
         this.frame = 0;
         this.mapLoaded = false;
         this.currentTime = '';
         this.getRadarCapabilities().then((t) => {
             console.info('inital last time ' + t);
-            const frames = this._config.frame_count != undefined ? this._config.frame_count : 10;
-            this.start_time = Date.parse(t) - ((frames - 1) * 5 * 60 * 1000);
-            console.info(this.start_time);
+            this.frame_count = this._config.frame_count != undefined ? this._config.frame_count : this.frame_count;
+            this.frame_delay = this._config.frame_delay !== undefined ? this._config.frame_delay : this.frame_delay;
+            this.restart_delay = this._config.restart_delay !== undefined ? this._config.restart_delay : this.restart_delay;
+            this.start_time = t - ((this.frame_count - 1) * 5 * 60 * 1000);
+            console.info('start_time ' + this.start_time);
+            console.info('frame_count ' + this.frame_count.toString());
+            console.info('frame_delay ' + this.frame_delay.toString());
+            console.info('frame_restart ' + this.restart_delay.toString());
         });
-        setInterval(() => {
-            this.getRadarCapabilities();
-        }, 60000);
+    }
+    setNextUpdateTimeout(time) {
+        const nextTime = time + (10 * 60 * 1000) + (15 * 1000);
+        console.info('delay ' + (nextTime - Date.now()));
+        setTimeout(() => { this.getRadarCapabilities(); }, nextTime - Date.now());
     }
     addRadarLayer(id) {
         if ((this._map !== undefined) && (id !== '') && (this.mapLoaded === true)) {
@@ -13089,9 +13102,10 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                 //    	  	    'line-width': 1
                 //          }
                 'layout': {
-                    'visibility': 'none'
+                    'visibility': 'visible'
                 },
                 'paint': {
+                    'fill-opacity': 0,
                     'fill-color': [
                         'interpolate',
                         [
@@ -13134,9 +13148,11 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                         406.9,
                         '#280000'
                     ]
-                },
-                //      }, 'BOM-towns MIN_zoom 9-10');
-            });
+                }
+            }
+            // , 'BOM-towns MIN_zoom 9-10'
+            // , 'settlement-minor-label'
+            );
         }
     }
     removeRadarLayer(id) {
@@ -13148,12 +13164,8 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         }
     }
     loadRadarLayers() {
-        const frame_count = this._config.frame_count != undefined ? this._config.frame_count : 10;
-        console.info('frame_count ' + frame_count.toString());
-        console.info('frame_delay ' + (this._config.frame_delay !== undefined ? this._config.frame_delay : 500).toString());
-        console.info('frame_restart ' + (this._config.restart_delay !== undefined ? this._config.restart_delay : 1000).toString());
         console.info('times:');
-        for (let i = 0; i < frame_count; i++) {
+        for (let i = 0; i < this.frame_count; i++) {
             const time = this.start_time + (i * 5 * 60 * 1000);
             const id = new Date(time).toISOString().replace(':00.000Z', '').replaceAll('-', '').replace('T', '').replace(':', '');
             this.mapLayers.push(id);
@@ -13162,25 +13174,48 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         }
     }
     changeRadarFrame() {
-        var _a;
+        var _a, _b;
         if (this._map !== undefined) {
-            const next = (this.frame + 1) % this.mapLayers.length;
-            (_a = this._map) === null || _a === void 0 ? void 0 : _a.setLayoutProperty(this.mapLayers[next], 'visibility', 'visible').setLayoutProperty(this.mapLayers[this.frame], 'visibility', 'none');
+            const extra = this.mapLayers.length > this.frame_count;
+            let next = (this.frame + 1) % this.mapLayers.length;
+            // this._map?.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 0).setPaintProperty(this.mapLayers[next], 'fill-opacity', 1);
+            (_a = this._map) === null || _a === void 0 ? void 0 : _a.setPaintProperty(this.mapLayers[next], 'fill-opacity', 1).setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 0);
+            if (extra) {
+                const oldLayer = this.mapLayers.shift();
+                if (oldLayer !== undefined) {
+                    this.removeRadarLayer(oldLayer);
+                }
+                next--;
+            }
             this.frame = next;
+            const el = (_b = this.shadowRoot) === null || _b === void 0 ? void 0 : _b.getElementById("progress-bar");
+            if ((el !== undefined) && (el !== null)) {
+                el.style.width = 100 + "px";
+            }
+            if (next == this.frame_count - 1) {
+                clearInterval(this.frameTimer);
+                this.frameTimer = setInterval(() => this.changeRadarFrame(), this.restart_delay);
+            }
+            else if (next == 0) {
+                clearInterval(this.frameTimer);
+                this.frameTimer = setInterval(() => this.changeRadarFrame(), this.frame_delay);
+            }
         }
     }
     firstUpdated() {
         requestAnimationFrame(() => {
             var _a;
             const container = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.getElementById('map');
+            const styleUrl = (this._config.data_source === undefined) ? 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb' : (this._config.data_source === 'Light') ? 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb' : 'mapbox://styles/mapbox/dark-v11';
             if (container) {
                 this._map = new mapboxGlExports.Map({
                     accessToken: 'pk.eyJ1IjoiYm9tLWRjLXByb2QiLCJhIjoiY2w4dHA5ZHE3MDlsejN3bnFwZW5vZ2xxdyJ9.KQjQkhGAu78U2Lu5Rxxh4w',
                     container: container,
                     // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-                    style: 'mapbox://styles/mapbox/dark-v11',
-                    //style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
-                    zoom: 5,
+                    style: styleUrl,
+                    // style: 'mapbox://styles/mapbox/dark-v11',
+                    // style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
+                    zoom: 7,
                     center: [149.1, -35.3],
                     projection: { name: 'equirectangular' },
                     attributionControl: false,
@@ -13198,8 +13233,8 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                     this.mapLoaded = true;
                     this.loadRadarLayers();
                     this.frame = this.mapLayers.length - 1;
-                    (_a = this._map) === null || _a === void 0 ? void 0 : _a.setLayoutProperty(this.mapLayers[this.frame], 'visibility', 'visible');
-                    this.frameTimer = setInterval(() => this.changeRadarFrame(), 200);
+                    (_a = this._map) === null || _a === void 0 ? void 0 : _a.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 1);
+                    this.frameTimer = setInterval(() => this.changeRadarFrame(), this.frame_delay);
                 });
             }
         });
@@ -13208,12 +13243,9 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         if (this.mapLoaded === false) {
             return true;
         }
-        // if ((changedProps.has('mapLoaded')) && (this.mapLoaded === true)) {
-        //   return true;
-        // }
         if ((changedProps.has('currentTime')) && (this.currentTime !== '')) {
             if (this._map !== undefined) {
-                console.info('shouldUpdate');
+                console.info('shouldUpdate ' + this.currentTime);
                 return true;
             }
         }
@@ -13222,10 +13254,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
     willUpdate() {
         if (this.mapLoaded) {
             console.info('willUpdate');
-            const oldLayer = this.mapLayers.shift();
-            if (oldLayer !== undefined) {
-                this.removeRadarLayer(oldLayer);
-            }
+            this.mapLayers.push(this.currentTime);
             this.addRadarLayer(this.currentTime);
         }
     }
@@ -13911,7 +13940,19 @@ let BomRadarCard = class BomRadarCard extends s$1 {
           <div id="color-bar" style="height: 8px;">
             <img id="img-color-bar" src="/local/community/bom-radar-card/radar-colour-bar-bom.png" height="8" style="vertical-align: top" />
           </div>
-          <div id='map'></div>
+          <div id='map'>
+          </div>
+          <div id="div-progress-bar" style="height: 8px; background-color: white;">
+            <div id="progress-bar" style="height:8px;width:0; background-color: #ccf2ff;"></div>
+          </div>
+          <div id="bottom-container" class="light-links" style="height: 32px; background-color: white;">
+            <div id="timestampid" class="text-container" style="width: 120px; height: 32px; float:left; position: absolute;">
+              <p id="timestamp"></p>
+            </div>
+            <div id="attribution" class="text-container-small" style="height: 32px; float:right;">
+              <span class="Map__Attribution-LjffR DKiFh" id="attribution"></span>
+            </div>
+          </div>
         </div>
       </ha-card>
     `;
