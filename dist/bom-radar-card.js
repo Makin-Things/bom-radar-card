@@ -13054,8 +13054,6 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         this.barsize = 0;
         this.center_lon = 133.75;
         this.center_lat = -27.85;
-        this.marker_lon = 149.08013;
-        this.marker_lat = -35.361996;
         this.mapLoaded = false;
         this.currentTime = '';
         this.getRadarCapabilities().then(async (t) => {
@@ -13102,9 +13100,11 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                 el.style.width = `15px`;
                 el.style.height = `15px`;
                 el.style.backgroundSize = '100%';
-                new mapboxGlExports.Marker(el)
-                    .setLngLat([this.marker_lon, this.marker_lat])
-                    .addTo(this.map);
+                this.marker = new mapboxGlExports.Marker(el);
+                if ((this._config.show_marker) && (this._config.marker_latitude !== undefined) && (this._config.marker_longitude !== undefined)) {
+                    this.marker.setLngLat([Number(this._config.marker_longitude), Number(this._config.marker_latitude)]);
+                    this.marker.addTo(this.map);
+                }
                 // This is the timestamp in UTC time to show radar images for.
                 // There are between 6-7 hours worth of data (for each 5 minutes).
                 // Shortly after 5 minutes past the hour the data for hour -7 is removed up to an including the :00 data.
@@ -13254,7 +13254,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                 clearInterval(this.frameTimer);
                 this.frameTimer = setInterval(() => this.changeRadarFrame(), this.restart_delay);
             }
-            else if (next == 0) {
+            else {
                 clearInterval(this.frameTimer);
                 this.frameTimer = setInterval(() => this.changeRadarFrame(), this.frame_delay);
             }
@@ -13288,6 +13288,17 @@ let BomRadarCard = class BomRadarCard extends s$1 {
             }
             if (this._config.restart_delay !== changedProps.get('_config').restart_delay) {
                 this.restart_delay = (this._config.restart_delay === undefined) || isNaN(this._config.restart_delay) ? 1000 : this._config.restart_delay;
+            }
+            if ((this._config.show_marker !== changedProps.get('_config').show_marker) || (this._config.marker_latitude !== changedProps.get('_config').marker_latitude) || (this._config.marker_longitude !== changedProps.get('_config').marker_longitude)) {
+                if (this.marker !== undefined) {
+                    if ((this._config.show_marker) && (this._config.marker_latitude !== undefined) && (this._config.marker_longitude !== undefined)) {
+                        this.marker.setLngLat([Number(this._config.marker_longitude), Number(this._config.marker_latitude)]);
+                        this.marker.addTo(this.map);
+                    }
+                    else {
+                        this.marker.remove();
+                    }
+                }
             }
             return true;
         }
