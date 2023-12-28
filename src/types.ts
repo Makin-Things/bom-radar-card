@@ -18,6 +18,7 @@ export interface BomRadarCardConfig extends LovelaceCardConfig {
   extra_labels: undefined;
   frame_count: undefined;
   frame_delay: undefined;
+  restart_delay?: number;
   marker_longitude: undefined;
   marker_latitude: undefined;
   center_longitude: undefined;

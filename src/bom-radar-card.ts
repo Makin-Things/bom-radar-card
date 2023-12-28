@@ -12,7 +12,7 @@ import * as mapboxgl from 'mapbox-gl';
 
 /* eslint no-console: 0 */
 console.info(
-  `%c  BOM-RADAR-CARD \n%c  ${localize('common.version')} ${CARD_VERSION}    `,
+  `%c  BOM-RADAR-CARD  \n%c  ${localize('common.version')} ${CARD_VERSION}   `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
@@ -40,14 +40,19 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
   @property({ type: Boolean, reflect: true })
   public isPanel = false;
-  private _map;
+  private map;
   private start_time = 0;
   private frame_count = 12;
   private frame_delay = 250;
   private restart_delay = 1000;
   private mapLayers: string[] = [];
   private frame = 0;
-  private frameTimer;
+  private frameTimer: NodeJS.Timer | undefined;
+  private barsize = 0;
+  private center_lon = 133.75;
+  private center_lat = -27.85;
+  private marker_lon = 149.08013;
+  private marker_lat = -35.361996;
 
   // TODO Add any properities that should cause your element to re-render here
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -93,6 +98,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
     if (!response || !response.ok) {
       setTimeout(() => { this.getRadarCapabilities(); }, 5000);
+      console.info('  failed');
       return Promise.reject(response);
     }
 
@@ -119,8 +125,9 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   }
 
   constructor() {
+    console.info('contructor');
     super();
-    this.getRadarCapabilities().then((t) => {
+    this.getRadarCapabilities().then(async (t) => {
       console.info('inital last time ' + t);
       this.frame_count = this._config.frame_count != undefined ? this._config.frame_count : this.frame_count;
       this.frame_delay = this._config.frame_delay !== undefined ? this._config.frame_delay : this.frame_delay;
@@ -130,7 +137,82 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       console.info('frame_count ' + this.frame_count.toString());
       console.info('frame_delay ' + this.frame_delay.toString());
       console.info('frame_restart ' + this.restart_delay.toString());
+
+      const container = this.shadowRoot?.getElementById('map');
+      const styleUrl = (this._config.map_style === undefined) ? 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb' : (this._config.map_style === 'Light') ? 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb' : 'mapbox://styles/mapbox/dark-v11';
+      if (container) {
+        console.info('creating map');
+        console.info('offset width ' + container.offsetWidth);
+        if (this.parentNode?.nodeName === 'HUI-CARD-PREVIEW') {
+          await this.sleep(200);
+        }
+
+        if (this._config.center_longitude !== undefined) {
+          this.center_lon = this._config.center_longitude;
+        }
+        if (this._config.center_latitude !== undefined) {
+          this.center_lat = this._config.center_latitude;
+        }
+
+        this.map = new mapboxgl.Map({
+          accessToken: 'pk.eyJ1IjoiYm9tLWRjLXByb2QiLCJhIjoiY2w4dHA5ZHE3MDlsejN3bnFwZW5vZ2xxdyJ9.KQjQkhGAu78U2Lu5Rxxh4w',
+          container: container,
+          // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+          style: styleUrl,
+          zoom: this._config.zoom_level,
+          center: [this.center_lon, this.center_lat],
+          projection: { name: 'mercator' },
+          attributionControl: false,
+          maxBounds: [109, -47, 158.1, -7],
+          minZoom: 3,
+          maxZoom: 10,
+        });
+
+        const el = document.createElement('div');
+        el.className = 'marker';
+        el.style.backgroundImage = `url(/local/community/bom-radar-card/home-circle-light.svg)`;
+        el.style.width = `15px`;
+        el.style.height = `15px`;
+        el.style.backgroundSize = '100%';
+
+        new mapboxgl.Marker(el)
+          .setLngLat([this.marker_lon, this.marker_lat])
+          .addTo(this.map);
+
+        // This is the timestamp in UTC time to show radar images for.
+        // There are between 6-7 hours worth of data (for each 5 minutes).
+        // Shortly after 5 minutes past the hour the data for hour -7 is removed up to an including the :00 data.
+        // const ts = '202304090710';
+        this.map.on('load', () => {
+          console.info('map loaded');
+          this.loadMapContent();
+        });
+        this.map.on('resize', () => {
+          console.info('resize');
+        });
+      }
     });
+  }
+
+  protected sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  protected loadMapContent() {
+    this.mapLoaded = true;
+    this.loadRadarLayers();
+    this.frame = this.mapLayers.length - 1;
+    this.map?.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 1);
+    this.frameTimer = setInterval(() => this.changeRadarFrame(), this.restart_delay);
+    const el = this.shadowRoot?.getElementById('map');
+    if ((el !== undefined) && (el !== null)) {
+      console.info('offset width ' + el.offsetWidth);
+      this.barsize = el.offsetWidth / this.frame_count;
+      const pg = this.shadowRoot?.getElementById("progress-bar");
+      if ((pg !== undefined) && (pg !== null)) {
+        pg.style.width = el.offsetWidth + 'px';
+      }
+    }
   }
 
   protected setNextUpdateTimeout(time: number) {
@@ -140,38 +222,27 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   }
 
   protected addRadarLayer(id: string) {
-    if ((this._map !== undefined) && (id !== '') && (this.mapLoaded === true)) {
+    if ((this.map !== undefined) && (id !== '') && (this.mapLoaded === true)) {
       // Add the Mapbox Terrain v2 vector tileset. Read more about
       // the structure of data in this tileset in the documentation:
       // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
-      this._map.addSource(id, {
+      this.map.addSource(id, {
         type: 'vector',
         url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + id
       });
 
-      this._map.addLayer({
+      this.map.addLayer({
         'id': id, // Layer ID
         'type': 'fill',
         'source': id, // ID of the tile source created above
         // Source has several layers. We visualize the one with name 'sequence'.
         'source-layer': id,
-        //          'layout': {
-        //              'visibility': 'visible',
-        //          		'fill-color':  'rgb(53, 175, 109)'
-        //          		'line-cap': 'round',
-        //          		'line-join': 'round'
-        //          },
-        //          'paint': {
-        //          		'fill-color':  'rgb(53, 175, 109)'
-        //	        	  'line-opacity': 1.0,
-        //  	  	      'line-color': 'rgb(53, 175, 109)',
-        //    	  	    'line-width': 1
-        //          }
         'layout': {
           'visibility': 'visible'
         },
         'paint': {
           'fill-opacity': 0,
+          'fill-opacity-transition': { "duration": 5, "delay": 0 },
           'fill-color': [
             'interpolate',
             [
@@ -223,10 +294,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   }
 
   protected removeRadarLayer(id: string) {
-    if (this._map !== undefined) {
-      if (this._map.getLayer(id)) {
-        this._map.removeLayer(id);
-        this._map.removeSource(id);
+    if (this.map !== undefined) {
+      if (this.map.getLayer(id)) {
+        this.map.removeLayer(id);
+        this.map.removeSource(id);
       }
     }
   }
@@ -243,11 +314,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   }
 
   private changeRadarFrame(): void {
-    if (this._map !== undefined) {
+    if (this.map !== undefined) {
       const extra = this.mapLayers.length > this.frame_count;
       let next = (this.frame + 1) % this.mapLayers.length;
-      // this._map?.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 0).setPaintProperty(this.mapLayers[next], 'fill-opacity', 1);
-      this._map?.setPaintProperty(this.mapLayers[next], 'fill-opacity', 1).setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 0);
+      this.map.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 0).setPaintProperty(this.mapLayers[next], 'fill-opacity', 1);
       if (extra) {
         const oldLayer = this.mapLayers.shift();
         if (oldLayer !== undefined) {
@@ -256,9 +326,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         next--;
       }
       this.frame = next;
+
       const el = this.shadowRoot?.getElementById("progress-bar");
       if ((el !== undefined) && (el !== null)) {
-        el.style.width = 100 + "px";
+        el.style.width = (this.frame + 1) * this.barsize + 'px';
       }
 
       if (next == this.frame_count - 1) {
@@ -272,51 +343,51 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     }
   }
 
-  protected firstUpdated(): void {
-    requestAnimationFrame(() => {
-      const container = this.shadowRoot?.getElementById('map');
-      const styleUrl = (this._config.data_source === undefined) ? 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb' : (this._config.data_source === 'Light') ? 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb' : 'mapbox://styles/mapbox/dark-v11';
-      if (container) {
-        this._map = new mapboxgl.Map({
-          accessToken: 'pk.eyJ1IjoiYm9tLWRjLXByb2QiLCJhIjoiY2w4dHA5ZHE3MDlsejN3bnFwZW5vZ2xxdyJ9.KQjQkhGAu78U2Lu5Rxxh4w',
-          container: container,
-          // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-          style: styleUrl,
-          // style: 'mapbox://styles/mapbox/dark-v11',
-          // style: 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb',
-          zoom: 7,
-          center: [149.1, -35.3],
-          projection: { name: 'equirectangular' },
-          attributionControl: false,
-          maxBounds: [109, -47, 158.1, -7],
-          minZoom: 3,
-          maxZoom: 10,
-        });
-
-        // This is the timestamp in UTC time to show radar images for.
-        // There are between 6-7 hours worth of data (for each 5 minutes).
-        // Shortly after 5 minutes past the hour the data for hour -7 is removed up to an including the :00 data.
-        // const ts = '202304090710';
-        this._map.on('load', () => {
-          console.info('map loaded');
-          this.mapLoaded = true;
-          this.loadRadarLayers();
-          this.frame = this.mapLayers.length - 1;
-          this._map?.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 1);
-          this.frameTimer = setInterval(() => this.changeRadarFrame(), this.frame_delay);
-        });
-      }
-    });
-  }
+  // protected firstUpdated(): void {
+  //   console.info('first updated');
+  //   const container = this.shadowRoot?.getElementById('map');
+  // }
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
+    console.info('should update');
     if (this.mapLoaded === false) {
       return true;
     }
 
+    if (changedProps.has('_config')) {
+      console.info('config changed');
+
+      if (this._config.zoom_level !== changedProps.get('_config').zoom_level) {
+        console.info('zoom ' + this._config.zoom_level);
+        this.map.jumpTo({ center: [this.center_lon, this.center_lat], zoom: this._config.zoom_level });
+      }
+
+      if (this._config.center_longitude !== changedProps.get('_config').center_longitude) {
+        this.center_lon = (this._config.center_longitude === undefined) || isNaN(this._config.center_longitude) ? 133.75 : this._config.center_longitude;
+        this.map.jumpTo({ center: [this.center_lon, this.center_lat], zoom: this._config.zoom_level });
+      }
+
+      if (this._config.center_latitude !== changedProps.get('_config').center_latitude) {
+        this.center_lat = (this._config.center_latitude === undefined) || isNaN(this._config.center_latitude) ? -27.85 : this._config.center_latitude;
+        this.map.jumpTo({ center: [this.center_lon, this.center_lat], zoom: this._config.zoom_level });
+      }
+
+      if (this._config.frame_delay !== changedProps.get('_config').frame_delay) {
+        this.frame_delay = (this._config.frame_delay === undefined) || isNaN(this._config.frame_delay) ? 250 : this._config.frame_delay;
+      }
+
+      if (this._config.restart_delay !== changedProps.get('_config').restart_delay) {
+        this.restart_delay = (this._config.restart_delay === undefined) || isNaN(this._config.restart_delay) ? 1000 : this._config.restart_delay;
+      }
+
+      return true;
+    }
+
     if ((changedProps.has('currentTime')) && (this.currentTime !== '')) {
-      if (this._map !== undefined) {
+      if (this.map !== undefined) {
         console.info('shouldUpdate ' + this.currentTime);
+        this.mapLayers.push(this.currentTime);
+        this.addRadarLayer(this.currentTime);
         return true;
       }
     }
@@ -325,10 +396,11 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   }
 
   protected willUpdate() {
+    console.info('willUpdate');
     if (this.mapLoaded) {
-      console.info('willUpdate');
-      this.mapLayers.push(this.currentTime);
-      this.addRadarLayer(this.currentTime);
+      console.info('willUpdate - map loaded');
+      // this.mapLayers.push(this.currentTime);
+      // this.addRadarLayer(this.currentTime);
     }
   }
 
@@ -1896,6 +1968,13 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     .mapboxgl-canvas-container.mapboxgl-touch-pan-blocker-override.mapboxgl-scrollable-page,
     .mapboxgl-canvas-container.mapboxgl-touch-pan-blocker-override.mapboxgl-scrollable-page .mapboxgl-canvas {
         touch-action: pan-x pan-y;
-    }    `;
+    }
+
+    .marker {
+      display: block;
+      border: none;
+      padding: 0;
+  }
+    `;
   }
 }
