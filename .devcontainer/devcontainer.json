@@ -1,7 +1,7 @@
 // See https://aka.ms/vscode-remote/devcontainer.json for format details.
 {
   "name": "BOM Radar Card Development",
-  "image": "ludeeus/container:monster",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node",
   "context": "..",
   "appPort": ["5124:5000", "9124:8123"],
   "postCreateCommand": "npm install",

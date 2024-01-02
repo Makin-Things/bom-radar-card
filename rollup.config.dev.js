@@ -1,7 +1,8 @@
 
-import resolve from 'rollup-plugin-node-resolve';
-import typescript from 'rollup-plugin-typescript2';
-import babel from 'rollup-plugin-babel';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import typescript from '@rollup/plugin-typescript';
+import babel from '@rollup/plugin-babel';
 import serve from 'rollup-plugin-serve';
 import { terser } from 'rollup-plugin-terser';
 import json from '@rollup/plugin-json';
@@ -18,12 +19,14 @@ export default {
   },
   plugins: [
     resolve(),
+    commonjs(),
     typescript(),
     json(),
     babel({
+      babelHelpers: 'bundled',
       exclude: 'node_modules/**',
     }),
-    terser(),
+//    terser(),
     serve({
       contentBase: './dist',
       host: '0.0.0.0',
