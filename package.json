@@ -1,6 +1,6 @@
 {
   "name": "bom-radar-card",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A rain radar card using the new vector tiles from the Australian BOM",
   "keywords": [
     "home-assistant",
