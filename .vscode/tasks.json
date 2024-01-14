@@ -17,7 +17,7 @@
 			},
 			"problemMatcher": [],
 			"label": "npm: build",
-			"detail": "npm run lint && npm run rollup"
+			"detail": "rollup -c"
 		}
 	]
 }

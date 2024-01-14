@@ -29,6 +29,7 @@ const radarCapabilities = 'https://api.weather.bom.gov.au/v1/radar/capabilities'
 });
 
 @customElement('bom-radar-card')
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class BomRadarCard extends LitElement implements LovelaceCard {
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
     return document.createElement('bom-radar-card-editor') as LovelaceCardEditor;
@@ -46,12 +47,14 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   private frame_delay = 250;
   private restart_delay = 1000;
   private mapLayers: string[] = [];
+  private radarTime: string[] = [];
   private frame = 0;
-  private frameTimer: NodeJS.Timer | undefined;
+  private frameTimer: NodeJS.Timeout | undefined;
   private barsize = 0;
   private center_lon = 133.75;
   private center_lat = -27.85;
   private marker?: mapboxgl.Marker;
+  private beforeLayer?: string;
 
   // TODO Add any properities that should cause your element to re-render here
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -109,7 +112,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       }
     }
 
-    const newTime = latest.replaceAll("-", "").replace("T", "").replace(":", "").replace("Z", "");
+    const newTime = latest;
     if (this.currentTime == newTime) {
       setTimeout(() => { this.getRadarCapabilities(); }, 5000);
       return Date.parse(latest);
@@ -138,6 +141,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       console.info('frame_restart ' + this.restart_delay.toString());
 
       const container = this.shadowRoot?.getElementById('map');
+      this.beforeLayer = (this._config.map_style === undefined) ? 'country-label-other' : (this._config.map_style === 'Light') ? 'country-label-other' : 'settlement-subdivision-label';
       const styleUrl = (this._config.map_style === undefined) ? 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb' : (this._config.map_style === 'Light') ? 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb' : 'mapbox://styles/mapbox/dark-v11';
       if (container) {
         console.info('creating map');
@@ -169,7 +173,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
         const el = document.createElement('div');
         el.className = 'marker';
-        el.style.backgroundImage = `url(/local/community/bom-radar-card/home-circle-light.svg)`;
+        el.style.backgroundImage = (this._config.map_style === 'Light') ? `url(/local/community/bom-radar-card/home-circle-dark.svg)` : `url(/local/community/bom-radar-card/home-circle-light.svg)`;
         el.style.width = `15px`;
         el.style.height = `15px`;
         el.style.backgroundSize = '100%';
@@ -187,6 +191,11 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         // const ts = '202304090710';
         this.map.on('load', () => {
           console.info('map loaded');
+          if (this._config.map_style === 'Dark') {
+            this.map.moveLayer('continent-label', 'settlement-subdivision-label');
+            this.map.moveLayer('country-label', 'settlement-subdivision-label');
+            this.map.moveLayer('state-label', 'settlement-subdivision-label');
+          }
           this.loadMapContent();
         });
         this.map.on('resize', () => {
@@ -198,6 +207,32 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
   protected sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  protected getRadarTimeString(date: string): string {
+    const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const x = new Date(date);
+    return (
+      weekday[x.getDay()] +
+      ' ' +
+      month[x.getMonth()] +
+      ' ' +
+      x
+        .getDate()
+        .toString()
+        .padStart(2, '0') +
+      ' ' +
+      x
+        .getHours()
+        .toString()
+        .padStart(2, '0') +
+      ':' +
+      x
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')
+    );
   }
 
   protected loadMapContent() {
@@ -225,9 +260,6 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
   protected addRadarLayer(id: string) {
     if ((this.map !== undefined) && (id !== '') && (this.mapLoaded === true)) {
-      // Add the Mapbox Terrain v2 vector tileset. Read more about
-      // the structure of data in this tileset in the documentation:
-      // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
       this.map.addSource(id, {
         type: 'vector',
         url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + id
@@ -289,8 +321,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
           ]
         }
       }
-        // , 'BOM-towns MIN_zoom 9-10'
+        , this.beforeLayer
+        // , 'country-label-other'
         // , 'settlement-minor-label'
+        // , 'settlement-subdivision-label'
       );
     }
   }
@@ -308,8 +342,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     console.info('times:');
     for (let i = 0; i < this.frame_count; i++) {
       const time = this.start_time + (i * 5 * 60 * 1000);
-      const id = new Date(time).toISOString().replace(':00.000Z', '').replaceAll('-', '').replace('T', '').replace(':', '');
+      const ts = new Date(time).toISOString();
+      const id = ts.replace(':00.000Z', '').replaceAll('-', '').replace('T', '').replace(':', '');
       this.mapLayers.push(id);
+      this.radarTime.push(this.getRadarTimeString(ts));
       this.addRadarLayer(id);
       console.info('  ' + id);
     }
@@ -322,6 +358,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       this.map.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 0).setPaintProperty(this.mapLayers[next], 'fill-opacity', 1);
       if (extra) {
         const oldLayer = this.mapLayers.shift();
+        this.radarTime.shift();
         if (oldLayer !== undefined) {
           this.removeRadarLayer(oldLayer);
         }
@@ -341,6 +378,11 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       else {
         clearInterval(this.frameTimer);
         this.frameTimer = setInterval(() => this.changeRadarFrame(), this.frame_delay);
+      }
+
+      const ts = this.shadowRoot?.getElementById('timestamp');
+      if ((ts !== undefined) && (ts !== null)) {
+        ts.innerHTML = this.radarTime[this.frame];
       }
     }
   }
@@ -400,8 +442,10 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     if ((changedProps.has('currentTime')) && (this.currentTime !== '')) {
       if (this.map !== undefined) {
         console.info('shouldUpdate ' + this.currentTime);
-        this.mapLayers.push(this.currentTime);
-        this.addRadarLayer(this.currentTime);
+        const id = this.currentTime.replaceAll("-", "").replace("T", "").replace(":", "").replace("Z", "");
+        this.mapLayers.push(id);
+        this.radarTime.push(this.getRadarTimeString(this.currentTime));
+        this.addRadarLayer(id);
         return true;
       }
     }
@@ -413,9 +457,29 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     console.info('willUpdate');
     if (this.mapLoaded) {
       console.info('willUpdate - map loaded');
-      // this.mapLayers.push(this.currentTime);
-      // this.addRadarLayer(this.currentTime);
     }
+  }
+
+  protected updateStyle(elem: this) {
+    if (this._config.map_style === "Dark") {
+      elem?.style.setProperty("--progress-bar-background", "#1C1C1C");
+      elem?.style.setProperty("--progress-bar-color", "steelblue");
+      elem?.style.setProperty("--bottom-container-background", "#1C1C1C");
+      elem?.style.setProperty("--bottom-container-color", "#DDDDDD");
+      elem?.style.setProperty("--bottom-container-classname", "dark-links");
+    } else {
+      elem?.style.setProperty("--progress-bar-background", "white");
+      elem?.style.setProperty("--progress-bar-color", "#ccf2ff");
+      elem?.style.setProperty("--bottom-container-background", "white");
+      elem?.style.setProperty("--bottom-container-color", "black");
+
+    }
+  }
+
+  connectedCallback() {
+    console.info("Custom square element added to page.");
+    super.connectedCallback();
+    this.updateStyle(this);
   }
 
   protected render(): TemplateResult | void {
@@ -424,6 +488,27 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     if (this._config.show_warning) {
       return this.showWarning(localize('common.show_warning'));
     }
+
+    if (this._config.map_style === "Dark") {
+      const dpb = document.getElementById("shadow-root");
+      dpb?.style.setProperty("--progress-bar-background", "#1C1C1C");
+      // if ((dpb !== undefined) && (dpb !== null)) {
+      //   dpb.style.background = "#1C1C1C";
+      // }
+
+      // const pb = document.getElementById("progress-bar");
+      // if ((pb !== undefined) && (pb !== null)) {
+      //   pb.style.background = "steelblue";
+      // }
+
+      // const bc = document.getElementById("bottom-container");
+      // if ((bc !== undefined) && (bc !== null)) {
+      //   bc.style.background = "#1C1C1C";
+      //   bc.style.color = "#DDDDDD";
+      //   bc.className = "dark-links";
+      // }
+    }
+
 
     /*    const doc = `
           <!DOCTYPE html>
@@ -1085,12 +1170,12 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     const padding = this.isPanel
       ? this.offsetParent
         ? this.offsetParent.clientHeight - 2 - (this.editMode === true ? 59 : 0) + `px`
-        : `540px`
+        : `538px`
       : this._config.square_map !== undefined
         ? this._config.square_map
           ? `${this.getBoundingClientRect().width + 48}px`
-          : `540px`
-        : `540px`;
+          : `538px`
+        : `538px`;
 
     const cardTitle = this._config.card_title !== undefined ? html`<div id="card-title">${this._config.card_title}</div>` : ``;
 
@@ -1106,11 +1191,11 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
           </div>
           <div id='map'>
           </div>
-          <div id="div-progress-bar" style="height: 8px; background-color: white;">
-            <div id="progress-bar" style="height:8px;width:0; background-color: #ccf2ff;"></div>
+          <div id="div-progress-bar">
+            <div id="progress-bar"></div>
           </div>
-          <div id="bottom-container" class="light-links" style="height: 32px; background-color: white;">
-            <div id="timestampid" class="text-container" style="width: 120px; height: 32px; float:left; position: absolute;">
+          <div id="bottom-container" class="light-links">
+            <div id="timestampid" class="text-container">
               <p id="timestamp"></p>
             </div>
             <div id="attribution" class="text-container-small" style="height: 32px; float:right;">
@@ -1143,11 +1228,20 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
 
   get styles(): CSSResult {
     return css`
-      .text-container {
-        font: 12px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
-      }
-      ha-card {
+      #card {
         overflow: hidden;
+      }
+      .text-container {
+        font: 14px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        color: var(--bottom-container-color);
+        width: 120px;
+        float:left;
+        padding-left: 10px;
+        position: absolute;
+        margin: 0;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
       }
       #root {
         width: 100%;
@@ -1159,7 +1253,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
         top: 0;
         bottom: 0;
         width: 490px;
-        height: 540px;
+        height: 490px;
       }
       iframe {
         position: absolute;
@@ -1172,6 +1266,20 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
       #card-title {
         margin: 8px 0px 4px 8px;
         font-size: 1.5em;
+      }
+      #div-progress-bar {
+        height: 8px;
+        background-color: var(--progress-bar-background);
+      }
+      #progress-bar {
+        height: 8px;
+        width: 0;
+        background-color: var(--progress-bar-color);
+      }
+      #bottom-container {
+        height: 32px;
+        position: relative;
+        background-color: var(--bottom-container-background);
       }
       .mapboxgl-map {
         font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
