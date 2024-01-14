@@ -72,7 +72,7 @@
   },
   "scripts": {
     "start": "rollup -c rollup.config.dev.js --watch",
-    "build": "npm run lint && npm run rollup",
+    "build": "rollup -c rollup.config.dev.js",
     "lint": "eslint src/*.ts",
     "rollup": "rollup -c"
   }
