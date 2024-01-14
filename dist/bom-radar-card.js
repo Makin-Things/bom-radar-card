@@ -13038,7 +13038,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                 latest = data.data.rain[obj].time;
             }
         }
-        const newTime = latest.replaceAll("-", "").replace("T", "").replace(":", "").replace("Z", "");
+        const newTime = latest;
         if (this.currentTime == newTime) {
             setTimeout(() => { this.getRadarCapabilities(); }, 5000);
             return Date.parse(latest);
@@ -13058,6 +13058,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         this.frame_delay = 250;
         this.restart_delay = 1000;
         this.mapLayers = [];
+        this.radarTime = [];
         this.frame = 0;
         this.barsize = 0;
         this.center_lon = 133.75;
@@ -13076,6 +13077,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
             console.info('frame_delay ' + this.frame_delay.toString());
             console.info('frame_restart ' + this.restart_delay.toString());
             const container = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.getElementById('map');
+            this.beforeLayer = (this._config.map_style === undefined) ? 'country-label-other' : (this._config.map_style === 'Light') ? 'country-label-other' : 'settlement-subdivision-label';
             const styleUrl = (this._config.map_style === undefined) ? 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb' : (this._config.map_style === 'Light') ? 'mapbox://styles/bom-dc-prod/cl82p806e000b15q6o92eppcb' : 'mapbox://styles/mapbox/dark-v11';
             if (container) {
                 console.info('creating map');
@@ -13119,6 +13121,11 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                 // const ts = '202304090710';
                 this.map.on('load', () => {
                     console.info('map loaded');
+                    if (this._config.map_style === 'Dark') {
+                        this.map.moveLayer('continent-label', 'settlement-subdivision-label');
+                        this.map.moveLayer('country-label', 'settlement-subdivision-label');
+                        this.map.moveLayer('state-label', 'settlement-subdivision-label');
+                    }
                     this.loadMapContent();
                 });
                 this.map.on('resize', () => {
@@ -13177,9 +13184,6 @@ let BomRadarCard = class BomRadarCard extends s$1 {
     }
     addRadarLayer(id) {
         if ((this.map !== undefined) && (id !== '') && (this.mapLoaded === true)) {
-            // Add the Mapbox Terrain v2 vector tileset. Read more about
-            // the structure of data in this tileset in the documentation:
-            // https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
             this.map.addSource(id, {
                 type: 'vector',
                 url: 'mapbox://bom-dc-prod.rain-prod-LPR-' + id
@@ -13239,9 +13243,10 @@ let BomRadarCard = class BomRadarCard extends s$1 {
                         '#280000'
                     ]
                 }
-            }
-            // , 'BOM-towns MIN_zoom 9-10'
+            }, this.beforeLayer
+            // , 'country-label-other'
             // , 'settlement-minor-label'
+            // , 'settlement-subdivision-label'
             );
         }
     }
@@ -13257,8 +13262,10 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         console.info('times:');
         for (let i = 0; i < this.frame_count; i++) {
             const time = this.start_time + (i * 5 * 60 * 1000);
-            const id = new Date(time).toISOString().replace(':00.000Z', '').replaceAll('-', '').replace('T', '').replace(':', '');
+            const ts = new Date(time).toISOString();
+            const id = ts.replace(':00.000Z', '').replaceAll('-', '').replace('T', '').replace(':', '');
             this.mapLayers.push(id);
+            this.radarTime.push(this.getRadarTimeString(ts));
             this.addRadarLayer(id);
             console.info('  ' + id);
         }
@@ -13271,6 +13278,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
             this.map.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 0).setPaintProperty(this.mapLayers[next], 'fill-opacity', 1);
             if (extra) {
                 const oldLayer = this.mapLayers.shift();
+                this.radarTime.shift();
                 if (oldLayer !== undefined) {
                     this.removeRadarLayer(oldLayer);
                 }
@@ -13291,7 +13299,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
             }
             const ts = (_b = this.shadowRoot) === null || _b === void 0 ? void 0 : _b.getElementById('timestamp');
             if ((ts !== undefined) && (ts !== null)) {
-                ts.innerHTML = this.mapLayers[this.frame].toString();
+                ts.innerHTML = this.radarTime[this.frame];
             }
         }
     }
@@ -13340,8 +13348,10 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         if ((changedProps.has('currentTime')) && (this.currentTime !== '')) {
             if (this.map !== undefined) {
                 console.info('shouldUpdate ' + this.currentTime);
-                this.mapLayers.push(this.currentTime);
-                this.addRadarLayer(this.currentTime);
+                const id = this.currentTime.replaceAll("-", "").replace("T", "").replace(":", "").replace("Z", "");
+                this.mapLayers.push(id);
+                this.radarTime.push(this.getRadarTimeString(this.currentTime));
+                this.addRadarLayer(id);
                 return true;
             }
         }
@@ -13351,8 +13361,6 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         console.info('willUpdate');
         if (this.mapLoaded) {
             console.info('willUpdate - map loaded');
-            // this.mapLayers.push(this.currentTime);
-            // this.addRadarLayer(this.currentTime);
         }
     }
     updateStyle(elem) {
@@ -13367,6 +13375,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
             elem === null || elem === void 0 ? void 0 : elem.style.setProperty("--progress-bar-background", "white");
             elem === null || elem === void 0 ? void 0 : elem.style.setProperty("--progress-bar-color", "#ccf2ff");
             elem === null || elem === void 0 ? void 0 : elem.style.setProperty("--bottom-container-background", "white");
+            elem === null || elem === void 0 ? void 0 : elem.style.setProperty("--bottom-container-color", "black");
         }
     }
     connectedCallback() {
@@ -14056,12 +14065,12 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         const padding = this.isPanel
             ? this.offsetParent
                 ? this.offsetParent.clientHeight - 2 - (this.editMode === true ? 59 : 0) + `px`
-                : `540px`
+                : `538px`
             : this._config.square_map !== undefined
                 ? this._config.square_map
                     ? `${this.getBoundingClientRect().width + 48}px`
-                    : `540px`
-                : `540px`;
+                    : `538px`
+                : `538px`;
         const cardTitle = this._config.card_title !== undefined ? x `<div id="card-title">${this._config.card_title}</div>` : ``;
         return x `
       <style>
@@ -14079,7 +14088,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
             <div id="progress-bar"></div>
           </div>
           <div id="bottom-container" class="light-links">
-            <div id="timestampid" class="text-container" style="width: 120px; height: 32px; float:left; position: absolute;">
+            <div id="timestampid" class="text-container">
               <p id="timestamp"></p>
             </div>
             <div id="attribution" class="text-container-small" style="height: 32px; float:right;">
@@ -14108,8 +14117,20 @@ let BomRadarCard = class BomRadarCard extends s$1 {
     }
     get styles() {
         return i$5 `
+      #card {
+        overflow: hidden;
+      }
       .text-container {
-        font: 12px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        font: 14px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        color: var(--bottom-container-color);
+        width: 120px;
+        float:left;
+        padding-left: 10px;
+        position: absolute;
+        margin: 0;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
       }
       #root {
         width: 100%;
@@ -14121,7 +14142,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
         top: 0;
         bottom: 0;
         width: 490px;
-        height: 540px;
+        height: 490px;
       }
       iframe {
         position: absolute;
@@ -14146,6 +14167,7 @@ let BomRadarCard = class BomRadarCard extends s$1 {
       }
       #bottom-container {
         height: 32px;
+        position: relative;
         background-color: var(--bottom-container-background);
       }
       .mapboxgl-map {
