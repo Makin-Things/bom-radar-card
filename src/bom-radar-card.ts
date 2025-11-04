@@ -779,9 +779,7 @@ async firstUpdated() {
       if (container) {
         console.info('creating map');
         console.info('offset width ' + container.offsetWidth);
-        if (this.parentNode?.nodeName === 'HUI-CARD-PREVIEW') {
-          await this.sleep(200);
-        }
+        await this.waitForStableMapSize(container);
 
         const haLocation = this.getHomeAssistantLocation();
         this.center_lon = this.resolveCoordinate(
@@ -871,6 +869,42 @@ async firstUpdated() {
 
   protected sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  private async waitForStableMapSize(container: HTMLElement): Promise<void> {
+    if (this.parentNode?.nodeName !== 'HUI-CARD-PREVIEW') {
+      return;
+    }
+
+    const target = this.shadowRoot?.getElementById('map-wrap') ?? container;
+
+    if (!target) {
+      await this.sleep(200);
+      return;
+    }
+
+    if (!('ResizeObserver' in window)) {
+      await this.sleep(200);
+      return;
+    }
+
+    await new Promise<void>((resolve) => {
+      let timeoutId = 0;
+
+      const finish = () => {
+        window.clearTimeout(timeoutId);
+        observer.disconnect();
+        resolve();
+      };
+
+      const observer = new ResizeObserver(() => {
+        window.clearTimeout(timeoutId);
+        timeoutId = window.setTimeout(finish, 150);
+      });
+
+      timeoutId = window.setTimeout(finish, 150);
+      observer.observe(target);
+    });
   }
 
   protected getRadarTimeString(date: string): string {
