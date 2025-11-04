@@ -7,6 +7,8 @@ A Home Assistant rain radar card using the new tiled images from the Australian 
 [![License][license-shield]](LICENSE.md)
 ![Maintenance](https://img.shields.io/maintenance/yes/2025?style=for-the-badge)
 
+> Based on the original [BOM Radar Card](https://github.com/Makin-Things/bom-radar-card) by [Makin-Things](https://github.com/Makin-Things).
+
 ## Description
 The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/) now use map tiles to distribute the radar images. This allows for one continous map that can be zoomed and panned seamlessly. This card allows this to be displayed within Home Assistant.
 
@@ -91,6 +93,19 @@ resources:
   - url: /local/community/bom-radar-card/bom-radar-card.js
     type: module
 ```
+## Known Issues
+
+- **Marker drift after editing card settings**  
+  Occasionally, after opening and saving changes in the **card editor**, the map marker may appear slightly offset or not align correctly on both the preview and live dashboard.  
+  This is a temporary visual issue and does **not** affect the radar data or map center position internally.  
+
+  **Fix:** Refresh your browser or the Home Assistant app after editing the card to restore the correct marker position.
+
+## Acknowledgements
+
+This project is a fork of the original [BOM Radar Card](https://github.com/Makin-Things/bom-radar-card) created by [Makin-Things](https://github.com/Makin-Things).  
+All credit goes to the original author for their excellent work building the foundation of this card.
+
 [license-shield]: https://img.shields.io/github/license/plasmapod/bom-radar-card.svg?style=for-the-badge
 [releases-shield]: https://img.shields.io/github/release/plasmapod/bom-radar-card.svg?style=for-the-badge
 [releases]: https://github.com/plasmapod/bom-radar-card/releases
