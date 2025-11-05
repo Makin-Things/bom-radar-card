@@ -16,6 +16,7 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
       frame_count: 7,
       frame_delay: 250,
       restart_delay: 1000,
+      overlay_transparency: 0,
       show_zoom: true,
       show_marker: true,
       show_recenter: true,
@@ -76,6 +77,10 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
       { name: 'frame_count', selector: { number: { mode: 'box', min: 1, max: 60, step: 1 } } },
       { name: 'frame_delay', selector: { number: { mode: 'box', min: 0, max: 5000, step: 10 } } },
       { name: 'restart_delay', selector: { number: { mode: 'box', min: 0, max: 10000, step: 10 } } },
+      {
+        name: 'overlay_transparency',
+        selector: { number: { mode: 'slider', min: 0, max: 90, step: 5, unit_of_measurement: '%' } },
+      },
     ];
 
     const controls = [
@@ -184,7 +189,13 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
       const mutable = { ...cfg } as BomRadarCardConfig & Record<string, unknown>;
 
       let value: unknown = raw;
-      if (name === 'zoom_level' || name === 'frame_count' || name === 'frame_delay' || name === 'restart_delay') {
+      if (
+        name === 'zoom_level' ||
+        name === 'frame_count' ||
+        name === 'frame_delay' ||
+        name === 'restart_delay' ||
+        name === 'overlay_transparency'
+      ) {
         value = toNumber(raw);
       } else if (name === 'center_latitude' || name === 'marker_latitude') {
         value = toLatitude(raw);
@@ -233,6 +244,7 @@ private _computeLabel = (schema: { name: string }): string => {
     frame_count: 'Frame Count',
     frame_delay: 'Frame Delay (ms)',
     restart_delay: 'Restart Delay (ms)',
+    overlay_transparency: 'Overlay Transparency',
     show_zoom: 'Show Zoom',
     show_recenter: 'Show Recenter',
     show_scale: 'Show Scale',
@@ -247,6 +259,7 @@ private _computeHelper = (schema: { name: string }): string | undefined => {
     frame_count: 'How many frames in the loop',
     frame_delay: 'Delay between frames',
     restart_delay: 'Pause on the last frame before looping',
+    overlay_transparency: 'Reduce the radar fill opacity to reveal the map (0%–90%)',
     show_recenter: 'Adds a control to jump back to your center and zoom',
   };
   return help[schema.name];
