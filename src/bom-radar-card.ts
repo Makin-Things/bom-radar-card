@@ -863,9 +863,10 @@ async firstUpdated() {
           NaN,
         );
 
-        if ((this._config.show_marker) && !Number.isNaN(markerLat) && !Number.isNaN(markerLon)) {
+        const map = this.map;
+        if ((this._config.show_marker) && !Number.isNaN(markerLat) && !Number.isNaN(markerLon) && map !== undefined) {
           this.marker.setLngLat([Number(markerLon), Number(markerLat)]);
-          this.marker.addTo(this.map);
+          this.marker.addTo(map);
         }
 
         // This is the timestamp in UTC time to show radar images for.
@@ -875,13 +876,13 @@ async firstUpdated() {
         this.map.on('load', () => {
           console.info('map loaded');
           if (this._config.map_style === 'Dark') {
-            this.map.moveLayer('continent-label', 'settlement-subdivision-label');
-            this.map.moveLayer('country-label', 'settlement-subdivision-label');
-            this.map.moveLayer('state-label', 'settlement-subdivision-label');
+            this.map?.moveLayer('continent-label', 'settlement-subdivision-label');
+            this.map?.moveLayer('country-label', 'settlement-subdivision-label');
+            this.map?.moveLayer('state-label', 'settlement-subdivision-label');
           }
           // Show Scale
           if (this._config.show_scale && this.map) {
-            const unit: mapboxgl.ScaleControlOptions['unit'] =
+            const unit: 'imperial' | 'metric' =
               this.hass?.config?.unit_system?.length === 'mi' ? 'imperial' : 'metric';
             this.map.addControl(new mapboxgl.ScaleControl({ unit }), 'bottom-left');
           }
@@ -1137,63 +1138,71 @@ async firstUpdated() {
       return true;
     }
 
-    if (changedProps.has('_config')) {
+    const configKey = '_config' as keyof BomRadarCard;
+
+    if (changedProps.has(configKey)) {
       console.info('config changed');
+      const previousConfig = changedProps.get(configKey) as BomRadarCardConfig | undefined;
 
-      if (this._config.zoom_level !== changedProps.get('_config').zoom_level) {
-        console.info('zoom ' + this._config.zoom_level);
-        this.map.jumpTo({ center: [this.center_lon, this.center_lat], zoom: this._config.zoom_level });
-      }
+      if (previousConfig) {
+        if (this._config.zoom_level !== previousConfig.zoom_level) {
+          console.info('zoom ' + this._config.zoom_level);
+          this.map?.jumpTo({ center: [this.center_lon, this.center_lat], zoom: this._config.zoom_level });
+        }
 
-      if (this._config.center_longitude !== changedProps.get('_config').center_longitude) {
-        const haLocation = this.getHomeAssistantLocation();
-        this.center_lon = this.resolveCoordinate(this._config.center_longitude, haLocation.longitude, 133.75);
-        this.map.jumpTo({ center: [this.center_lon, this.center_lat], zoom: this._config.zoom_level });
-      }
+        if (this._config.center_longitude !== previousConfig.center_longitude) {
+          const haLocation = this.getHomeAssistantLocation();
+          this.center_lon = this.resolveCoordinate(this._config.center_longitude, haLocation.longitude, 133.75);
+          this.map?.jumpTo({ center: [this.center_lon, this.center_lat], zoom: this._config.zoom_level });
+        }
 
-      if (this._config.center_latitude !== changedProps.get('_config').center_latitude) {
-        const haLocation = this.getHomeAssistantLocation();
-        this.center_lat = this.resolveCoordinate(this._config.center_latitude, haLocation.latitude, -27.85);
-        this.map.jumpTo({ center: [this.center_lon, this.center_lat], zoom: this._config.zoom_level });
-      }
+        if (this._config.center_latitude !== previousConfig.center_latitude) {
+          const haLocation = this.getHomeAssistantLocation();
+          this.center_lat = this.resolveCoordinate(this._config.center_latitude, haLocation.latitude, -27.85);
+          this.map?.jumpTo({ center: [this.center_lon, this.center_lat], zoom: this._config.zoom_level });
+        }
 
-      if (this._config.frame_delay !== changedProps.get('_config').frame_delay) {
-        this.frame_delay = (this._config.frame_delay === undefined) || isNaN(this._config.frame_delay) ? 250 : this._config.frame_delay;
-      }
+        if (this._config.frame_delay !== previousConfig.frame_delay) {
+          this.frame_delay = (this._config.frame_delay === undefined) || isNaN(this._config.frame_delay) ? 250 : this._config.frame_delay;
+        }
 
-      if (this._config.restart_delay !== changedProps.get('_config').restart_delay) {
-        this.restart_delay = (this._config.restart_delay === undefined) || isNaN(this._config.restart_delay) ? 1000 : this._config.restart_delay;
-      }
+        if (this._config.restart_delay !== previousConfig.restart_delay) {
+          this.restart_delay = (this._config.restart_delay === undefined) || isNaN(this._config.restart_delay) ? 1000 : this._config.restart_delay;
+        }
 
-      if (this._config.overlay_transparency !== changedProps.get('_config').overlay_transparency) {
-        this.overlayTransparency = this.normalizeOverlayTransparency(this._config.overlay_transparency);
-        this.applyOverlayOpacityToLayers();
-      }
+        if (this._config.overlay_transparency !== previousConfig.overlay_transparency) {
+          this.overlayTransparency = this.normalizeOverlayTransparency(this._config.overlay_transparency);
+          this.applyOverlayOpacityToLayers();
+        }
 
-      if ((this._config.show_marker !== changedProps.get('_config').show_marker) || (this._config.marker_latitude !== changedProps.get('_config').marker_latitude) || (this._config.marker_longitude !== changedProps.get('_config').marker_longitude)) {
-        if (this.marker !== undefined) {
-          if (this._config.show_marker) {
-            const haLocation = this.getHomeAssistantLocation();
-            const markerLat = this.resolveCoordinate(
-              this._config.marker_latitude,
-              haLocation.latitude,
-              NaN,
-            );
-            const markerLon = this.resolveCoordinate(
-              this._config.marker_longitude,
-              haLocation.longitude,
-              NaN,
-            );
+        if ((this._config.show_marker !== previousConfig.show_marker) || (this._config.marker_latitude !== previousConfig.marker_latitude) || (this._config.marker_longitude !== previousConfig.marker_longitude)) {
+          if (this.marker !== undefined) {
+            if (this._config.show_marker) {
+              const haLocation = this.getHomeAssistantLocation();
+              const markerLat = this.resolveCoordinate(
+                this._config.marker_latitude,
+                haLocation.latitude,
+                NaN,
+              );
+              const markerLon = this.resolveCoordinate(
+                this._config.marker_longitude,
+                haLocation.longitude,
+                NaN,
+              );
 
-            if (!Number.isNaN(markerLat) && !Number.isNaN(markerLon)) {
-              this.marker.setLngLat([markerLon, markerLat]);
-              this.marker.addTo(this.map);
-            } else {
+              if (!Number.isNaN(markerLat) && !Number.isNaN(markerLon)) {
+                this.marker.setLngLat([markerLon, markerLat]);
+                const map = this.map;
+                if (map !== undefined) {
+                  this.marker.addTo(map);
+                }
+              } else {
+                this.marker.remove();
+              }
+            }
+            else {
               this.marker.remove();
             }
-          }
-          else {
-            this.marker.remove();
           }
         }
       }
