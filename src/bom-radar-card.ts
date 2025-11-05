@@ -641,6 +641,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   private marker?: mapboxgl.Marker;
   private beforeLayer?: string;
   private resizeObserver?: ResizeObserver;
+  private overlayTransparency = 0;
 
   // Add any properities that should cause your element to re-render here
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -699,6 +700,41 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
     const t = Date.parse(latest);
     this.setNextUpdateTimeout(t);
     return t;
+  }
+
+  private normalizeOverlayTransparency(value: number | undefined): number {
+    if (value === undefined) {
+      return 0;
+    }
+
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+      return 0;
+    }
+
+    const clamped = Math.min(Math.max(numeric, 0), 90);
+    return clamped;
+  }
+
+  private getOverlayOpacity(): number {
+    const opacity = 1 - this.overlayTransparency / 100;
+    return Math.max(0, Math.min(1, opacity));
+  }
+
+  private applyOverlayOpacityToLayers(): void {
+    const map = this.map;
+    if (!map) {
+      return;
+    }
+
+    this.mapLayers.forEach((layerId, index) => {
+      if (!map.getLayer(layerId)) {
+        return;
+      }
+
+      const targetOpacity = index === this.frame ? this.getOverlayOpacity() : 0;
+      map.setPaintProperty(layerId, 'fill-opacity', targetOpacity);
+    });
   }
 
 constructor() {
@@ -767,6 +803,7 @@ async firstUpdated() {
       this.frame_count = this._config.frame_count != undefined ? this._config.frame_count : this.frame_count;
       this.frame_delay = this._config.frame_delay !== undefined ? this._config.frame_delay : this.frame_delay;
       this.restart_delay = this._config.restart_delay !== undefined ? this._config.restart_delay : this.restart_delay;
+      this.overlayTransparency = this.normalizeOverlayTransparency(this._config.overlay_transparency);
       this.start_time = t - ((this.frame_count - 1) * 5 * 60 * 1000);
       console.info('start_time ' + this.start_time);
       console.info('frame_count ' + this.frame_count.toString());
@@ -937,7 +974,10 @@ async firstUpdated() {
     this.mapLoaded = true;
     this.loadRadarLayers();
     this.frame = this.mapLayers.length - 1;
-    this.map?.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 1);
+    if (this.map && this.mapLayers[this.frame] && this.map.getLayer(this.mapLayers[this.frame])) {
+      this.map.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', this.getOverlayOpacity());
+    }
+    this.applyOverlayOpacityToLayers();
     this.frameTimer = setInterval(() => this.changeRadarFrame(), this.restart_delay);
     const el = this.shadowRoot?.getElementById('map');
     if ((el !== undefined) && (el !== null)) {
@@ -1050,7 +1090,16 @@ async firstUpdated() {
     if (this.map !== undefined) {
       const extra = this.mapLayers.length > this.frame_count;
       let next = (this.frame + 1) % this.mapLayers.length;
-      this.map.setPaintProperty(this.mapLayers[this.frame], 'fill-opacity', 0).setPaintProperty(this.mapLayers[next], 'fill-opacity', 1);
+      const currentLayer = this.mapLayers[this.frame];
+      const nextLayer = this.mapLayers[next];
+
+      if (currentLayer && this.map.getLayer(currentLayer)) {
+        this.map.setPaintProperty(currentLayer, 'fill-opacity', 0);
+      }
+
+      if (nextLayer && this.map.getLayer(nextLayer)) {
+        this.map.setPaintProperty(nextLayer, 'fill-opacity', this.getOverlayOpacity());
+      }
       if (extra) {
         const oldLayer = this.mapLayers.shift();
         this.radarTime.shift();
@@ -1116,6 +1165,11 @@ async firstUpdated() {
         this.restart_delay = (this._config.restart_delay === undefined) || isNaN(this._config.restart_delay) ? 1000 : this._config.restart_delay;
       }
 
+      if (this._config.overlay_transparency !== changedProps.get('_config').overlay_transparency) {
+        this.overlayTransparency = this.normalizeOverlayTransparency(this._config.overlay_transparency);
+        this.applyOverlayOpacityToLayers();
+      }
+
       if ((this._config.show_marker !== changedProps.get('_config').show_marker) || (this._config.marker_latitude !== changedProps.get('_config').marker_latitude) || (this._config.marker_longitude !== changedProps.get('_config').marker_longitude)) {
         if (this.marker !== undefined) {
           if (this._config.show_marker) {
@@ -1154,6 +1208,7 @@ async firstUpdated() {
         this.mapLayers.push(id);
         this.radarTime.push(this.getRadarTimeString(this.currentTime));
         this.addRadarLayer(id);
+        this.applyOverlayOpacityToLayers();
         return true;
       }
     }
