@@ -32,6 +32,7 @@ All of the options below can be selected using the GUI config editor, there is n
 | frame_count                | number  | **Optional** | The number of frames to use in the loop                      | `7`                                          |
 | frame_delay                | number  | **Optional** | The number of milliseconds to show each frame                | `250`                                        |
 | restart_delay              | number  | **Optional** | The additional number of milliseconds to show the last frame | `1000`                                       |
+| overlay_transparency       | number  | **Optional** | Percentage transparency (0–90%) applied to the radar overlay | `0`                                          |
 | show_zoom                  | boolean | **Optional** | Show the zoom controls in the top right corner               | `true`                                       |
 | show_marker                | boolean | **Optional** | Show the home icon at the marker position                    | `true`                                       |
 | show_recenter              | boolean | **Optional** | Show the re-center control in the bottom right toolbar       | `true`                                       |
