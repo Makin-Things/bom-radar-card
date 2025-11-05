@@ -77,10 +77,7 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
       { name: 'frame_count', selector: { number: { mode: 'box', min: 1, max: 60, step: 1 } } },
       { name: 'frame_delay', selector: { number: { mode: 'box', min: 0, max: 5000, step: 10 } } },
       { name: 'restart_delay', selector: { number: { mode: 'box', min: 0, max: 10000, step: 10 } } },
-      {
-        name: 'overlay_transparency',
-        selector: { number: { mode: 'slider', min: 0, max: 90, step: 5, unit_of_measurement: '%' } },
-      },
+      { name: 'overlay_transparency', selector: { number: { mode: 'slider', min: 0, max: 90, step: 5, unit_of_measurement: '%' } } },
     ];
 
     const controls = [
@@ -189,13 +186,7 @@ export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor
       const mutable = { ...cfg } as BomRadarCardConfig & Record<string, unknown>;
 
       let value: unknown = raw;
-      if (
-        name === 'zoom_level' ||
-        name === 'frame_count' ||
-        name === 'frame_delay' ||
-        name === 'restart_delay' ||
-        name === 'overlay_transparency'
-      ) {
+      if (name === 'zoom_level' || name === 'frame_count' || name === 'frame_delay' || name === 'restart_delay' || name === 'overlay_transparency') {
         value = toNumber(raw);
       } else if (name === 'center_latitude' || name === 'marker_latitude') {
         value = toLatitude(raw);
