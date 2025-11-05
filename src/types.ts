@@ -25,6 +25,7 @@ export interface BomRadarCardConfig extends LovelaceCardConfig {
   frame_count?: number;
   frame_delay?: number;
   restart_delay?: number;
+  overlay_transparency?: number;
 
   // Standard Lovelace flags
   show_warning?: boolean;
