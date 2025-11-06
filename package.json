@@ -1,6 +1,6 @@
 {
   "name": "bom-radar-card",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "A rain radar card using the new vector tiles from the Australian BOM",
   "keywords": [
     "home-assistant",
@@ -11,8 +11,8 @@
     "custom-cards"
   ],
   "module": "bom-radar-card.js",
-  "repository": "git@github.com:plasmapod/bom-radar-card.git",
-  "author": "Hayden Kliese <hayden@kliese.net>",
+  "repository": "git@github.com:makin-things/bom-radar-card.git",
+  "author": "Hayden Kliese <hayden@kliese.net> Simon Ratcliffe <simon@makin-things.com>",
   "license": "MIT",
   "dependencies": {
     "custom-card-helpers": "^1.9.0",
