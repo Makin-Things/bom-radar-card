@@ -14,7 +14,7 @@ A Home Assistant rain radar card using the new tiled images from the Australian 
 
 ## Description
 
-The new Austalian BOM radar products (mobile app and https://weather.bom.gov.au/) now use map tiles to distribute the radar images. This allows for one continous map that can be zoomed and panned seamlessly. This card allows this to be displayed within Home Assistant.
+The new Australian BOM radar products (mobile app and https://weather.bom.gov.au/) now use map tiles to distribute the radar images. This allows for one continuous map that can be zoomed and panned seamlessly. This card allows this to be displayed within Home Assistant.
 
 ![BOM Radar card](https://raw.githubusercontent.com/makin-things/bom-radar-card/master/bom-radar-card.gif)
 
@@ -28,7 +28,7 @@ All of the options below can be selected using the GUI config editor, there is n
 | -------------------- | ------- | ------------ | ------------------------------------------------------------ | -------------------------------------------- |
 | type                 | string  | **Required** |                                                              | must be `custom:bom-radar-card`              |
 | card_title           | string  | **Optional** | The title to display on the card                             | no title displayed                           |
-| map_style            | string  | **Optional** | Specifies the style for the map **_(Light, Dark)_**          | `'Light'` see section below for valid values |
+| map_style            | string  | **Optional** | Specifies the style for the map **_(Light, Dark)_**          | `'Light'` |
 | zoom_level           | number  | **Optional** | The initial zoom level, can be from 4 to 10                  | `8`                                          |
 | center_latitude      | number  | **Optional** | The initial center latitude of the map                       | your HA default latitude                     |
 | center_longitude     | number  | **Optional** | The initial center longitude of the map                      | your HA default longitude                    |
@@ -64,7 +64,7 @@ show_scale: true
 
 If you use HACS, the card is now part of the default HACS store.
 
-If you don't use HACS (seriously you should as it makes life so much easier), you can download the required files from [latest releases](https://github.com/PlasmaPod/bom-radar-card/releases). Drop all of the files in `www/community/bom-radar-card` folder in your `config` directory. It should look like this:
+If you don't use HACS (seriously you should as it makes life so much easier), you can download the required files from [latest releases](https://github.com/makin-things/bom-radar-card/releases). Drop all of the files in `www/community/bom-radar-card` folder in your `config` directory. It should look like this:
 
 ```
     └── ...
