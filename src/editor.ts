@@ -1,378 +1,265 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { LitElement, html, TemplateResult, css, CSSResultGroup } from 'lit';
-import { HomeAssistant, fireEvent, LovelaceCardEditor } from 'custom-card-helpers';
-
-import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
-import { BomRadarCardConfig } from './types';
+import { LitElement, html, css, type CSSResultGroup } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { formfieldDefinition } from '../elements/formfield';
-import { selectDefinition } from '../elements/select';
-import { switchDefinition } from '../elements/switch';
-import { textfieldDefinition } from '../elements/textfield';
-import { sliderDefinition } from '../elements/slider';
+import { HomeAssistant, LovelaceCardEditor, fireEvent } from 'custom-card-helpers';
+import type { TemplateResult } from 'lit';
+import { BomRadarCardConfig } from './types';
 
 @customElement('bom-radar-card-editor')
-export class BomRadarCardEditor extends ScopedRegistryHost(LitElement) implements LovelaceCardEditor {
+export class BomRadarCardEditor extends LitElement implements LovelaceCardEditor {
   @property({ attribute: false }) public hass?: HomeAssistant;
+  @state() private _config: BomRadarCardConfig = this._mergeWithDefaults();
 
-  @state() private _config?: BomRadarCardConfig;
+  private _mergeWithDefaults(config: Partial<BomRadarCardConfig> = {}): BomRadarCardConfig {
+    const defaults: Partial<BomRadarCardConfig> = {
+      map_style: 'Light',
+      zoom_level: 8,
+      frame_count: 7,
+      frame_delay: 250,
+      restart_delay: 1000,
+      overlay_transparency: 0,
+      show_zoom: true,
+      show_marker: true,
+      show_recenter: true,
+      show_scale: true,
+    };
 
-  @state() private _helpers?: any;
-
-  private _initialized = false;
-
-  static elementDefinitions = {
-    ...textfieldDefinition,
-    ...selectDefinition,
-    ...switchDefinition,
-    ...formfieldDefinition,
-    ...sliderDefinition,
-  };
+    return {
+      ...defaults,
+      ...config,
+      type: 'custom:bom-radar-card',
+    } as BomRadarCardConfig;
+  }
 
   public setConfig(config: BomRadarCardConfig): void {
-    this._config = config;
-
-    this.loadCardHelpers();
+    // Merge defaults so editor always has values to show
+    this._config = this._mergeWithDefaults(config);
+    this.requestUpdate();
   }
 
-  protected shouldUpdate(): boolean {
-    if (!this._initialized) {
-      this._initialize();
-    }
+  // ---------- Schemas ----------
+  private _buildSchemas() {
+    const overview = [
+      { name: 'card_title', selector: { text: {} } },
+      {
+        name: 'map_style',
+        selector: {
+          select: {
+            mode: 'dropdown',
+            options: [
+              { value: 'Light', label: 'Light' },
+              { value: 'Dark', label: 'Dark' },
+            ],
+          },
+        },
+      },
+      {
+        name: 'zoom_level',
+        selector: {
+          number: {
+            min: 3,
+            max: 10,
+            step: 1,
+            mode: 'box',
+          },
+        },
+      },
+    ];
 
-    return true;
+    const location = [
+      { name: 'center_latitude',  selector: { text: { inputmode: 'decimal' } },  context: { domain: 'lat'  }, helper: '−90 to 90' },
+      { name: 'center_longitude', selector: { text: { inputmode: 'decimal' } },  context: { domain: 'lon'  }, helper: '−90 to 90' },
+      { name: 'show_marker', selector: { boolean: {} } },
+      { name: 'marker_latitude',  selector: { text: { inputmode: 'decimal' } },  context: { domain: 'lat'  }, helper: '−90 to 90' },
+      { name: 'marker_longitude', selector: { text: { inputmode: 'decimal' } },  context: { domain: 'lon'  }, helper: '−90 to 90' },
+    ];
+
+    const animation = [
+      { name: 'frame_count', selector: { number: { mode: 'box', min: 1, max: 60, step: 1 } } },
+      { name: 'frame_delay', selector: { number: { mode: 'box', min: 0, max: 5000, step: 10 } } },
+      { name: 'restart_delay', selector: { number: { mode: 'box', min: 0, max: 10000, step: 10 } } },
+      { name: 'overlay_transparency', selector: { number: { mode: 'slider', min: 0, max: 90, step: 5, unit_of_measurement: '%' } } },
+    ];
+
+    const controls = [
+      { name: 'show_zoom', selector: { boolean: {} } },
+      { name: 'show_recenter', selector: { boolean: {} } },
+      { name: 'show_scale', selector: { boolean: {} } },
+    ];
+
+    return { overview, location, animation, controls };
   }
 
-  get _name(): string {
-    return this._config?.name || '';
-  }
-
-  get _entity(): string {
-    return this._config?.entity || '';
-  }
-
-  get _show_warning(): boolean {
-    return this._config?.show_warning || false;
-  }
-
-  get _show_error(): boolean {
-    return this._config?.show_error || false;
-  }
-
+  // ---------- Render ----------
   protected render(): TemplateResult | void {
-    if (!this.hass || !this._helpers) {
-      return html``;
-    }
-
-    let config;
-    // eslint-disable-next-line prefer-const
-    config = this._config;
+    if (!this.hass) return html``;
+    const schemas = this._buildSchemas();
 
     return html`
-      <div class="values">
-        <mwc-textfield
-            label="Card Title (optional)"
-            .value=${config.card_title ? config.card_title : ''}
-            .configValue=${'card_title'}
-            @input=${this._valueChangedString}
-        ></mwc-textfield>
-        <div class="side-by-side">
-          <mwc-select label="Map Style (optional)" .configValue=${'map_style'} .value=${config.map_style ?
-        config.map_style : ''} @selected=${this._valueChangedString} @closed=${(ev) =>
-          ev.stopPropagation()}
-            >
-            <mwc-list-item></mwc-list-item>
-            <mwc-list-item value="Light">BOM Light</mwc-list-item>
-            <mwc-list-item value="Dark">Mapbox Dark</mwc-list-item>
-          </mwc-select>
-          <mwc-select label="Zoom Level (optional)" .configValue=${'zoom_level'} .value=${config.zoom_level ?
-        config.zoom_level.toString() : null} @selected=${this._valueChangedNumber} @closed=${(ev) =>
-          ev.stopPropagation()}
-            >
-            <mwc-list-item></mwc-list-item>
-            <mwc-list-item value="3">3</mwc-list-item>
-            <mwc-list-item value="4">4</mwc-list-item>
-            <mwc-list-item value="5">5</mwc-list-item>
-            <mwc-list-item value="6">6</mwc-list-item>
-            <mwc-list-item value="7">7</mwc-list-item>
-            <mwc-list-item value="8">8</mwc-list-item>
-            <mwc-list-item value="9">9</mwc-list-item>
-            <mwc-list-item value="10">10</mwc-list-item>
-          </mwc-select>
+      <div class="editor">
+        <div class="section">
+          <h3>Overview</h3>
+          <ha-form
+            .hass=${this.hass}
+            .data=${this._config}
+            .schema=${schemas.overview}
+            .computeLabel=${this._computeLabel}
+            .computeHelper=${this._computeHelper}
+            @value-changed=${this._onValueChanged}
+          ></ha-form>
         </div>
-        <mwc-textfield
-            label="Map Centre Latitude (optional)"
-            .value=${config.center_latitude ? config.center_latitude : ''}
-            .configValue=${'center_latitude'}
-            @input=${this._valueChangedNumber}
-        ></mwc-textfield>
-        <mwc-textfield
-            label="Map Centre Longitude (optional)"
-            .value=${config.center_longitude ? config.center_longitude : ''}
-            .configValue=${'center_longitude'}
-            @input=${this._valueChangedNumber}
-        ></mwc-textfield>
-        <mwc-textfield
-            label="Marker Latitude (optional)"
-            .value=${config.marker_latitude ? config.marker_latitude : ''}
-            .configValue=${'marker_latitude'}
-            @input=${this._valueChangedNumber}
-        ></mwc-textfield>
-        <mwc-textfield
-            label="Marker Longitude (optional)"
-            .value=${config.marker_longitude ? config.marker_longitude : ''}
-            .configValue=${'marker_longitude'}
-            @input=${this._valueChangedNumber}
-        ></mwc-textfield>
-        <div class="side-by-side">
-          <mwc-textfield
-              label="Frame Count (optional)"
-              .value=${config.frame_count ? config.frame_count : ''}
-              .configValue=${'frame_count'}
-              @input=${this._valueChangedNumber}
-          ></mwc-textfield>
-          <mwc-textfield
-              label="Frame Delay(ms) (optional)"
-              .value=${config.frame_delay ? config.frame_delay : ''}
-              .configValue=${'frame_delay'}
-              @input=${this._valueChangedNumber}
-          ></mwc-textfield>
-          <mwc-textfield
-              label="Restart Delay(ms) (optional)"
-              .value=${config.restart_delay ? config.restart_delay : ''}
-              .configValue=${'restart_delay'}
-              @input=${this._valueChangedNumber}
-          ></mwc-textfield>
+
+        <div class="section">
+          <h3>Location & Marker</h3>
+          <ha-form
+            .hass=${this.hass}
+            .data=${this._config}
+            .schema=${schemas.location}
+            .computeLabel=${this._computeLabel}
+            .computeHelper=${this._computeHelper}
+            @value-changed=${this._onValueChanged}
+          ></ha-form>
         </div>
-        <div class="side-by-side">
-          <mwc-formfield .label=${"Static Map"}>
-            <mwc-switch
-              .checked=${config.static_map === true}
-              .configValue=${'static_map'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
-          <mwc-formfield .label=${'Show Zoom'}>
-            <mwc-switch
-              .checked=${config.show_zoom === true}
-              .configValue=${'show_zoom'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
-          <mwc-formfield .label=${'Square Map'}>
-            <mwc-switch
-              .checked=${config.square_map === true}
-              .configValue=${'square_map'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
+
+        <div class="section">
+          <h3>Animation</h3>
+          <ha-form
+            .hass=${this.hass}
+            .data=${this._config}
+            .schema=${schemas.animation}
+            .computeLabel=${this._computeLabel}
+            .computeHelper=${this._computeHelper}
+            @value-changed=${this._onValueChanged}
+          ></ha-form>
         </div>
-        <div class="side-by-side">
-          <mwc-formfield .label=${"Show Marker"}>
-            <mwc-switch
-              .checked=${config.show_marker === true}
-              .configValue=${'show_marker'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
-          <mwc-formfield .label=${'Show Playback'}>
-            <mwc-switch
-              .checked=${config.show_playback === true}
-              .configValue=${'show_playback'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
-          <mwc-formfield .label=${'Show Recenter'}>
-            <mwc-switch
-              .checked=${config.show_recenter === true}
-              .configValue=${'show_recenter'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
-        </div>
-        <div class="side-by-side">
-          <mwc-formfield .label=${"Show Scale"}>
-            <mwc-switch
-              .checked=${config.show_scale === true}
-              .configValue=${'show_scale'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
-          <mwc-formfield .label=${'Show Range'}>
-            <mwc-switch
-              .checked=${config.show_range === true}
-              .configValue=${'show_range'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
-          <mwc-formfield .label=${'Show Extra Labels'}>
-            <mwc-switch
-              .checked=${config.extra_labels === true}
-              .configValue=${'extra_labels'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
-        </div>
-        <div class="side-by-side">
-          <mwc-formfield .label=${"Show Radar Locations"}>
-            <mwc-switch
-              .checked=${config.show_radar_location === true}
-              .configValue=${'show_radar_location'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
-          <mwc-formfield .label=${'Show Radar Coverage'}>
-            <mwc-switch
-              .checked=${config.show_radar_coverage === true}
-              .configValue=${'show_radar_coverage'}
-              @change=${this._valueChangedSwitch}
-            ></mwc-switch>
-          </mwc-formfield>
-          <div></div>
-        </div>
-        <div class="side-by-side">
-          <mwc-textfield
-              label="Radar Location Radius (optional)"
-              .value=${config.radar_location_radius ? config.radar_location_radius : ''}
-              .configValue=${'radar_location_radius'}
-              @input=${this._valueChangedNumber}
-          ></mwc-textfield>
-          <div></div>
-        </div>
-        <div class="side-by-side">
-          <mwc-textfield
-              label="Radar Line Colour (optional)"
-              .value=${config.radar_location_line_colour ? config.radar_location_line_colour : ''}
-              .configValue=${'radar_location_line_colour'}
-              @input=${this._valueChangedString}
-          ></mwc-textfield>
-          <mwc-textfield
-              label="Radar Fill Colour (optional)"
-              .value=${config.radar_location_fill_colour ? config.radar_location_fill_colour : ''}
-              .configValue=${'radar_location_fill_colour'}
-              @input=${this._valueChangedString}
-          ></mwc-textfield>
+
+        <div class="section">
+          <h3>Controls</h3>
+          <ha-form
+            .hass=${this.hass}
+            .data=${this._config}
+            .schema=${schemas.controls}
+            .computeLabel=${this._computeLabel}
+            .computeHelper=${this._computeHelper}
+            @value-changed=${this._onValueChanged}
+          ></ha-form>
         </div>
       </div>
     `;
   }
 
-  private _initialize(): void {
-    if (this.hass === undefined) return;
-    if (this._config === undefined) return;
-    if (this._helpers === undefined) return;
-    this._initialized = true;
-  }
+  // ---------- Change handling ----------
+  private _onValueChanged(
+    ev: CustomEvent<
+      | { name: string; value: unknown }
+      | { value: Partial<BomRadarCardConfig> }
+    >,
+  ): void {
+    const detail = ev.detail;
+    const current = this._config ?? this._mergeWithDefaults();
 
-  private async loadCardHelpers(): Promise<void> {
-    this._helpers = await (window as any).loadCardHelpers();
-  }
+    const toNumber = (value: unknown): number | undefined => {
+      if (value === '' || value === null || value === undefined) {
+        return undefined;
+      }
 
-  private _valueChangedSwitch(ev): void {
-    const target = ev.target;
-
-    if (!this._config || !this.hass || !target) {
-      return;
-    }
-    this._config = {
-      ...this._config,
-      [target.configValue]: target.checked,
+      const numeric = Number(value);
+      return Number.isFinite(numeric) ? numeric : undefined;
     };
-    fireEvent(this, 'config-changed', { config: this._config });
-  }
 
-  private _valueChangedNumber(ev): void {
-    if (!this._config || !this.hass) {
-      return;
-    }
-    const target = ev.target;
-    if (this[`_${target.configValue}`] === target.value) {
-      return;
-    }
-    if (target.configValue) {
-      if (target.value === '' || target.value === null) {
-        this._config = {
-          ...this._config
-        };
-        delete this._config[target.configValue];
+    const toLatitude = (value: unknown): number | undefined => {
+      const numeric = Number.parseFloat(String(value).trim());
+      if (!Number.isFinite(numeric)) return undefined;
+      return Math.max(-90, Math.min(90, numeric));
+    };
+
+    const toLongitude = (value: unknown): number | undefined => {
+      const numeric = Number.parseFloat(String(value).trim());
+      if (!Number.isFinite(numeric)) return undefined;
+      return Math.max(-180, Math.min(180, numeric));
+    };
+
+    const applyField = (
+      cfg: BomRadarCardConfig,
+      name: string,
+      raw: unknown,
+    ): BomRadarCardConfig => {
+      const mutable = { ...cfg } as BomRadarCardConfig & Record<string, unknown>;
+
+      let value: unknown = raw;
+      if (name === 'zoom_level' || name === 'frame_count' || name === 'frame_delay' || name === 'restart_delay' || name === 'overlay_transparency') {
+        value = toNumber(raw);
+      } else if (name === 'center_latitude' || name === 'marker_latitude') {
+        value = toLatitude(raw);
+      } else if (name === 'center_longitude' || name === 'marker_longitude') {
+        value = toLongitude(raw);
+      }
+
+      if (value === undefined) {
+        delete mutable[name];
       } else {
-        this._config = {
-          ...this._config,
-          [target.configValue]: Number(target.value),
-        };
+        mutable[name] = value;
+      }
+
+      return mutable;
+    };
+
+    let merged = current;
+
+    if (detail && 'name' in detail) {
+      merged = applyField(current, detail.name, detail.value);
+    } else if (detail && typeof detail.value === 'object' && detail.value !== null) {
+      const entries = Object.entries(detail.value as Record<string, unknown>);
+      for (const [key, value] of entries) {
+        merged = applyField(merged, key, value);
       }
     }
+
+    merged.type = 'custom:bom-radar-card';
+
+    this._config = merged;
     fireEvent(this, 'config-changed', { config: this._config });
   }
 
-  private _valueChangedString(ev): void {
-    if (!this._config || !this.hass) {
-      return;
-    }
-    const target = ev.target;
-    if (this[`_${target.configValue}`] === target.value) {
-      return;
-    }
-    if (target.configValue) {
-      if (target.value === '') {
-        this._config = {
-          ...this._config
-        };
-        delete this._config[target.configValue];
-      } else {
-        this._config = {
-          ...this._config,
-          [target.configValue]: target.value,
-        };
-      }
-    }
-    fireEvent(this, 'config-changed', { config: this._config });
-  }
 
-  static styles: CSSResultGroup = css`
-    mwc-select,
-    mwc-textfield {
-      margin-bottom: 16px;
-      display: block;
-    }
-    mwc-formfield {
-      padding-bottom: 8px;
-    }
-    mwc-switch {
-      --mdc-theme-secondary: var(--switch-checked-color);
-    }
-    .option {
-      padding: 4px 0px;
-      cursor: pointer;
-    }
-    .row {
-      display: flex;
-      margin-bottom: -14px;
-      pointer-events: none;
-    }
-    .title {
-      padding-left: 16px;
-      margin-top: -6px;
-      pointer-events: none;
-    }
-    .secondary {
-      padding-left: 40px;
-      color: var(--secondary-text-color);
-      pointer-events: none;
-    }
-    .values {
-      padding-left: 16px;
-      background: var(--secondary-background-color);
-    }
-    ha-switch {
-      padding: 16px 6px;
-    }
-    .side-by-side {
-      display: flex;
-    }
-    .side-by-side > * {
-      flex: 1;
-      padding-right: 4px;
-    }
+// ---------- Labels & helpers ----------
+private _computeLabel = (schema: { name: string }): string => {
+  const map: Record<string, string> = {
+    card_title: 'Card Title',
+    map_style: 'Map Style',
+    zoom_level: 'Zoom Level',
+    center_latitude: 'Map Centre Latitude',
+    center_longitude: 'Map Centre Longitude',
+    show_marker: 'Show Marker',
+    marker_latitude: 'Marker Latitude',
+    marker_longitude: 'Marker Longitude',
+    frame_count: 'Frame Count',
+    frame_delay: 'Frame Delay (ms)',
+    restart_delay: 'Restart Delay (ms)',
+    overlay_transparency: 'Overlay Transparency',
+    show_zoom: 'Show Zoom',
+    show_recenter: 'Show Recenter',
+    show_scale: 'Show Scale',
+  };
+  return map[schema.name] ?? schema.name;
+};
+
+private _computeHelper = (schema: { name: string }): string | undefined => {
+  const help: Record<string, string> = {
+    map_style: 'Light uses BoM vector tiles - Dark uses Mapbox dark style',
+    zoom_level: 'Initial zoom from 3 to 10',
+    frame_count: 'How many frames in the loop',
+    frame_delay: 'Delay between frames',
+    restart_delay: 'Pause on the last frame before looping',
+    overlay_transparency: 'Reduce the radar fill opacity to reveal the map (0%–90%)',
+    show_recenter: 'Adds a control to jump back to your center and zoom',
+  };
+  return help[schema.name];
+};
+
+// ---------- Styles ----------
+static styles: CSSResultGroup = css`
+  .editor { padding: 8px 16px; }
+  .section { margin: 12px 0; }
+  .section h3 { margin: 0 0 8px; font-weight: 600; }
   `;
 }

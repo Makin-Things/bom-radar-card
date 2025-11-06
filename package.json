@@ -1,6 +1,6 @@
 {
   "name": "bom-radar-card",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "A rain radar card using the new vector tiles from the Australian BOM",
   "keywords": [
     "home-assistant",
@@ -11,26 +11,13 @@
     "custom-cards"
   ],
   "module": "bom-radar-card.js",
-  "repository": "git@github.com:makin-things/bom-radar-card.git",
-  "author": "Simon Ratcliffe <simon@makin-things.com>",
+  "repository": "git@github.com:plasmapod/bom-radar-card.git",
+  "author": "Hayden Kliese <hayden@kliese.net>",
   "license": "MIT",
   "dependencies": {
-    "@lit-labs/scoped-registry-mixin": "^1.0.3",
-    "@lit/reactive-element": "^1.6.3",
-    "@material/mwc-base": "^0.27.0",
-    "@material/mwc-formfield": "^0.25.3",
-    "@material/mwc-list": "^0.25.3",
-    "@material/mwc-menu": "^0.25.3",
-    "@material/mwc-notched-outline": "^0.25.3",
-    "@material/mwc-ripple": "^0.25.3",
-    "@material/mwc-select": "^0.25.3",
-    "@material/mwc-slider": "^0.25.3",
-    "@material/mwc-switch": "^0.25.3",
-    "@material/mwc-textfield": "^0.25.3",
     "custom-card-helpers": "^1.9.0",
     "home-assistant-js-websocket": "^5.12.0",
-    "lit": "^2.8.0",
-    "mapbox.js": "^3.3.1",
+    "lit": "^3.1.2",
     "randombytes": "^2.1.0",
     "safe-buffer": "^5.2.1",
     "serialize-javascript": "^6.0.2",
@@ -48,8 +35,8 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/geojson": "^7946.0.13",
     "@types/mapbox-gl": "^2.7.19",
-    "@typescript-eslint/eslint-plugin": "^6.18.1",
-    "@typescript-eslint/parser": "^6.18.1",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "css-loader": "^6.9.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
@@ -59,21 +46,15 @@
     "mapbox-gl": "^2.15.0",
     "prettier": "^2.8.8",
     "rollup": "^2.79.1",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-serve": "^1.1.1",
-    "rollup-plugin-terser": "^7.0.2",
-    "typescript": "^5.3.3",
+    "typescript": "~5.3.3",
     "typescript-plugin-css-modules": "^5.0.2"
   },
-  "resolutions": {
-    "lit": "^2.2.0",
-    "lit-html": "2.2.0",
-    "lit-element": "3.2.0",
-    "@lit/reactive-element": "1.3.0"
-  },
   "scripts": {
-    "start": "rollup -c rollup.config.dev.js --watch",
-    "build": "rollup -c rollup.config.dev.js",
-    "lint": "eslint src/*.ts",
+    "start": "rollup -c rollup.config.ci.js --watch",
+    "build": "NODE_ENV=production ROLLUP_WATCH=false rollup -c rollup.config.ci.js",
+    "lint": "node scripts/lint.cjs src/*.ts",
     "rollup": "rollup -c"
   }
 }

@@ -1,32 +1,33 @@
 import { LovelaceCardConfig } from 'custom-card-helpers';
-
-// TODO Add your configuration elements here for type-checking
+// BoM Radar Card configuration
 export interface BomRadarCardConfig extends LovelaceCardConfig {
-  show_radar_coverage: boolean;
-  show_radar_location: boolean;
-  show_range: boolean;
-  show_marker: boolean;
-  show_scale: boolean;
-  show_playback: boolean;
-  show_recenter: boolean;
-  static_map: boolean;
-  show_zoom: boolean;
-  square_map: boolean;
-  radar_location_fill_colour: undefined;
-  radar_location_line_colour: undefined;
-  radar_location_radius: undefined;
-  extra_labels: undefined;
-  frame_count: undefined;
-  frame_delay: undefined;
-  restart_delay?: number;
-  marker_longitude: undefined;
-  marker_latitude: undefined;
-  center_longitude: undefined;
-  center_latitude: undefined;
-  zoom_level: undefined;
-  type: string;
+  type: 'custom:bom-radar-card';
+
+  // General
   name?: string;
-  map_style?: string;
+  card_title?: string;
+  map_style?: 'Light' | 'Dark';
+  zoom_level?: number;
+  center_latitude?: number;
+  center_longitude?: number;
+
+  // Marker
+  show_marker?: boolean;
+  marker_latitude?: number;
+  marker_longitude?: number;
+
+  // Controls
+  show_zoom?: boolean;
+  show_scale?: boolean;
+  show_recenter?: boolean;
+
+  // Animation
+  frame_count?: number;
+  frame_delay?: number;
+  restart_delay?: number;
+  overlay_transparency?: number;
+
+  // Standard Lovelace flags
   show_warning?: boolean;
   show_error?: boolean;
   test_gui?: boolean;

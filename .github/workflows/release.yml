@@ -1,31 +1,33 @@
-name: Release
-
+name: Build and Upload Release
 on:
   release:
     types: [published]
 
 jobs:
-  release:
-    name: Prepare release
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
 
-      # Build
-      - name: Build the file
-        run: |
-          rm -rf /home/runner/work/bom-radar-card/bom-radar-card/node_modules
-          cd /home/runner/work/bom-radar-card/bom-radar-card
-          npm install
-          npm run build
-
-      # Upload build file to the release as an asset.
-      - name: Upload zip to release
-        uses: svenstaro/upload-release-action@v1-release
-
+      - uses: actions/setup-node@v4
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /home/runner/work/bom-radar-card/bom-radar-card/dist/*
-          tag: ${{ github.ref }}
-          overwrite: true
-          file_glob: true
+          node-version: 20   # no cache when you have no lockfile
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Clean dist
+        run: rm -rf dist && mkdir dist
+
+      - name: Build (CI)
+        run: npm run build
+
+      - name: Show dist contents (sanity check)
+        run: ls -la dist || true
+
+      - name: Upload build to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/**
+          fail_on_unmatched_files: true   # <- release fails if file missing
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

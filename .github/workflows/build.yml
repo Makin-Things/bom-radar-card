@@ -1,21 +1,33 @@
-name: "Build"
+name: Build
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
 
 jobs:
   build:
-    name: Test build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Use npm install (ci requires package-lock.json)
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      # Use your CI build script (non-watch)
       - name: Build
-        run: |
-          rm -rf /home/runner/work/bom-radar-card/bom-radar-card/node_modules
-          npm install
-          npm run build
+        run: npm run build
+
+      - name: Upload dist (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/**
