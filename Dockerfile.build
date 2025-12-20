@@ -1,0 +1,22 @@
+# Dockerfile for building the BOM Radar Card
+# This isolates Node.js/npm in a container for security
+FROM node:20-alpine
+
+WORKDIR /build
+
+# Copy package files first for better caching
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY rollup.config.js ./
+
+# Install dependencies (including devDependencies)
+# Use npm install since we may have updated package.json
+RUN npm install
+
+# Copy source files
+COPY src/ ./src/
+
+# Default command: run the build
+# This ensures the build runs when the container starts, not during image creation
+# Use BUILD_TARGET to allow running "watch" or other scripts
+CMD ["sh", "-c", "npm run ${BUILD_TARGET:-build}"]

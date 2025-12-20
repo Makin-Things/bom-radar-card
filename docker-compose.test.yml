@@ -1,0 +1,22 @@
+services:
+  # Home Assistant test instance
+  # HA runs as root (default) - we fix file permissions after it creates files
+  homeassistant:
+    container_name: bom-card-test-ha
+    image: 'ghcr.io/home-assistant/home-assistant:stable'
+    volumes:
+      # Mount HA config directory
+      - ./test-ha/config:/config
+      # Mount the integration
+      - ./custom_components/bom_radar:/config/custom_components/bom_radar
+    environment:
+      - TZ=Australia/Brisbane
+    restart: unless-stopped
+    ports:
+      - '8124:8123' # Use 8124 to avoid conflicts with main HA instance
+    networks:
+      - bom-test-network
+
+networks:
+  bom-test-network:
+    driver: bridge

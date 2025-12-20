@@ -15,7 +15,8 @@ console.info(
   'color: white; font-weight: bold; background: dimgray',
 );
 
-const radarCapabilities = 'https://api.weather.bom.gov.au/v1/radar/capabilities';
+const radarCapabilities = 'https://api.bom.gov.au/apikey/v1/mapping/timeseries/wmts/1.0.0/WMTSCapabilities.xml';
+const xPathQuery = '/Capabilities/Contents/Layer[ows:Title=\'atm_surf_air_precip_reflectivity_dbz\']/Dimension/Value[last()]';
 
 class RecenterControl implements mapboxgl.IControl {
   private container?: HTMLElement;
