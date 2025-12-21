@@ -7,7 +7,7 @@ import copy from 'rollup-plugin-copy';
 export default {
   input: 'src/bom-radar-card.ts',
   output: {
-    file: 'dist/bom-radar-card.js',
+    file: 'custom_components/bom_radar/www/bom-radar-card.js',
     format: 'es',
   },
   onwarn(warning, warn) {

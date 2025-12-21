@@ -7,7 +7,7 @@ WORKDIR /build
 # Copy package files first for better caching
 COPY package*.json ./
 COPY tsconfig.json ./
-COPY rollup.config.js ./
+COPY rollup.config.ci.js ./
 
 # Install dependencies (including devDependencies)
 # Use npm install since we may have updated package.json

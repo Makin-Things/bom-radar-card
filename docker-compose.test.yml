@@ -10,7 +10,7 @@ services:
       # Mount the integration
       - ./custom_components/bom_radar:/config/custom_components/bom_radar
     environment:
-      - TZ=Australia/Brisbane
+      - TZ=Australia/Sydney
     restart: unless-stopped
     ports:
       - '8124:8123' # Use 8124 to avoid conflicts with main HA instance
