@@ -639,6 +639,7 @@ export class BomRadarCard extends LitElement implements LovelaceCard {
   private center_lon = 133.75;
   private center_lat = -27.85;
   private marker?: mapboxgl.Marker;
+  private markerPlaced = false;
   private beforeLayer?: string;
   private resizeObserver?: ResizeObserver;
   private overlayTransparency = 0;
@@ -867,6 +868,7 @@ async firstUpdated() {
         if ((this._config.show_marker) && !Number.isNaN(markerLat) && !Number.isNaN(markerLon) && map !== undefined) {
           this.marker.setLngLat([Number(markerLon), Number(markerLat)]);
           this.marker.addTo(map);
+          this.markerPlaced = true;
         }
 
         // This is the timestamp in UTC time to show radar images for.
@@ -1195,15 +1197,32 @@ async firstUpdated() {
                 const map = this.map;
                 if (map !== undefined) {
                   this.marker.addTo(map);
+                  this.markerPlaced = true;
                 }
               } else {
                 this.marker.remove();
+                this.markerPlaced = false;
               }
             }
             else {
               this.marker.remove();
+              this.markerPlaced = false;
             }
           }
+        }
+      }
+
+      // Recover from cold-start race: if hass.config.latitude/longitude wasn't
+      // available when initMap ran, the marker was created but never addTo'd.
+      // Retry once hass becomes ready.
+      if (!this.markerPlaced && this.marker !== undefined && this.map !== undefined && this._config.show_marker) {
+        const haLocation = this.getHomeAssistantLocation();
+        const lat = this.resolveCoordinate(this._config.marker_latitude, haLocation.latitude, NaN);
+        const lon = this.resolveCoordinate(this._config.marker_longitude, haLocation.longitude, NaN);
+        if (!Number.isNaN(lat) && !Number.isNaN(lon)) {
+          this.marker.setLngLat([Number(lon), Number(lat)]);
+          this.marker.addTo(this.map);
+          this.markerPlaced = true;
         }
       }
 
